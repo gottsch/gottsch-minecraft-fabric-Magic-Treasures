@@ -21,6 +21,7 @@ import mod.gottsch.fabric.gottschcore.enums.IRarity;
 import mod.gottsch.fabric.gottschcore.spatial.ICoords;
 import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryVitalsComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.MagicTreasuresComponents;
+import mod.gottsch.fabric.magic_treasures.core.spell.cost.ICostEvaluator;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
@@ -38,7 +39,7 @@ import java.util.Random;
 public interface ISpell {
 
     // TODO won't be able to use Event.... it'll have to change to something else
-    boolean serverUpdate(World level, Random random, ICoords coords, Event event, ICastSpellContext context);
+    boolean serverUpdate(World level, Random random, ICoords coords, /*Event event,*/ ICastSpellContext context);
 
 //    default public boolean clientUpdate(ItemStack jewelry,SpellUpdateS2C message) {
 //        if (jewelry.contains(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT)) {
@@ -60,7 +61,7 @@ public interface ISpell {
 //    }
 
     @SuppressWarnings("deprecation")
-    void addInformation(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType flagIn, SpellEntity entity);
+    void addInformation(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType flagIn, ISpell spell); //SpellEntity entity);
 
     Text getSpellDesc();
 
