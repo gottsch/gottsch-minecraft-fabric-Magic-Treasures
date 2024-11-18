@@ -135,7 +135,7 @@ public class Jewelry extends Item implements IJewelry{
                         // get the spell
                         Optional<ISpell> spell = SpellRegistry.get(spellIdentifier);
                         if (spell.isPresent()) {
-                            spell.get().addInformation(stack, context, tooltip, type, entity);
+                            spell.get().addInformation(stack, context, tooltip, type);
                         }
                     }
                 }
@@ -158,6 +158,15 @@ public class Jewelry extends Item implements IJewelry{
                         .formatted(Formatting.DARK_AQUA).formatted(Formatting.ITALIC));
             }
         tooltip.add(Text.literal(LangUtil.NEWLINE));
+    }
+
+    /**
+     * TODO should we have a default Vitals?
+     * @param stack
+     * @return
+     */
+    public static Optional<JewelryVitalsComponent> vitals(ItemStack stack) {
+        return Optional.ofNullable(stack.get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT));
     }
 
     @Override

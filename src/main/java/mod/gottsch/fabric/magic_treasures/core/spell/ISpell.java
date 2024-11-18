@@ -61,7 +61,7 @@ public interface ISpell {
 //    }
 
     @SuppressWarnings("deprecation")
-    void addInformation(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType flagIn, ISpell spell); //SpellEntity entity);
+    void addInformation(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType flagIn); //SpellEntity entity);
 
     Text getSpellDesc();
 
