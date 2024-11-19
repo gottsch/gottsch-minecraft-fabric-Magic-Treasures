@@ -17,7 +17,9 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.item;
 
+import com.mojang.serialization.Codec;
 import mod.gottsch.fabric.gottschcore.enums.IEnum;
+import net.minecraft.util.Identifier;
 
 import java.util.EnumSet;
 import java.util.HashMap;
@@ -44,7 +46,9 @@ public enum JewelryType implements IJewelryType {
 	private static final Map<String, IEnum> values = new HashMap<String, IEnum>();
 	private Integer code;
 	private String value;
-	
+
+	CODEC = Codec.STRING.comapFlatMap(Identifier::validate, Identifier::toString).stable();
+
 	// setup reverse lookup
 	static {
 		for (IJewelryType x : EnumSet.allOf(JewelryType.class)) {

@@ -63,6 +63,9 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
                     .add(MagicTreasuresItems.SAPPHIRE)
                     .add(MagicTreasuresItems.BLACK_PEARL);
 
+            // jewelry
+            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY).add(MagicTreasuresItems.GOLD_RING);
+
         } catch(Exception e) {
             MagicTreasures.LOGGER.error("error", e);
         }

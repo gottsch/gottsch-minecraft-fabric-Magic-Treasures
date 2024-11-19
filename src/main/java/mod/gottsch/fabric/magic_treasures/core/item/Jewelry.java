@@ -37,6 +37,7 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 /**
  * Created by Mark Gottschling on 5/29/2023
@@ -47,6 +48,7 @@ public class Jewelry extends Item implements IJewelry{
     private IJewelrySizeTier sizeTier;
     private JewelryMaterial material;
     private Identifier gemstone;
+    private Predicate<ItemStack> affixer = p -> true;
 
     private String loreKey;
 
@@ -238,6 +240,26 @@ public class Jewelry extends Item implements IJewelry{
     @Override
     public void setGemstone(Identifier gemstone) {
         this.gemstone = gemstone;
+    }
+
+    @Override
+    public String getBaseName() {
+        return baseName;
+    }
+
+    @Override
+    public void setBaseName(String baseName) {
+        this.baseName = baseName;
+    }
+
+    @Override
+    public void setAffixer(Predicate<ItemStack> acceptsAffixer) {
+        this.affixer = acceptsAffixer;
+    }
+
+    @Override
+    public boolean acceptsAffixing(ItemStack stack) {
+        return affixer.test(stack);
     }
 
     /**

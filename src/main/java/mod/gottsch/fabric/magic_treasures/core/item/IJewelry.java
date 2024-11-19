@@ -25,6 +25,7 @@ import net.minecraft.text.Text;
 import net.minecraft.util.Identifier;
 
 import java.util.List;
+import java.util.function.Predicate;
 
 /**
  * Created by Mark Gottschling on 5/29/2023
@@ -57,6 +58,14 @@ public interface IJewelry {
     Identifier getGemstone();
 
     void setGemstone(Identifier gemstone);
+
+    String getBaseName();
+
+    void setBaseName(String baseName);
+
+    void setAffixer(Predicate<ItemStack> acceptsAffixer);
+
+    boolean acceptsAffixing(ItemStack stack);
 
     String getLoreKey();
 
