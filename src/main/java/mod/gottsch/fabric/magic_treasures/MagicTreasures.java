@@ -20,6 +20,7 @@ package mod.gottsch.fabric.magic_treasures;
 import mod.gottsch.fabric.magic_treasures.core.config.MyConfig;
 import mod.gottsch.fabric.magic_treasures.core.setup.CommonSetup;
 import mod.gottsch.fabric.magic_treasures.core.setup.Registration;
+import mod.gottsch.fabric.magic_treasures.core.spell.MagicTreasuresSpells;
 import net.fabricmc.api.ModInitializer;
 
 import org.apache.logging.log4j.LogManager;
@@ -38,6 +39,11 @@ public class MagicTreasures implements ModInitializer {
 //	public static Logger LOGGER = LogManager.getLogger(MagicTreasures.MOD_ID);
 
 	public static final MyConfig CONFIG = MyConfig.createAndLoad();
+
+	public MagicTreasures() {
+		// force load of static blocks
+		MagicTreasuresSpells.init();
+	}
 
 	@Override
 	public void onInitialize() {

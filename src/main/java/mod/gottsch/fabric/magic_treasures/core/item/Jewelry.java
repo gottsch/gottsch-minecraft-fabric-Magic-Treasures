@@ -19,6 +19,7 @@ package mod.gottsch.fabric.magic_treasures.core.item;
 
 import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryVitalsComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.MagicTreasuresComponents;
+import mod.gottsch.fabric.magic_treasures.core.item.component.SpellFactorsComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.SpellsComponent;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterials;
@@ -161,12 +162,42 @@ public class Jewelry extends Item implements IJewelry{
     }
 
     /**
+     * convenience method
      * TODO should we have a default Vitals?
      * @param stack
      * @return
      */
     public static Optional<JewelryVitalsComponent> vitals(ItemStack stack) {
         return Optional.ofNullable(stack.get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT));
+    }
+
+    public void setMana(ItemStack stack, double mana) {
+        vitals(stack).ifPresent(v -> {
+            stack.set(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT,
+                    new JewelryVitalsComponent(v.maxLevel(),
+                    v.maxUses(), v.uses(),
+                    v.maxRepairs(),
+                    v.repairs(),
+                    v.maxMana(),
+                    mana,
+                    v.maxRecharges(),
+                    v.recharges()));
+        });
+    }
+
+    public void setUses(ItemStack stack, int uses) {
+        vitals(stack).ifPresent(v -> {
+            stack.set(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT,
+                    new JewelryVitalsComponent(v.maxLevel(),
+                            v.maxUses(), uses,
+                            v.maxRepairs(), v.repairs(),
+                            v.maxMana(), v.mana(),
+                            v.maxRecharges(), v.recharges()));
+        });
+    }
+
+    public static Optional<SpellFactorsComponent> spellFactors(ItemStack stack) {
+        return Optional.ofNullable(stack.get(MagicTreasuresComponents.SPELL_FACTORS_COMPONENT));
     }
 
     @Override

@@ -4,6 +4,7 @@ import mod.gottsch.fabric.magic_treasures.core.block.MagicTreasuresBlocks;
 import mod.gottsch.fabric.magic_treasures.core.event.TagsLoadedHandler;
 import mod.gottsch.fabric.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.fabric.magic_treasures.core.item.ModItemGroups;
+import mod.gottsch.fabric.magic_treasures.core.spell.MagicTreasuresSpells;
 import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
 

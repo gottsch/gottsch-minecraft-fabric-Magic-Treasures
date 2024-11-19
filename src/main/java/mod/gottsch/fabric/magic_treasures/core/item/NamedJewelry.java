@@ -15,19 +15,25 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Magic Treasures.  If not, see <http://www.gnu.org/licenses/lgpl>.
  */
-package mod.gottsch.fabric.magic_treasures.core.spell;
+package mod.gottsch.fabric.magic_treasures.core.item;
 
-import net.minecraft.entity.player.PlayerEntity;
+import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import net.minecraft.item.ItemStack;
+import net.minecraft.text.MutableText;
+import net.minecraft.text.Text;
+import net.minecraft.util.Formatting;
 
-import java.util.List;
 
-public interface ICastSpellContext {
-    ItemStack getJewelry();
+/**
+ * Created by Mark Gottschling on May 7, 2024
+ */
+public class NamedJewelry extends Jewelry {
+    public NamedJewelry(IJewelryType type, IJewelrySizeTier sizeTier, JewelryMaterial material, Settings properties) {
+        super(type, sizeTier, material, properties);
+    }
 
-    ISpell getSpell();
-
-    List<ItemStack> getManaWells();
-
-    PlayerEntity getPlayer();
+    @Override
+    public Text getName(ItemStack stack) {
+        return ((MutableText)super.getName(stack)).formatted(Formatting.YELLOW);
+    }
 }

@@ -102,7 +102,7 @@ public interface ISpell {
     boolean isExclusive();
     void setExclusive(boolean exclusive);
 
-    public Class<?> getRegisteredEvent();
+    public EventType getRegisteredEvent();
 
     boolean isEffectStackable();
 

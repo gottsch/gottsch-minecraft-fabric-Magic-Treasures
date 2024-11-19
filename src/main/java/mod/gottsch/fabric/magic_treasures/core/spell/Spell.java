@@ -20,7 +20,11 @@ package mod.gottsch.fabric.magic_treasures.core.spell;
 import mod.gottsch.fabric.gottschcore.enums.IRarity;
 import mod.gottsch.fabric.gottschcore.spatial.ICoords;
 import mod.gottsch.fabric.magic_treasures.MagicTreasures;
+import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
+import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryVitalsComponent;
+import mod.gottsch.fabric.magic_treasures.core.item.component.SpellFactorsComponent;
 import mod.gottsch.fabric.magic_treasures.core.rarity.MagicTreasuresRarity;
+import mod.gottsch.fabric.magic_treasures.core.spell.cost.CostEvaluator;
 import mod.gottsch.fabric.magic_treasures.core.spell.cost.ICostEvaluator;
 import mod.gottsch.fabric.magic_treasures.core.util.LangUtil;
 import net.minecraft.item.Item;
@@ -108,50 +112,52 @@ public abstract class Spell implements ISpell {
             return getCostEvaluator().apply(level, random, coords, context, amount);
         }
         else {
-            IJewelryHandler handler = context.getJewelry().getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
+            Jewelry item = (Jewelry)context.getJewelry().getItem();
+            JewelryVitalsComponent vitals = Jewelry.vitals(context.getJewelry()).orElseThrow(IllegalStateException::new);
             MagicTreasures.LOGGER.debug("Spell does not have a cost eval.");
-            handler.setMana(MathHelper.clamp(handler.getMana() - 1.0,  0D, handler.getMana()));
+            item.setMana(context.getJewelry(), MathHelper.clamp(vitals.mana() - 1.0,  0D, vitals.mana()));
+
         }
         return amount;
     }
 
     public double modifySpellCost(ItemStack jewelry) {
-        IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-        return handler.modifySpellCost(getSpellCost());
+       SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
+       return factorsComponent.modifySpellCost(getSpellCost());
    }
 
     public double modifyEffectAmount(ItemStack jewelry) {
-        IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-        return handler.modifyEffectAmount(getEffectAmount());
+        SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
+        return factorsComponent.modifyEffectAmount(getEffectAmount());
    }
 
     public long modifyCooldown(ItemStack jewelry) {
-        IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-        return handler.modifyCooldown(getCooldown());
+        SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
+        return factorsComponent.modifyCooldown(getCooldown());
    }
 
     public long modifyDuration(ItemStack jewelry) {
-        IJewelryHandler handler = getHandler(jewelry);
-        return handler.modifyDuration(getDuration());
+        SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
+        return factorsComponent.modifyDuration(getDuration());
     }
 
     public long modifyFrequency(ItemStack jewelry) {
-        IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-        return handler.modifyFrequency(getFrequency());
+        SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
+        return factorsComponent.modifyFrequency(getFrequency());
    }
 
     public double modifyRange(ItemStack jewelry) {
-        IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-        return handler.modifyRange(getRange());
+        SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
+        return factorsComponent.modifyRange(getRange());
    }
 
-    private IJewelryHandler getHandler(ItemStack jewelry) {
-        return  jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-    }
+   private SpellFactorsComponent getSpellFactors(ItemStack jewelry) {
+        return Jewelry.spellFactors(jewelry).orElseThrow(IllegalStateException::new);
+   }
 
     @SuppressWarnings("deprecation")
     @Override
-    public void addInformation(ItemStack stack, Item.TooltipContext, List<Text> tooltip, TooltipType flagIn, ISpell spell) {
+    public void addInformation(ItemStack stack, Item.TooltipContext context, List<Text> tooltip, TooltipType flagIn) {
         tooltip.add(getLabel());
         getDesc(stack).ifPresent(tooltip::add);
     }
@@ -159,7 +165,7 @@ public abstract class Spell implements ISpell {
     private Text getLabel() {
         MutableText label = Text.translatable(LangUtil.tooltip("spell.name.") + getName().getPath().toLowerCase());
         label.append(" ").append((this.effectStackable ? "+" : ""));
-        return Text.translatable(LangUtil.INDENT2).append(label.formatted(getSpellLabelColor()).withStyle(Formatting.BOLD));
+        return Text.translatable(LangUtil.INDENT2).append(label.formatted(getSpellLabelColor()).formatted(Formatting.BOLD));
     }
 
     // a short desc of its effect ex "Heals 1hp / 10 sec"

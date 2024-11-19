@@ -5,6 +5,7 @@ import mod.gottsch.fabric.magic_treasures.MagicTreasures;
 import mod.gottsch.fabric.magic_treasures.core.block.MagicTreasuresBlocks;
 import mod.gottsch.fabric.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.fabric.magic_treasures.core.setup.Registration;
+import mod.gottsch.fabric.magic_treasures.core.spell.SpellRegistry;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricModelProvider;
 import net.minecraft.data.client.*;
@@ -66,10 +67,21 @@ public class ModModelProvider extends FabricModelProvider {
         // jewelry
         singleTexture(MagicTreasuresItems.GOLD_RING, Models.GENERATED, modLoc("item/jewelry/" + name(MagicTreasuresItems.GOLD_RING)), itemModelGenerator.writer);
 
+        // scrolls
+        SpellRegistry.values().forEach(spell -> {
+            singleTexture(modLoc(spell.getName().getPath() + "_scroll")
+                            .withPrefixedPath("item/"),
+                    Models.GENERATED, modLoc(
+                            switch(spell.getLevel()) {
+                                case 1,2 -> "item/yellow_spell_scroll";
+                                case 3,4 -> "item/green_spell_scroll";
+                                case 5,6 -> "item/blue_spell_scroll";
+                                case 7,8 -> "item/red_spell_scroll";
+                                default -> "item/black_spell_scroll";
+                            }), itemModelGenerator.writer);
+        });
     }
 
-    // TODO this method cause errors which in turn nothing generates - why?!
-    // TODO now it doesn't cause error - bizarre
     public void gem(Item item, BiConsumer<Identifier, Supplier<JsonElement>> writer) {
         try {
             singleTexture(item, Models.GENERATED, modLoc("item/gem/" + name(item)), writer);
@@ -82,8 +94,15 @@ public class ModModelProvider extends FabricModelProvider {
         model.upload(ModelIds.getItemModelId(item), TextureMap.layer0(path), writer);
     }
 
+    public void singleTexture(Identifier itemIdentifier, Model model, Identifier path, BiConsumer<Identifier, Supplier<JsonElement>> writer) {
+        model.upload(itemIdentifier, TextureMap.layer0(path), writer);
+    }
+
     public final Identifier modLoc(String path) {
         return Identifier.of(MagicTreasures.MOD_ID, path);
+    }
+    public final Identifier mcLoc(String path) {
+        return Identifier.ofVanilla(path);
     }
 
     public final String name(Item item) {

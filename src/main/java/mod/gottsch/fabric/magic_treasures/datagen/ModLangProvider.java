@@ -3,6 +3,7 @@ package mod.gottsch.fabric.magic_treasures.datagen;
 import mod.gottsch.fabric.magic_treasures.core.block.MagicTreasuresBlocks;
 import mod.gottsch.fabric.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.fabric.magic_treasures.core.item.ModItemGroups;
+import mod.gottsch.fabric.magic_treasures.core.item.SpellScroll;
 import mod.gottsch.fabric.magic_treasures.core.util.LangUtil;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricLanguageProvider;
@@ -21,6 +22,8 @@ public class ModLangProvider extends FabricLanguageProvider {
 
     @Override
     public void generateTranslations(RegistryWrapper.WrapperLookup wrapperLookup, TranslationBuilder translationBuilder) {
+
+        // ores
         translationBuilder.add(MagicTreasuresBlocks.TOPAZ_ORE, "Topaz Ore");
         translationBuilder.add(MagicTreasuresBlocks.ONYX_ORE, "Onyx Ore");
         translationBuilder.add(MagicTreasuresBlocks.JADEITE_ORE, "Jadeite Ore");
@@ -35,6 +38,7 @@ public class ModLangProvider extends FabricLanguageProvider {
         translationBuilder.add(MagicTreasuresBlocks.DEEPSLATE_SAPPHIRE_ORE, "Deepslate Sapphire Ore");
         translationBuilder.add(MagicTreasuresBlocks.DEEPSLATE_SILVER_ORE, "Deepslate Silver Ore");
 
+        // gems
         translationBuilder.add(MagicTreasuresItems.TOPAZ, "Topaz");
         translationBuilder.add(MagicTreasuresItems.ONYX, "Onyx");
         translationBuilder.add(MagicTreasuresItems.JADEITE, "Jadeite");
@@ -50,6 +54,13 @@ public class ModLangProvider extends FabricLanguageProvider {
         // regular jewelry
         MagicTreasuresItems.STANDARD_JEWELRY.forEach(item -> {
             translationBuilder.add(item, WordUtils.capitalizeFully(name(item).replace("_", " ")));
+        });
+
+        // scrolls
+        Registries.ITEM.forEach(o -> {
+            if (o instanceof SpellScroll) {
+                translationBuilder.add(o, WordUtils.capitalizeFully("Scroll of " + ((SpellScroll) o).getSpell().getName().getPath().replace("_", " ")));
+            }
         });
 
         /*

@@ -7,6 +7,7 @@ import mod.gottsch.fabric.magic_treasures.core.item.component.MagicTreasuresComp
 import mod.gottsch.fabric.magic_treasures.core.item.component.SpellFactorsComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.SpellsComponent;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.*;
+import mod.gottsch.fabric.magic_treasures.core.spell.SpellRegistry;
 import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemGroups;
@@ -20,6 +21,13 @@ import java.util.List;
  * Created by Mark Gottschling on Nov 14, 2024
  */
 public class MagicTreasuresItems {
+    /*
+     * lists of all mod generated items.
+     */
+    public static final List<Item> ALL_JEWELRY = Lists.newArrayList();
+    public static final List<Item> STANDARD_JEWELRY = Lists.newArrayList();
+    public static final List<Item> ALL_SPELL_SCROLLS = Lists.newArrayList();
+
     // tab items
     public static final Item MAGIC_TREASURES_TAB = registerItem("magic_treasures_tab", new Item(new Item.Settings()));
 
@@ -34,11 +42,16 @@ public class MagicTreasuresItems {
 
     public static final Item RAW_SILVER = registerItem("raw_silver", new Gemstone(new Item.Settings()));
 
-    /*
-     * a list of all mod generated items.
-     */
-    public static final List<Item> ALL_JEWELRY = Lists.newArrayList();
-    public static final List<Item> STANDARD_JEWELRY = Lists.newArrayList();
+
+    // spell scrolls
+    static {
+        SpellRegistry.values().forEach(spell -> {
+            Item scroll = registerItem(spell.getName().getPath() + "_scroll",
+                    new SpellScroll(new Item.Settings(), spell));
+            // add scroll registry item to a list
+            ALL_SPELL_SCROLLS.add(scroll);
+        });
+    }
 
     // jewelry
     public static final Item GOLD_RING = registerItem("gold_ring",

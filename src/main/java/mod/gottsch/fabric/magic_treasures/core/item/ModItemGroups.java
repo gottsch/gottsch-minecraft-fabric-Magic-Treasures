@@ -44,6 +44,10 @@ public class ModItemGroups {
 
                         // TODO replace with STANDARD_JEWELRY builder
                         entries.add(MagicTreasuresItems.GOLD_RING);
+
+                        // add all scrolls
+                        MagicTreasuresItems.ALL_SPELL_SCROLLS.forEach(entries::add);
+
                     }).build());
 
 

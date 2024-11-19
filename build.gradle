@@ -19,12 +19,12 @@ repositories {
 //	maven {
 //		url "${project.projectDir}/../maven"
 //	}
+	mavenLocal()
 	maven { url 'https://maven.wispforest.io/releases/' }
 	maven {
 		name = "CurseMaven"
 		url = "https://www.cursemaven.com"
 	}
-	mavenLocal()
 }
 
 fabricApi {

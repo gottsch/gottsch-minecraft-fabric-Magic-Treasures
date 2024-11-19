@@ -3,16 +3,16 @@
 	"id": "magictreasures",
 	"version": "${version}",
 	"name": "Magic Treasures",
-	"description": "This is an example description! Tell everyone what your mod is about!",
+	"description": "",
 	"authors": [
-		"Me!"
+		"gottsch"
 	],
 	"contact": {
 		"homepage": "https://fabricmc.net/",
 		"sources": "https://github.com/FabricMC/fabric-example-mod"
 	},
-	"license": "CC0-1.0",
-	"icon": "assets/magictreasures/icon.png",
+	"license": "GNU GPL v3",
+	"icon": "assets/magictreasures/magic_treasures_curseforge_logo.png",
 	"environment": "*",
 	"entrypoints": {
 		"main": [
