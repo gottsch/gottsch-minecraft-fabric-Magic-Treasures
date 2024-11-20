@@ -17,8 +17,8 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.mixin;
 
-import mod.gottsch.fabric.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.fabric.magic_treasures.core.item.component.MagicTreasuresComponents;
+import mod.gottsch.fabric.magic_treasures.core.item.generator.JewelryGenerator;
 import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
 import net.minecraft.entity.player.PlayerInventory;
 import net.minecraft.item.ItemStack;
@@ -57,12 +57,16 @@ public abstract class AnvilEventMixin extends ForgingScreenHandler {
         // add a spell to item
         if (!jewelryStack.isEmpty()
                 && jewelryStack.isIn(MagicTreasuresTags.Items.JEWELRY)
-                && jewelryStack.contains(MagicTreasuresComponents.SPELLS_COMPONENT)) {
+                && jewelryStack.contains(MagicTreasuresComponents.SPELLS)) {
             ItemStack scrollStack = this.input.getStack(1);
-            if (!scrollStack.isEmpty() && scrollStack.isIn(MagicTreasuresTags.Items.SPELL_SCROLLS)
-                && scrollStack.contains(MagicTreasuresComponents.SPELLS_COMPONENT)) {
-                Optional<ItemStack> resultStack = generator.addSpells(leftStack, rightStack);
-                resultStack.ifPresent(resultOutStack::set);
+            if (!scrollStack.isEmpty() && scrollStack.isIn(MagicTreasuresTags.Items.SPELL_SCROLLS)) {
+                Optional<ItemStack> resultStack = generator.addSpells(jewelryStack, scrollStack);
+                resultStack.ifPresent(stack -> {
+                    // TODO this is moot
+                    resultOutStack.set(stack);
+                    this.output.setStack(0, stack);
+                    this.sendContentUpdates();
+                });
                 ci.cancel();
             }
         }

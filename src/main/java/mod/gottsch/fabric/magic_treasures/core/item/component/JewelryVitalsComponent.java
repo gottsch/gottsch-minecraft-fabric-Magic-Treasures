@@ -35,6 +35,7 @@ import java.util.function.Consumer;
 /**
  * Created by Mark Gottschling on 11/15/2024
  */
+@Deprecated
 public record JewelryVitalsComponent(int maxLevel,
                                      int maxUses, int uses,
                                      int maxRepairs, int repairs,

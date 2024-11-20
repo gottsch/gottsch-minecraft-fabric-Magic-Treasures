@@ -17,12 +17,10 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.item;
 
-import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
-import net.minecraft.util.Identifier;
 
 import java.util.List;
 import java.util.function.Predicate;
@@ -43,21 +41,6 @@ public interface IJewelry {
 
     void appendLoreHoverText(ItemStack stack, Item.TooltipContext level, List<Text> tooltip, TooltipType flag);
 
-    IJewelryType getType();
-
-    void setType(IJewelryType type);
-
-    IJewelrySizeTier getSizeTier();
-
-    void setSizeTier(IJewelrySizeTier sizeTier);
-
-    JewelryMaterial getMaterial();
-
-    void setMaterial(JewelryMaterial material);
-
-    Identifier getGemstone();
-
-    void setGemstone(Identifier gemstone);
 
     String getBaseName();
 

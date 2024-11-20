@@ -1,7 +1,9 @@
 package mod.gottsch.fabric.magic_treasures.core.setup;
 
 import mod.gottsch.fabric.magic_treasures.core.api.MagicTreasuresApi;
+import mod.gottsch.fabric.magic_treasures.core.integration.MagicTreasuresIntegrations;
 import mod.gottsch.fabric.magic_treasures.core.item.JewelryType;
+import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTiers;
 import mod.gottsch.fabric.magic_treasures.core.rarity.MagicTreasuresRarity;
@@ -57,6 +59,19 @@ public class CommonSetup {
         MagicTreasuresApi.registerJewelryStoneRarityTag(MagicTreasuresRarity.RARE, MagicTreasuresTags.Items.STONE_RARITY_RARE);
         MagicTreasuresApi.registerJewelryStoneRarityTag(MagicTreasuresRarity.EPIC, MagicTreasuresTags.Items.STONE_RARITY_EPIC);
 
+        // register jewelry material tiers
+        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.WOOD);
+        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.IRON);
+        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.COPPER);
+        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.SILVER);
+        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.GOLD);
+        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.BLOOD);
+        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.BONE);
+        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.SHADOW);
+        MagicTreasuresApi.registerJewelryMaterial(JewelryMaterials.ATIUM);
+
+        // curios integration
+        MagicTreasuresIntegrations.registerTrinketsIntegration();
     }
 
 }

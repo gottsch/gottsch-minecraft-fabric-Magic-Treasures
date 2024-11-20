@@ -21,6 +21,13 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import mod.gottsch.fabric.gottschcore.enums.IRarity;
+import mod.gottsch.fabric.magic_treasures.core.api.MagicTreasuresApi;
+import mod.gottsch.fabric.magic_treasures.core.item.IJewelrySizeTier;
+import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
+import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
+import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryAttribsComponent;
+import mod.gottsch.fabric.magic_treasures.core.item.component.MagicTreasuresComponents;
+import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTier;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTiers;
 import mod.gottsch.fabric.magic_treasures.core.registry.support.JewelryRegistryKey;
@@ -48,34 +55,70 @@ public class JewelryRegistry {
 	 */
 	public static void register(Item item) {		
 		ItemStack stack = new ItemStack(item);
-		// TODO get all the components
-		stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(c -> {
-			NAME_MAP.put(ModUtil.getName(item), item);
+		JewelryStoneTier stoneTier = JewelryStoneTiers.NONE;
 
-			// get the stone
-			Item stone = null;
-			JewelryStoneTier stoneTier = JewelryStoneTiers.NONE;
-			if (c.hasStone()) {
-				Optional<Item> optionalStone = StoneRegistry.get(c.getStone());
-				if (optionalStone.isPresent()) {
-					stone = optionalStone.get();
-					Optional<JewelryStoneTier> tier = StoneRegistry.getStoneTier(stone);
-					if (tier.isPresent()) {
-						stoneTier = tier.get();
-					}
+		if (stack.contains(MagicTreasuresComponents.JEWELRY_ATTRIBS)) {
+			JewelryAttribsComponent attribs = Jewelry.attribs(stack).get();
+
+//			if (Jewelry.hasStone(stack)) {
+//				Optional<Item> optionalStone = StoneRegistry.get(attribs.gemstone());
+			// NOTE have to do this explicitly instead of lambdas since we need to the stoneTier
+			Optional<Item> optionalStone = Jewelry.gemstone(stack);
+			if (optionalStone.isPresent()) {
+				Item stone = optionalStone.get();
+				Optional<JewelryStoneTier> tier = StoneRegistry.getStoneTier(stone);
+				if (tier.isPresent()) {
+					// update the stone tier
+					stoneTier = tier.get();
 				}
-
 			}
+//			}
 
-			// generate keys
-			JewelryRegistryKey key = new JewelryRegistryKey(
-						c.getJewelryType(),
-						c.getMaterial(),
+			Optional<IJewelryType> jewelryType = MagicTreasuresApi.getJewelryType(attribs.type());
+			Optional<IJewelrySizeTier> sizeTier = MagicTreasuresApi.getJewelrySize(attribs.sizeTier());
+			Optional<JewelryMaterial> material = MagicTreasuresApi.getJewelryMaterial(attribs.material());
+
+			if (jewelryType.isPresent() && sizeTier.isPresent() && material.isPresent()) {
+				// generate keys
+				JewelryRegistryKey key = new JewelryRegistryKey(
+						jewelryType.get(),
+						material.get(),
 						stoneTier,
-						c.getJewelrySizeTier());
+						sizeTier.get());
 
-			KEY_MAP.put(key, item);
-		});
+				NAME_MAP.put(ModUtil.getName(item), item);
+				KEY_MAP.put(key, item);
+			}
+		}
+
+		// TODO get all the components
+//		stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(c -> {
+//			NAME_MAP.put(ModUtil.getName(item), item);
+//
+//			// get the stone
+//			Item stone = null;
+//			JewelryStoneTier stoneTier = JewelryStoneTiers.NONE;
+//			if (c.hasStone()) {
+//				Optional<Item> optionalStone = StoneRegistry.get(c.getStone());
+//				if (optionalStone.isPresent()) {
+//					stone = optionalStone.get();
+//					Optional<JewelryStoneTier> tier = StoneRegistry.getStoneTier(stone);
+//					if (tier.isPresent()) {
+//						stoneTier = tier.get();
+//					}
+//				}
+//
+//			}
+//
+//			// generate keys
+//			JewelryRegistryKey key = new JewelryRegistryKey(
+//						c.getJewelryType(),
+//						c.getMaterial(),
+//						stoneTier,
+//						c.getJewelrySizeTier());
+//
+//			KEY_MAP.put(key, item);
+//		});
 	}
 
 	/**

@@ -39,9 +39,9 @@ public record SpellsComponent(List<Identifier> spellNames) {
      * @return
      */
     public List<Identifier> spellNames() {
-        if (spellNames == null) {
+        if (this.spellNames == null) {
             return new ArrayList<>();
         }
-        return spellNames;
+        return this.spellNames;
     }
 }

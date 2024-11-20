@@ -4,12 +4,15 @@ import mod.gottsch.fabric.gottschcore.enums.IEnum;
 import mod.gottsch.fabric.gottschcore.enums.IRarity;
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
+import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTier;
 import mod.gottsch.fabric.magic_treasures.core.registry.EnumRegistry;
+import mod.gottsch.fabric.magic_treasures.core.registry.JewelryMaterialRegistry;
 import mod.gottsch.fabric.magic_treasures.core.registry.JewelryStoneTierRegistry;
 import mod.gottsch.fabric.magic_treasures.core.registry.TagRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.registry.tag.TagKey;
+import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +94,14 @@ public class MagicTreasuresApi {
         else {
             return Optional.of((IJewelrySizeTier) ienum);
         }
+    }
+
+    public static void registerJewelryMaterial(JewelryMaterial material) {
+        JewelryMaterialRegistry.register(material);
+    }
+
+    public static Optional<JewelryMaterial> getJewelryMaterial(Identifier name) {
+        return JewelryMaterialRegistry.get(name);
     }
 
     public static void registerJewelryStoneTier(JewelryStoneTier tier) {

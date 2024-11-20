@@ -17,6 +17,7 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.item.component;
 
+import com.mojang.serialization.Codec;
 import mod.gottsch.fabric.magic_treasures.MagicTreasures;
 import net.minecraft.component.ComponentType;
 import net.minecraft.registry.Registries;
@@ -27,31 +28,72 @@ import net.minecraft.util.Identifier;
  * Created by Mark Gottschling on Nov 15, 2024
  */
 public class MagicTreasuresComponents {
-    public static final String JEWELRY_VITALS = "jewelry_vitals";
-    public static final String SPELLS = "spells";
-    public static final String SPELL_FACTORS = "spell_factors";
+
+    public static final ComponentType<JewelryAttribsComponent> JEWELRY_ATTRIBS = Registry.register(
+            Registries.DATA_COMPONENT_TYPE,
+            Identifier.of(MagicTreasures.MOD_ID, "jewelry_attribs"),
+            ComponentType.<JewelryAttribsComponent>builder().codec(JewelryAttribsComponent.CODEC).build()
+    );
 
     /*
      * component to track uses, repairs, mana, etc.
      */
-    public static final ComponentType<JewelryVitalsComponent> JEWELRY_VITALS_COMPONENT = Registry.register(
-            Registries.DATA_COMPONENT_TYPE,
-            Identifier.of(MagicTreasures.MOD_ID, JEWELRY_VITALS),
-            ComponentType.<JewelryVitalsComponent>builder().codec(JewelryVitalsComponent.CODEC).build()
-    );
+//    @Deprecated
+//    public static final ComponentType<JewelryVitalsComponent> JEWELRY_VITALS_COMPONENT = Registry.register(
+//            Registries.DATA_COMPONENT_TYPE,
+//            Identifier.of(MagicTreasures.MOD_ID, JEWELRY_VITALS),
+//            ComponentType.<JewelryVitalsComponent>builder().codec(JewelryVitalsComponent.CODEC).build()
+//    );
 
     /*
      * component to track the spells (by Identifier) on a piece of jewelry.
      */
-    public static final ComponentType<SpellsComponent> SPELLS_COMPONENT = Registry.register(
+    public static final ComponentType<SpellsComponent> SPELLS = Registry.register(
             Registries.DATA_COMPONENT_TYPE,
-            Identifier.of(MagicTreasures.MOD_ID, SPELLS),
+            Identifier.of(MagicTreasures.MOD_ID, "spells"),
             ComponentType.<SpellsComponent>builder().codec(SpellsComponent.CODEC).build()
     );
 
-    public static final ComponentType<SpellFactorsComponent> SPELL_FACTORS_COMPONENT = Registry.register(
+    public static final ComponentType<SpellFactorsComponent> SPELL_FACTORS = Registry.register(
             Registries.DATA_COMPONENT_TYPE,
-            Identifier.of(MagicTreasures.MOD_ID, SPELL_FACTORS),
+            Identifier.of(MagicTreasures.MOD_ID, "spell_factors"),
             ComponentType.<SpellFactorsComponent>builder().codec(SpellFactorsComponent.CODEC).build()
+    );
+
+    public static final ComponentType<ManaComponent> MANA = Registry.register(
+            Registries.DATA_COMPONENT_TYPE,
+            Identifier.of(MagicTreasures.MOD_ID, "mana"),
+            ComponentType.<ManaComponent>builder().codec(ManaComponent.CODEC).build()
+    );
+
+    public static final ComponentType<MaxLevelComponent> MAX_LEVEL = Registry.register(
+            Registries.DATA_COMPONENT_TYPE,
+            Identifier.of(MagicTreasures.MOD_ID, "max_level"),
+            ComponentType.<MaxLevelComponent>builder().codec(MaxLevelComponent.CODEC).build()
+    );
+
+    public static final ComponentType<UsesComponent> USES = Registry.register(
+            Registries.DATA_COMPONENT_TYPE,
+            Identifier.of(MagicTreasures.MOD_ID, "uses"),
+            ComponentType.<UsesComponent>builder().codec(UsesComponent.CODEC).build()
+    );
+
+    public static final ComponentType<RepairsComponent> REPAIRS = Registry.register(
+            Registries.DATA_COMPONENT_TYPE,
+            Identifier.of(MagicTreasures.MOD_ID, "repairs"),
+            ComponentType.<RepairsComponent>builder().codec(RepairsComponent.CODEC).build()
+    );
+
+    public static final ComponentType<RechargesComponent> RECHARGES = Registry.register(
+            Registries.DATA_COMPONENT_TYPE,
+            Identifier.of(MagicTreasures.MOD_ID, "recharges"),
+            ComponentType.<RechargesComponent>builder().codec(RechargesComponent.CODEC).build()
+    );
+
+    // spell-specific components
+    public static final ComponentType<Long> COOLDOWN = Registry.register(
+            Registries.DATA_COMPONENT_TYPE,
+            Identifier.of(MagicTreasures.MOD_ID, "cooldown"),
+            ComponentType.<Long>builder().codec(Codec.LONG).build()
     );
 }

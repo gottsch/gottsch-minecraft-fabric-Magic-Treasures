@@ -2,6 +2,7 @@ package mod.gottsch.fabric.magic_treasures.datagen;
 
 import mod.gottsch.fabric.magic_treasures.MagicTreasures;
 import mod.gottsch.fabric.magic_treasures.core.item.MagicTreasuresItems;
+import mod.gottsch.fabric.magic_treasures.core.item.SpellScroll;
 import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
@@ -9,9 +10,13 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.RegistryWrapper;
+import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
+import java.util.Collection;
 import java.util.concurrent.CompletableFuture;
+
+import static net.fabricmc.fabric.api.biome.v1.BiomeSelectors.tag;
 
 /**
  * Created by Mark Gottschling on Nov 14, 2024
@@ -65,6 +70,13 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
             // jewelry
             getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY).add(MagicTreasuresItems.GOLD_RING);
+
+            // spell scrolls
+            Registries.ITEM.forEach(o -> {
+                if (o instanceof SpellScroll) {
+                    getOrCreateTagBuilder(MagicTreasuresTags.Items.SPELL_SCROLLS).add(o);
+                }
+            });
 
         } catch(Exception e) {
             MagicTreasures.LOGGER.error("error", e);

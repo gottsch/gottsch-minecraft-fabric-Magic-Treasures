@@ -22,6 +22,7 @@ import mod.gottsch.fabric.gottschcore.spatial.ICoords;
 import mod.gottsch.fabric.magic_treasures.MagicTreasures;
 import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
 import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryVitalsComponent;
+import mod.gottsch.fabric.magic_treasures.core.item.component.ManaComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.SpellFactorsComponent;
 import mod.gottsch.fabric.magic_treasures.core.rarity.MagicTreasuresRarity;
 import mod.gottsch.fabric.magic_treasures.core.spell.cost.CostEvaluator;
@@ -112,11 +113,9 @@ public abstract class Spell implements ISpell {
             return getCostEvaluator().apply(level, random, coords, context, amount);
         }
         else {
-            Jewelry item = (Jewelry)context.getJewelry().getItem();
-            JewelryVitalsComponent vitals = Jewelry.vitals(context.getJewelry()).orElseThrow(IllegalStateException::new);
             MagicTreasures.LOGGER.debug("Spell does not have a cost eval.");
-            item.setMana(context.getJewelry(), MathHelper.clamp(vitals.mana() - 1.0,  0D, vitals.mana()));
-
+            ManaComponent manaComponent = Jewelry.mana(context.getJewelry()).orElseThrow(IllegalStateException::new);
+            Jewelry.setMana(context.getJewelry(), MathHelper.clamp(manaComponent.mana() - 1.0,  0D, manaComponent.mana()));
         }
         return amount;
     }

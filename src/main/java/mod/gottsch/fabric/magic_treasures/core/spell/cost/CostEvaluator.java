@@ -19,9 +19,14 @@ package mod.gottsch.fabric.magic_treasures.core.spell.cost;
 
 import mod.gottsch.fabric.gottschcore.spatial.ICoords;
 import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
+import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryAttribsComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryVitalsComponent;
+import mod.gottsch.fabric.magic_treasures.core.item.component.ManaComponent;
+import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
+import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTier;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTiers;
+import mod.gottsch.fabric.magic_treasures.core.registry.JewelryMaterialRegistry;
 import mod.gottsch.fabric.magic_treasures.core.registry.StoneRegistry;
 import mod.gottsch.fabric.magic_treasures.core.spell.ICastSpellContext;
 import net.minecraft.item.Item;
@@ -40,23 +45,24 @@ import java.util.Random;
 public class CostEvaluator implements ICostEvaluator {
 	@Override
 	public double apply(World level, Random random, ICoords coords, ICastSpellContext context, double amount) {
-		Jewelry item = (Jewelry)context.getJewelry().getItem();
-		JewelryVitalsComponent vitals = Jewelry.vitals(context.getJewelry()).orElseThrow(IllegalStateException::new); //context.getJewelry().get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT)
-		Optional<Item> stone = StoneRegistry.get(item.getGemstone());
+		JewelryAttribsComponent attribs = Jewelry.attribs(context.getJewelry()).orElseThrow(IllegalStateException::new);
+		ManaComponent manaComponent = Jewelry.mana(context.getJewelry()).orElseThrow(IllegalStateException::new); //context.getJewelry().get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT)
+		Optional<Item> stone = StoneRegistry.get(attribs.gemstone());
 		JewelryStoneTier stoneTier = StoneRegistry.getStoneTier(stone.orElseGet(() -> Items.AIR)).orElse(JewelryStoneTiers.NONE);
+		JewelryMaterial material = JewelryMaterialRegistry.get(attribs.material()).orElse(JewelryMaterials.NONE);
 
 		// calculate the new amount for cost
-		double newAmount = amount * item.getMaterial().getSpellCostFactor()
+		double newAmount = amount * material.getSpellCostFactor()
 				* stoneTier.getSpellCostFactor();
 
 		double cost = 0;
-		if (vitals.mana() >= newAmount) {
+		if (manaComponent.mana() >= newAmount) {
 			cost = newAmount;
-			item.setMana(context.getJewelry(), MathHelper.clamp(vitals.mana() - newAmount, 0D, vitals.mana()));
+			Jewelry.setMana(context.getJewelry(), MathHelper.clamp(manaComponent.mana() - newAmount, 0D, manaComponent.mana()));
 			}
 		else {
-			cost = vitals.mana();
-			item.setMana(context.getJewelry(), 0);
+			cost = manaComponent.mana();
+			Jewelry.setMana(context.getJewelry(), 0);
 		}
 		return cost;
 	}

@@ -47,8 +47,6 @@ public enum JewelryType implements IJewelryType {
 	private Integer code;
 	private String value;
 
-	CODEC = Codec.STRING.comapFlatMap(Identifier::validate, Identifier::toString).stable();
-
 	// setup reverse lookup
 	static {
 		for (IJewelryType x : EnumSet.allOf(JewelryType.class)) {

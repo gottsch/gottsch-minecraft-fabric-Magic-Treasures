@@ -2,15 +2,10 @@ package mod.gottsch.fabric.magic_treasures.core.item;
 
 import com.google.common.collect.Lists;
 import mod.gottsch.fabric.magic_treasures.MagicTreasures;
-import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryVitalsComponent;
-import mod.gottsch.fabric.magic_treasures.core.item.component.MagicTreasuresComponents;
-import mod.gottsch.fabric.magic_treasures.core.item.component.SpellFactorsComponent;
-import mod.gottsch.fabric.magic_treasures.core.item.component.SpellsComponent;
+import mod.gottsch.fabric.magic_treasures.core.item.component.*;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.*;
 import mod.gottsch.fabric.magic_treasures.core.spell.SpellRegistry;
-import net.fabricmc.fabric.api.itemgroup.v1.ItemGroupEvents;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemGroups;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -55,15 +50,8 @@ public class MagicTreasuresItems {
 
     // jewelry
     public static final Item GOLD_RING = registerItem("gold_ring",
-            new Jewelry(JewelryType.RING, JewelrySizeTier.REGULAR, JewelryMaterials.GOLD,
-                    new Item.Settings().component(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT,
-                            new JewelryVitalsComponent.Builder(JewelryType.RING, JewelryMaterials.GOLD).build())
-                            .component(MagicTreasuresComponents.SPELLS_COMPONENT,
-                                    new SpellsComponent(null))
-                            .component(MagicTreasuresComponents.SPELL_FACTORS_COMPONENT,
-                                    new SpellFactorsComponent.Builder(JewelryMaterials.GOLD).build())
+            new Jewelry(createSettings(JewelryType.RING, JewelryMaterials.GOLD)
             ));
-
 
     // register items to built-in item group
     public static void register() {
@@ -81,5 +69,28 @@ public class MagicTreasuresItems {
 
     private static Item registerItem(String name, Item item) {
         return Registry.register(Registries.ITEM, Identifier.of(MagicTreasures.MOD_ID, name), item);
+    }
+
+    public static Item.Settings createSettings(IJewelryType type, JewelryMaterial material) {
+        return new Item.Settings()
+                .component(MagicTreasuresComponents.JEWELRY_ATTRIBS,
+                        new JewelryAttribsComponent(type.getName(), JewelrySizeTier.REGULAR.getName(),
+                                material.getId(), null))
+//                .component(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT,
+//                        new JewelryVitalsComponent.Builder(type, material).build())
+                .component(MagicTreasuresComponents.SPELLS,
+                        new SpellsComponent(null))
+                .component(MagicTreasuresComponents.SPELL_FACTORS,
+                        new SpellFactorsComponent.Builder(material).build())
+                .component(MagicTreasuresComponents.MAX_LEVEL,
+                        new MaxLevelComponent.Builder(material).build())
+                .component(MagicTreasuresComponents.USES,
+                        new UsesComponent.Builder(material).build())
+                .component(MagicTreasuresComponents.REPAIRS,
+                        new RepairsComponent.Builder(material).build())
+                .component(MagicTreasuresComponents.MANA,
+                        new ManaComponent.Builder(material).build())
+                .component(MagicTreasuresComponents.RECHARGES,
+                        new RechargesComponent.Builder(material).build());
     }
 }

@@ -17,18 +17,16 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.item;
 
-import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryVitalsComponent;
-import mod.gottsch.fabric.magic_treasures.core.item.component.MagicTreasuresComponents;
-import mod.gottsch.fabric.magic_treasures.core.item.component.SpellFactorsComponent;
-import mod.gottsch.fabric.magic_treasures.core.item.component.SpellsComponent;
-import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
-import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterials;
-import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
+import mod.gottsch.fabric.magic_treasures.core.api.MagicTreasuresApi;
+import mod.gottsch.fabric.magic_treasures.core.item.component.*;
+import mod.gottsch.fabric.magic_treasures.core.registry.StoneRegistry;
 import mod.gottsch.fabric.magic_treasures.core.spell.ISpell;
 import mod.gottsch.fabric.magic_treasures.core.spell.SpellRegistry;
+import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
 import mod.gottsch.fabric.magic_treasures.core.util.LangUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
@@ -44,30 +42,18 @@ import java.util.function.Predicate;
  */
 public class Jewelry extends Item implements IJewelry{
     private String baseName;
-    private IJewelryType type;
-    private IJewelrySizeTier sizeTier;
-    private JewelryMaterial material;
-    private Identifier gemstone;
     private Predicate<ItemStack> affixer = p -> true;
 
     private String loreKey;
 
-    public Jewelry(IJewelryType type, IJewelrySizeTier sizeTier, JewelryMaterial material, Item.Settings settings) {
-        this(type, sizeTier, material, null, settings);
-    }
-
-    public Jewelry(IJewelryType type, IJewelrySizeTier sizeTier, JewelryMaterial material, Identifier gemstone, Item.Settings settings) {
+    public Jewelry(Item.Settings settings) {
         super(settings.maxCount(1));
-        this.type = type == null ? JewelryType.RING : type;
-        this.sizeTier = sizeTier == null ? JewelrySizeTier.REGULAR : sizeTier;
-        this.material = material == null ? JewelryMaterials.GOLD : material;
-        this.gemstone = gemstone;
     }
 
     @Override
     public boolean hasGlint(ItemStack stack) {
-        if(stack.contains(MagicTreasuresComponents.SPELLS_COMPONENT)) {
-            if (!stack.get(MagicTreasuresComponents.SPELLS_COMPONENT).spellNames().isEmpty()) {
+        if(stack.contains(MagicTreasuresComponents.SPELLS)) {
+            if (!stack.get(MagicTreasuresComponents.SPELLS).spellNames().isEmpty()) {
                 return true;
             }
         }
@@ -100,33 +86,43 @@ public class Jewelry extends Item implements IJewelry{
 
         // TODO figure this out
         // add component tooltips
-        if (stack.contains(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT)) {
-            JewelryVitalsComponent vitals = stack.get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT);
+        Optional<MaxLevelComponent> maxLevelComponent = maxLevel(stack);
+        Optional<UsesComponent> usesComponent = uses(stack);
+        Optional<ManaComponent> manaComponent = mana(stack);
+
+        if (maxLevelComponent.isPresent()) {
+//            JewelryVitalsComponent vitals = stack.get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT);
 
             // spell max level
             tooltip.add(Text.translatable(LangUtil.INDENT2).append(Text.translatable(LangUtil.tooltip("jewelry.max_level"),
-                    Formatting.GOLD + String.valueOf(vitals.maxLevel()))));
+                    Formatting.GOLD + String.valueOf(maxLevelComponent.get().maxLevel()))));
 
+        }
+        if (usesComponent.isPresent()) {
             // durability
-            if (vitals.isInfinite()) {
+            if (usesComponent.get().isInfinite()) {
                 tooltip.add(Text.translatable(LangUtil.INDENT2)
                         .append(Text.translatable(LangUtil.tooltip("jewelry.durability.infinite"), Text.translatable(LangUtil.tooltip("infinite")).formatted(Formatting.GRAY))));
             } else {
                 tooltip.add(Text.translatable(LangUtil.INDENT2)
                         .append(Text.translatable(LangUtil.tooltip("jewelry.durability.amount"),
-                                Formatting.GRAY + String.valueOf(vitals.uses()),
-                                Formatting.GRAY + String.valueOf(vitals.maxUses()))));
+                                Formatting.GRAY + String.valueOf(usesComponent.get().uses()),
+                                Formatting.GRAY + String.valueOf(usesComponent.get().maxUses()))));
             }
+        }
 
+        if (manaComponent.isPresent()) {
             // mana
             tooltip.add(Text.translatable(LangUtil.INDENT2)
                     .append(Text.translatable(LangUtil.tooltip("jewelry.mana"),
-                            Formatting.BLUE + String.valueOf(Math.toIntExact(Math.round(vitals.mana()))),
-                            Formatting.BLUE + String.valueOf(Math.toIntExact((long)Math.ceil(vitals.maxMana()))))));
+                            Formatting.BLUE + String.valueOf(Math.toIntExact(Math.round(manaComponent.get().mana()))),
+                            Formatting.BLUE + String.valueOf(Math.toIntExact((long) Math.ceil(manaComponent.get().maxMana()))))));
             // + getUsesGauge().getString())));
+        }
 
-            if (stack.contains(MagicTreasuresComponents.SPELLS_COMPONENT)) {
-                SpellsComponent spells = stack.get(MagicTreasuresComponents.SPELLS_COMPONENT);
+        // TODO update like the above code
+        if (stack.contains(MagicTreasuresComponents.SPELLS)) {
+                SpellsComponent spells = stack.get(MagicTreasuresComponents.SPELLS);
 
                 if (!spells.spellNames().isEmpty()) {
                     tooltip.add(Text.translatable(LangUtil.NEWLINE));
@@ -148,7 +144,7 @@ public class Jewelry extends Item implements IJewelry{
 //        stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(handler -> {
 //            handler.appendHoverText(stack, level, tooltip, flag);
 //        });
-    }
+//    }
 
     @Override
     public void appendLoreHoverText(ItemStack stack, TooltipContext level, List<Text> tooltip, TooltipType flag) {
@@ -163,83 +159,106 @@ public class Jewelry extends Item implements IJewelry{
         tooltip.add(Text.literal(LangUtil.NEWLINE));
     }
 
-    /**
-     * convenience method
-     * TODO should we have a default Vitals?
-     * @param stack
-     * @return
+    public static boolean hasStone(ItemStack stack) {
+        return attribs(stack).map(a -> {
+            if (a.gemstone() != null) {
+                Item stoneItem = StoneRegistry.get(a.gemstone()).orElse(Items.AIR);
+                return stoneItem != null
+                        && stoneItem != Items.AIR
+                        && stoneItem.getRegistryEntry().isIn(MagicTreasuresTags.Items.STONES);
+            }
+            return false;
+        }).orElse(false);
+    }
+
+    /*
+     * component accessors
      */
-    public static Optional<JewelryVitalsComponent> vitals(ItemStack stack) {
-        return Optional.ofNullable(stack.get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT));
+    // attribs
+    public static Optional<JewelryAttribsComponent> attribs(ItemStack stack) {
+        return Optional.ofNullable(stack.get(MagicTreasuresComponents.JEWELRY_ATTRIBS));
     }
 
-    public void setMana(ItemStack stack, double mana) {
-        vitals(stack).ifPresent(v -> {
-            stack.set(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT,
-                    new JewelryVitalsComponent(v.maxLevel(),
-                    v.maxUses(), v.uses(),
-                    v.maxRepairs(),
-                    v.repairs(),
-                    v.maxMana(),
-                    mana,
-                    v.maxRecharges(),
-                    v.recharges()));
+    public static Optional<IJewelryType> jewelryType(ItemStack stack) {
+        return attribs(stack).flatMap(a -> MagicTreasuresApi.getJewelryType(a.type()));
+    }
+    // TODO make convenience methods for all the component properties
+    public static Optional<Item> gemstone(ItemStack stack) {
+        return attribs(stack).flatMap(a -> StoneRegistry.get(a.gemstone()));
+    }
+
+
+//    public static Optional<JewelryVitalsComponent> vitals(ItemStack stack) {
+//        return Optional.ofNullable(stack.get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT));
+//    }
+
+    // max level
+    public static Optional<MaxLevelComponent> maxLevel(ItemStack stack) {
+        return Optional.ofNullable(stack.get(MagicTreasuresComponents.MAX_LEVEL));
+    }
+
+    // uses
+    public static Optional<UsesComponent> uses(ItemStack stack) {
+        return Optional.ofNullable(stack.get(MagicTreasuresComponents.USES));
+    }
+
+    // repairs
+
+    // mana
+    public static Optional<ManaComponent> mana(ItemStack stack) {
+        return Optional.ofNullable(stack.get(MagicTreasuresComponents.MANA));
+    }
+
+    // recharges
+
+    // spells
+    public static Optional<SpellsComponent> spells(ItemStack stack) {
+        return Optional.ofNullable(stack.get(MagicTreasuresComponents.SPELLS));
+    }
+
+//    public void setMana(ItemStack stack, double mana) {
+//        vitals(stack).ifPresent(v -> {
+//            stack.set(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT,
+//                    new JewelryVitalsComponent(v.maxLevel(),
+//                    v.maxUses(), v.uses(),
+//                    v.maxRepairs(),
+//                    v.repairs(),
+//                    v.maxMana(),
+//                    mana,
+//                    v.maxRecharges(),
+//                    v.recharges()));
+//        });
+//    }
+
+    /*
+     * data component convenience setters
+     */
+    public static void setMana(ItemStack stack, double mana) {
+        // TODO need else if the stack doesn't contain component. ie add it.
+        mana(stack).ifPresent(component -> {
+            stack.set(MagicTreasuresComponents.MANA, new ManaComponent(component.maxMana(), mana));
         });
     }
 
-    public void setUses(ItemStack stack, int uses) {
-        vitals(stack).ifPresent(v -> {
-            stack.set(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT,
-                    new JewelryVitalsComponent(v.maxLevel(),
-                            v.maxUses(), uses,
-                            v.maxRepairs(), v.repairs(),
-                            v.maxMana(), v.mana(),
-                            v.maxRecharges(), v.recharges()));
+    public static void setUses(ItemStack stack, int uses) {
+        uses(stack).ifPresent(component -> {
+            stack.set(MagicTreasuresComponents.USES, new UsesComponent(component.maxUses(), uses));
         });
     }
+
+
+//        uses(stack).ifPresent(v -> {
+//            stack.set(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT,
+//                    new JewelryVitalsComponent(v.maxLevel(),
+//                            v.maxUses(), uses,
+//                            v.maxRepairs(), v.repairs(),
+//                            v.maxMana(), v.mana(),
+//                            v.maxRecharges(), v.recharges()));
+//        });
+//    }
 
     public static Optional<SpellFactorsComponent> spellFactors(ItemStack stack) {
-        return Optional.ofNullable(stack.get(MagicTreasuresComponents.SPELL_FACTORS_COMPONENT));
-    }
-
-    @Override
-    public IJewelryType getType() {
-        return type;
-    }
-
-    @Override
-    public void setType(IJewelryType type) {
-        this.type = type;
-    }
-
-    @Override
-    public IJewelrySizeTier getSizeTier() {
-        return sizeTier;
-    }
-
-    @Override
-    public void setSizeTier(IJewelrySizeTier sizeTier) {
-        this.sizeTier = sizeTier;
-    }
-
-    @Override
-    public JewelryMaterial getMaterial() {
-        return material;
-    }
-
-    @Override
-    public void setMaterial(JewelryMaterial material) {
-        this.material = material;
-    }
-
-    @Override
-    public Identifier getGemstone() {
-        return gemstone;
-    }
-
-    @Override
-    public void setGemstone(Identifier gemstone) {
-        this.gemstone = gemstone;
+        return Optional.ofNullable(stack.get(MagicTreasuresComponents.SPELL_FACTORS));
     }
 
     @Override

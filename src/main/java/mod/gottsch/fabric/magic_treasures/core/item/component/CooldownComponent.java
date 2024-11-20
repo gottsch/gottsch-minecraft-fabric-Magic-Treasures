@@ -15,25 +15,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Magic Treasures.  If not, see <http://www.gnu.org/licenses/lgpl>.
  */
-package mod.gottsch.fabric.magic_treasures.core.item;
-
-import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
-import net.minecraft.item.ItemStack;
-import net.minecraft.text.MutableText;
-import net.minecraft.text.Text;
-import net.minecraft.util.Formatting;
-
+package mod.gottsch.fabric.magic_treasures.core.item.component;
 
 /**
- * Created by Mark Gottschling on May 7, 2024
+ * Created by Mark Gottschling on 11/20/2024
  */
-public class NamedJewelry extends Jewelry {
-    public NamedJewelry(Settings properties) {
-        super(properties);
-    }
-
-    @Override
-    public Text getName(ItemStack stack) {
-        return ((MutableText)super.getName(stack)).formatted(Formatting.YELLOW);
-    }
+public record CooldownComponent() {
 }
