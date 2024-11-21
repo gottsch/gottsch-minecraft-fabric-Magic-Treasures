@@ -31,6 +31,7 @@ public class CastSpellContext implements ICastSpellContext {
     private ISpell spell;
     private List<ItemStack> manaWells;
     private PlayerEntity player;
+    private double amount;
 
     public CastSpellContext(ItemStack jewelry, List<ItemStack> manaWells, ISpell spell, PlayerEntity player) {
         this.jewelry = jewelry;
@@ -76,5 +77,14 @@ public class CastSpellContext implements ICastSpellContext {
 
     public void setPlayer(PlayerEntity player) {
         this.player = player;
+    }
+
+    @Override
+    public double getAmount() {
+        return amount;
+    }
+
+    public void setAmount(double amount) {
+        this.amount = amount;
     }
 }

@@ -17,19 +17,8 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.spell;
 
-import net.minecraft.entity.player.PlayerEntity;
-import net.minecraft.item.ItemStack;
-
-import java.util.List;
-
-public interface ICastSpellContext {
-    ItemStack getJewelry();
-
-    ISpell getSpell();
-
-    List<ItemStack> getManaWells();
-
-    PlayerEntity getPlayer();
-
-    double getAmount();
+/**
+ * Created by Mark Gottschling on 11/21/2024
+ */
+public record SpellResult(boolean success, double amount) {
 }
