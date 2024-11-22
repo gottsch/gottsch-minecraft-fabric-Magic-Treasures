@@ -267,13 +267,15 @@ public class Jewelry extends Item implements IJewelry{
     }
 
     @Override
-    public void setBaseName(String baseName) {
+    public IJewelry setBaseName(String baseName) {
         this.baseName = baseName;
+        return this;
     }
 
     @Override
-    public void setAffixer(Predicate<ItemStack> acceptsAffixer) {
+    public IJewelry setAffixer(Predicate<ItemStack> acceptsAffixer) {
         this.affixer = acceptsAffixer;
+        return this;
     }
 
     @Override
@@ -312,6 +314,7 @@ public class Jewelry extends Item implements IJewelry{
     public String getLoreKey() {
         return loreKey;
     }
+
     @Override
     public Item setLoreKey(String loreKey) {
         this.loreKey = loreKey;

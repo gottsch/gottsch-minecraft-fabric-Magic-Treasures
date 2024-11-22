@@ -35,6 +35,10 @@ public record RepairsComponent(int maxRepairs, int repairs) {
 
     ).apply(instance, RepairsComponent::new));
 
+    public RepairsComponent(int maxRepairs) {
+        this(maxRepairs, maxRepairs);
+    }
+
     public static class Builder {
         public int maxRepairs = -1;
         public int repairs;
@@ -42,6 +46,10 @@ public record RepairsComponent(int maxRepairs, int repairs) {
         // transient
         public IJewelrySizeTier sizeTier;
         public JewelryMaterial material;
+
+        public Builder(int maxRepairs) {
+            this.maxRepairs = maxRepairs;
+        }
 
         public Builder(JewelryMaterial material) {
             this.material = material;

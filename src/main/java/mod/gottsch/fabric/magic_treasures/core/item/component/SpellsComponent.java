@@ -19,9 +19,11 @@ package mod.gottsch.fabric.magic_treasures.core.item.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
+import mod.gottsch.fabric.magic_treasures.core.spell.ISpell;
 import net.minecraft.util.Identifier;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -33,6 +35,20 @@ public record SpellsComponent(List<Identifier> spellNames) {
     public static final Codec<SpellsComponent> CODEC = RecordCodecBuilder.create(instance -> instance.group(
             Identifier.CODEC.listOf().fieldOf("spellNames").forGetter(SpellsComponent::spellNames)
     ).apply(instance, SpellsComponent::new));
+
+//    public SpellsComponent(List<Identifier> spellNames) {
+//        if (spellNames == null) {
+//            this.spellNames = new ArrayList<>();
+//        }
+//    }
+
+    public SpellsComponent(Identifier... spellNames) {
+        this(Arrays.asList(spellNames));
+    }
+
+    public SpellsComponent(ISpell... spells) {
+        this(Arrays.stream(spells).map(ISpell::getName).toList());
+    }
 
     /**
      *

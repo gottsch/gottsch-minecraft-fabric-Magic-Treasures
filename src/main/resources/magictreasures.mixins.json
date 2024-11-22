@@ -3,7 +3,7 @@
 	"package": "mod.gottsch.fabric.magic_treasures.core.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
-		"PlayerTickMixin",
+      "PlayerMixins",
 		"AnvilEventMixin"
 	],
 	"server": [

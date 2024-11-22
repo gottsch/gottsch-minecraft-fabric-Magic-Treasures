@@ -28,6 +28,7 @@ import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 
 import java.util.Optional;
+import java.util.function.Consumer;
 
 /**
  * Created by Mark Gottschling on 11/19/2024
@@ -52,6 +53,11 @@ public record MaxLevelComponent(int maxLevel) {
         public Builder(JewelryMaterial material, IJewelrySizeTier sizeTier) {
             this.material = material;
             this.sizeTier = sizeTier;
+        }
+
+        public Builder with(Consumer<Builder> builder) {
+            builder.accept(this);
+            return this;
         }
 
         public MaxLevelComponent build() {

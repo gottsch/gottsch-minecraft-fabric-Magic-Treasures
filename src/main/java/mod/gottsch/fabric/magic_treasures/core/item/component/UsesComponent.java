@@ -24,6 +24,10 @@ public record UsesComponent(int maxUses, int uses) {
 
     ).apply(instance, UsesComponent::new));
 
+    public UsesComponent(int maxUses) {
+        this(maxUses, maxUses);
+    }
+
     public boolean isInfinite() {
         return uses == Integer.MAX_VALUE;
     }

@@ -36,7 +36,16 @@ public class MagicTreasuresTags {
         public static final TagKey<Item> STONE_RARITY_EPIC = createTag(MagicTreasures.MOD_ID, "jewelry/stones/rarity/epic");
 
         // jewelry
+        public static final TagKey<Item> RINGS = createTag(MagicTreasures.MOD_ID, "jewelry/rings");
+        public static final TagKey<Item> BRACELETS = createTag(MagicTreasures.MOD_ID, "jewelry/bracelets");
+        public static final TagKey<Item> NECKLACES = createTag(MagicTreasures.MOD_ID, "jewelry/necklaces");
+        //        public static final TagKey<Item> CHARMS = mod(MagicTreasures.MOD_ID, "jewelry/charms");
+        public static final TagKey<Item> POCKETS = createTag(MagicTreasures.MOD_ID, "jewelry/pockets");
         public static final TagKey<Item> JEWELRY = createTag(MagicTreasures.MOD_ID, "jewelry/all_jewelry");
+
+        // castle rings
+        public static final TagKey<Item> CASTLE_RING_RUBY = createTag(MagicTreasures.MOD_ID, "jewelry/castle_ring/ruby");
+        public static final TagKey<Item> CASTLE_RING_SAPPHIRE = createTag(MagicTreasures.MOD_ID, "jewelry/castle_ring/sapphire");
 
         // spell scrolls
         public static final TagKey<Item> SPELL_SCROLLS = createTag(MagicTreasures.MOD_ID, "scrolls/spells");

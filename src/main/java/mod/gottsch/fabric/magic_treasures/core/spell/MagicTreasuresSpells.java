@@ -346,44 +346,44 @@ public class MagicTreasuresSpells {
 //            $.range = 3.0;
 //            $.effectStackable = true;
 //        })	.build());
-//
-//        // strength spells
-//        SpellRegistry.register(new StrengthSpell.Builder(ModUtil.asLocation(QUICK_STRENGTH), 1, MagicTreasuresRarity.COMMON)
-//            .withAmplifier(0)
-//                .with($ -> {
-//                $.spellCost = 4; // cost = min(spellCost, reflected amount)
-//                $.duration = 1200;
-//                $.cooldown = 2400;
-//                $.effectStackable = false;
-//            })	.build());
-//
-//        SpellRegistry.register(new StrengthSpell.Builder(ModUtil.asLocation(STRENGTH), 3, MagicTreasuresRarity.UNCOMMON)
-//                .withAmplifier(0)
-//                .with($ -> {
-//                    $.spellCost = 6; // cost = min(spellCost, reflected amount)
-//                    $.duration = 3600;
-//                    $.cooldown = 4800;
-//                    $.effectStackable = false;
-//                })	.build());
-//
-//        SpellRegistry.register(new StrengthSpell.Builder(ModUtil.asLocation("greater_strength"), 5, MagicTreasuresRarity.SCARCE)
-//                .withAmplifier(1)
-//                .with($ -> {
-//                    $.spellCost = 10; // cost = min(spellCost, reflected amount)
-//                    $.duration = 4800;
-//                    $.cooldown = 6000;
-//                    $.effectStackable = false;
-//                })	.build());
-//
-//        SpellRegistry.register(new StrengthSpell.Builder(ModUtil.asLocation("giant_strength"), 7, MagicTreasuresRarity.RARE)
-//                .withAmplifier(2)
-//                .with($ -> {
-//                    $.spellCost = 15;
-//                    $.duration = 6000;
-//                    $.cooldown = 6000;
-//                    $.effectStackable = false;
-//                })	.build());
-//
+
+        // strength spells
+        SpellRegistry.register(new StrengthSpell.Builder(ModUtil.asLocation(QUICK_STRENGTH), 1, MagicTreasuresRarity.COMMON)
+            .withAmplifier(0)
+                .with($ -> {
+                $.spellCost = 4; // cost = min(spellCost, reflected amount)
+                $.duration = 1200;
+                $.cooldown = 2400;
+                $.effectStackable = false;
+            })	.build());
+
+        SpellRegistry.register(new StrengthSpell.Builder(ModUtil.asLocation(STRENGTH), 3, MagicTreasuresRarity.UNCOMMON)
+                .withAmplifier(0)
+                .with($ -> {
+                    $.spellCost = 6; // cost = min(spellCost, reflected amount)
+                    $.duration = 3600;
+                    $.cooldown = 4800;
+                    $.effectStackable = false;
+                })	.build());
+
+        SpellRegistry.register(new StrengthSpell.Builder(ModUtil.asLocation("greater_strength"), 5, MagicTreasuresRarity.SCARCE)
+                .withAmplifier(1)
+                .with($ -> {
+                    $.spellCost = 10; // cost = min(spellCost, reflected amount)
+                    $.duration = 4800;
+                    $.cooldown = 6000;
+                    $.effectStackable = false;
+                })	.build());
+
+        SpellRegistry.register(new StrengthSpell.Builder(ModUtil.asLocation("giant_strength"), 7, MagicTreasuresRarity.RARE)
+                .withAmplifier(2)
+                .with($ -> {
+                    $.spellCost = 15;
+                    $.duration = 6000;
+                    $.cooldown = 6000;
+                    $.effectStackable = false;
+                })	.build());
+
 //        // speed spells
 //        SPEED_SPELL = SpellRegistry.register(new SpeedSpell.Builder(ModUtil.asLocation(SPEED), 2, MagicTreasuresRarity.COMMON)
 //                .withAmplifier(0)

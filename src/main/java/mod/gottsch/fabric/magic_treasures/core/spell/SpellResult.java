@@ -21,4 +21,7 @@ package mod.gottsch.fabric.magic_treasures.core.spell;
  * Created by Mark Gottschling on 11/21/2024
  */
 public record SpellResult(boolean success, double amount) {
+    public SpellResult() {
+        this(false, 0);
+    }
 }

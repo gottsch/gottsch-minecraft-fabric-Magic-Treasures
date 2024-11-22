@@ -44,9 +44,9 @@ public interface IJewelry {
 
     String getBaseName();
 
-    void setBaseName(String baseName);
+    IJewelry setBaseName(String baseName);
 
-    void setAffixer(Predicate<ItemStack> acceptsAffixer);
+    IJewelry setAffixer(Predicate<ItemStack> acceptsAffixer);
 
     boolean acceptsAffixing(ItemStack stack);
 

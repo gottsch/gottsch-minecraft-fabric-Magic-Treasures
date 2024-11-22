@@ -42,8 +42,7 @@ public class ModItemGroups {
                         entries.add(MagicTreasuresBlocks.DEEPSLATE_SAPPHIRE_ORE);
                         entries.add(MagicTreasuresBlocks.DEEPSLATE_SILVER_ORE);
 
-                        // TODO replace with STANDARD_JEWELRY builder
-                        entries.add(MagicTreasuresItems.GOLD_RING);
+                        MagicTreasuresItems.ALL_JEWELRY.forEach(entries::add);
 
                         // add all scrolls
                         MagicTreasuresItems.ALL_SPELL_SCROLLS.forEach(entries::add);

@@ -1,6 +1,9 @@
 package mod.gottsch.fabric.magic_treasures.datagen;
 
+import com.google.common.collect.Maps;
 import mod.gottsch.fabric.magic_treasures.MagicTreasures;
+import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
+import mod.gottsch.fabric.magic_treasures.core.item.JewelryType;
 import mod.gottsch.fabric.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.fabric.magic_treasures.core.item.SpellScroll;
 import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
@@ -14,6 +17,7 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 
 import static net.fabricmc.fabric.api.biome.v1.BiomeSelectors.tag;
@@ -28,6 +32,19 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
 
     @Override
     protected void configure(RegistryWrapper.WrapperLookup wrapperLookup) {
+        /*
+         * map from jewelry type attribute to tag
+         */
+        Map<IJewelryType, TagKey<Item>> TYPE_TAG_MAP = Maps.newHashMap();
+        TYPE_TAG_MAP.put(JewelryType.RING, MagicTreasuresTags.Items.RINGS);
+        TYPE_TAG_MAP.put(JewelryType.BRACELET, MagicTreasuresTags.Items.BRACELETS);
+//		TYPE_TAG_MAP.put(JewelryType.BROACH, GealdorCraftTags.Items.BROACHES);
+//		TYPE_TAG_MAP.put(JewelryType.CHARM, MagicTreasuresTags.Items.CHARMS);
+//		TYPE_TAG_MAP.put(JewelryType.EARRING, GealdorCraftTags.Items.EARRINGS);
+        TYPE_TAG_MAP.put(JewelryType.NECKLACE, MagicTreasuresTags.Items.NECKLACES);
+        TYPE_TAG_MAP.put(JewelryType.POCKET, MagicTreasuresTags.Items.POCKETS);
+
+
         try {
             getOrCreateTagBuilder(MagicTreasuresTags.Items.STONES)
                     .add(MagicTreasuresItems.TOPAZ)
@@ -69,7 +86,13 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
                     .add(MagicTreasuresItems.BLACK_PEARL);
 
             // jewelry
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY).add(MagicTreasuresItems.GOLD_RING);
+            // TODO change to get all jewelry items
+//            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY).add(MagicTreasuresItems.GOLD_RING);
+
+            // special jewelry tags
+            getOrCreateTagBuilder(MagicTreasuresTags.Items.CASTLE_RING_RUBY).add(MagicTreasuresItems.RUBY);
+            getOrCreateTagBuilder(MagicTreasuresTags.Items.CASTLE_RING_SAPPHIRE).add(MagicTreasuresItems.SAPPHIRE);
+
 
             // spell scrolls
             Registries.ITEM.forEach(o -> {

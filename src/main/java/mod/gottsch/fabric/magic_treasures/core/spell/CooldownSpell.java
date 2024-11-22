@@ -37,16 +37,16 @@ public abstract class CooldownSpell extends Spell {
     }
 
     @Override
-    public boolean serverUpdate(World world, Random random, ICoords coords, ICastSpellContext context) {
-        boolean result = false;
-        Jewelry item = (Jewelry)context.getJewelry().getItem();
+    public SpellResult cast(World world, Random random, ICoords coords, ICastSpellContext context) {
+        SpellResult result = new SpellResult();
+//        Jewelry item = (Jewelry)context.getJewelry().getItem();
         Long cooldownExpireTime = getCooldownExpireTime(context.getJewelry()).orElse(0L);
 
         long cooldown = modifyCooldown(context.getJewelry());
         // check if supports cooldown or if world time has exceeded the entity cooldown end time
         if (context.getJewelry().getOrDefault(MagicTreasuresComponents.COOLDOWN, 0L) <= 0.0 || (world.getTime() > cooldownExpireTime)) {
             result = execute(world, random, coords, context);
-            if(result) {
+            if(result.success()) {
                 // update cooldown expire time
                 updateExpireTime(world, random, context.getJewelry(), context.getSpell(), cooldown);
 //                context.getPlayer().getCooldowns().addCooldown(context.getJewelry().getItem(), (int)cooldown);
@@ -55,7 +55,7 @@ public abstract class CooldownSpell extends Spell {
         return result;
     }
 
-    abstract public boolean execute(World world, Random random, ICoords coords, ICastSpellContext context);
+    abstract public SpellResult execute(World world, Random random, ICoords coords, ICastSpellContext context);
 
     public void updateExpireTime(World level, Random random, ItemStack jewelry, ISpell entity, long cooldown) {
         // set cooldown expire time if cooldown is activated
@@ -64,7 +64,7 @@ public abstract class CooldownSpell extends Spell {
         }
     }
 
-    public static Optional<Long> getCooldownExpireTime(ItemStack stack) {
+    public Optional<Long> getCooldownExpireTime(ItemStack stack) {
         return Optional.ofNullable(stack.get(MagicTreasuresComponents.COOLDOWN));
     }
 }

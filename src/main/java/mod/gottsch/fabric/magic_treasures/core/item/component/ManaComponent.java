@@ -43,6 +43,10 @@ public record ManaComponent(double maxMana, double mana) {
 
     ).apply(instance, ManaComponent::new));
 
+    public ManaComponent(double maxMana) {
+        this(maxMana, maxMana);
+    }
+
     public static class Builder {
         public double maxMana = -1;
         public double mana = -1;
@@ -60,6 +64,12 @@ public record ManaComponent(double maxMana, double mana) {
         public Builder(JewelryMaterial material, IJewelrySizeTier sizeTier) {
             this.material = material;
             this.sizeTier = sizeTier;
+        }
+
+        public Builder(JewelryMaterial material, IJewelrySizeTier sizeTier, Identifier gemstone) {
+            this.material = material;
+            this.sizeTier = sizeTier;
+            this.stone = gemstone;
         }
 
         public Builder with(Consumer<Builder> builder) {

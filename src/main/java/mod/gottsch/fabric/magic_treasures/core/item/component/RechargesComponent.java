@@ -25,28 +25,24 @@ public record RechargesComponent(int maxRecharges, int recharges) {
 
     ).apply(instance, RechargesComponent::new));
 
+    public RechargesComponent(int maxRecharges) {
+        this(maxRecharges, maxRecharges);
+    }
+
     public static class Builder {
         public int maxRecharges = -1;
         public int recharges;
 
         // transient
-        public IJewelrySizeTier sizeTier;
         public JewelryMaterial material;
         public Identifier stone;
 
         public Builder(JewelryMaterial material) {
             this.material = material;
-            this.sizeTier = JewelrySizeTier.REGULAR;
         }
 
-        public Builder(JewelryMaterial material, IJewelrySizeTier sizeTier) {
+        public Builder(JewelryMaterial material, Identifier stone) {
             this.material = material;
-            this.sizeTier = sizeTier;
-        }
-
-        public Builder(JewelryMaterial material, IJewelrySizeTier sizeTier, Identifier stone) {
-            this.material = material;
-            this.sizeTier = sizeTier;
             this.stone = stone;
         }
 
@@ -59,7 +55,6 @@ public record RechargesComponent(int maxRecharges, int recharges) {
             this.stone = stone;
             return this;
         }
-
 
         public RechargesComponent build() {
             // get the stone and stone tier

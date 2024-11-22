@@ -1,4 +1,4 @@
-// 1.21.1	2024-11-20T14:25:03.0679338	Magic Treasures/Tags for minecraft:item
+// 1.21.1	2024-11-21T16:59:51.3795212	Magic Treasures/Tags for minecraft:item
 fdab8ddd5529ae14b26bc1853b004131135318a4 data\magictreasures\tags\item\jewelry\stones\tier\tier3.json
 5b564b58fc914f6ccb6de9a1ad00a95b5d96cd6e data\magictreasures\tags\item\jewelry\stones\rarity\epic.json
 dec88ed82818c35de64ceec6ba2f03a59ee46476 data\magictreasures\tags\item\jewelry\stones\rarity\scarce.json
@@ -7,9 +7,10 @@ dec88ed82818c35de64ceec6ba2f03a59ee46476 data\magictreasures\tags\item\jewelry\s
 81faa4079576fceffef687a5712d8e90313bbf72 data\magictreasures\tags\item\jewelry\stones\rarity\uncommon.json
 719f9f94cf00f2e1aa52683ca57f9363b024afed data\magictreasures\tags\item\jewelry\stones\rarity\common.json
 86682e6b3112db529befee045cb4d5eca18def58 data\magictreasures\tags\item\jewelry\stones\tier\tier5.json
-34847808538407f25335770447e54ca9fd2e4a6a data\magictreasures\tags\item\jewelry\all_jewelry.json
 719f9f94cf00f2e1aa52683ca57f9363b024afed data\magictreasures\tags\item\jewelry\stones\tier\tier1.json
+af653ffcefb8dcfab1de3c96cb3283c80c0b7a4d data\magictreasures\tags\item\jewelry\castle_ring\ruby.json
 81faa4079576fceffef687a5712d8e90313bbf72 data\magictreasures\tags\item\jewelry\stones\tier\tier2.json
 648909d375dc7b5f76d8f96321f2637b5efb23a8 data\magictreasures\tags\item\scrolls\spells.json
 a33376839f73d581d0bdf309c51fd6f8f0eceaa1 data\magictreasures\tags\item\jewelry\stones\tier\tier4.json
+0ff3dc1ac3b04da1b392e4e908c3a9326b5923a4 data\magictreasures\tags\item\jewelry\castle_ring\sapphire.json
 86682e6b3112db529befee045cb4d5eca18def58 data\magictreasures\tags\item\jewelry\stones\rarity\rare.json

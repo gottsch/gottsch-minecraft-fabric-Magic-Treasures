@@ -17,21 +17,14 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.mixin;
 
-import com.mojang.authlib.GameProfile;
+import mod.gottsch.fabric.gottschcore.spatial.Coords;
 import mod.gottsch.fabric.magic_treasures.MagicTreasures;
 import mod.gottsch.fabric.magic_treasures.core.event.SpellEventHandler;
 import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
 import mod.gottsch.fabric.magic_treasures.core.item.component.MagicTreasuresComponents;
 import mod.gottsch.fabric.magic_treasures.core.item.component.SpellsComponent;
-import mod.gottsch.fabric.magic_treasures.core.spell.EventType;
-import mod.gottsch.fabric.magic_treasures.core.spell.ISpell;
-import mod.gottsch.fabric.magic_treasures.core.spell.SpellContext;
-import mod.gottsch.fabric.magic_treasures.core.spell.SpellRegistry;
-import net.minecraft.block.BlockState;
-import net.minecraft.client.render.VertexConsumer;
-import net.minecraft.client.render.WorldRenderer;
-import net.minecraft.client.util.math.MatrixStack;
-import net.minecraft.entity.Entity;
+import mod.gottsch.fabric.magic_treasures.core.item.component.UsesComponent;
+import mod.gottsch.fabric.magic_treasures.core.spell.*;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -39,28 +32,22 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.util.Hand;
 import net.minecraft.util.Identifier;
-import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.nio.channels.IllegalSelectorException;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Created by Mark Gottschling on 11/19/2024
  */
 @Mixin(PlayerEntity.class)
-public abstract class PlayerTickMixin extends LivingEntity {
+public abstract class PlayerMixins extends LivingEntity {
 
-    protected PlayerTickMixin(EntityType<? extends LivingEntity> entityType, World world) {
+    protected PlayerMixins(EntityType<? extends LivingEntity> entityType, World world) {
         super(entityType, world);
     }
 
@@ -71,12 +58,10 @@ public abstract class PlayerTickMixin extends LivingEntity {
             // NOTE don't cancel the tick() call.
             return;
         }
-        MagicTreasures.LOGGER.info("in player tick!");
-
-        // TODO call the SpellHandler to gather jewelry + spells and execute
-        checkSpellsInteraction(EventType.LIVING_TICK, ((ServerPlayerEntity)(Object)this));
+        checkSpellsInteraction(EventType.PLAYER_LIVING_TICK, ((ServerPlayerEntity)(Object)this));
     }
 
+    // TODO this needs to move to a common class
     public void checkSpellsInteraction(EventType type, ServerPlayerEntity player) {
 
         // do something to player every update tick:
@@ -87,6 +72,7 @@ public abstract class PlayerTickMixin extends LivingEntity {
 //        }
     }
 
+    // TODO move to a different class
     private void processSpells(EventType event, ServerPlayerEntity player) {
         /*
          * a list of spell contexts to execute
@@ -100,7 +86,7 @@ public abstract class PlayerTickMixin extends LivingEntity {
         Collections.sort(spellsToExecute, SpellContext.priorityComparator);
 
         // execute spells
-//        executeSpells(event, player, spellsToExecute);
+        executeSpells(event, player, spellsToExecute);
     }
 
     /**
@@ -157,5 +143,61 @@ public abstract class PlayerTickMixin extends LivingEntity {
             }
         }
         return contexts;
+    }
+
+    private void executeSpells(EventType event, ServerPlayerEntity player, List<SpellContext> contexts) {
+        /*
+         * a list of spell types that are non-stackable that should not be executed more than once.
+         */
+        final List<String> executeOnceSpellTypes = new ArrayList<>(5);
+
+        contexts.forEach(context -> {
+            ISpell spell = (ISpell)context.getSpell();
+//			MagicTreasures.LOGGER.debug("processing spell -> {}", spell.getName().toString());
+            if (!spell.isEffectStackable()) {
+                // TODO this probably needs to change to spell.getName comparison
+                // check if this spell type is already in the monitored list
+                if (executeOnceSpellTypes.contains(spell.getType())) {
+                    return;
+                }
+                else {
+                    // add the spell type to the monitored list
+                    executeOnceSpellTypes.add(spell.getType());
+                }
+            }
+
+            // if spell is executable and executes successfully
+            ICastSpellContext castContext = new CastSpellContext(context.getItemStack(), null, context.getSpell(), player);
+            if (context.getSpell().cast(player.getServerWorld(), new Random(), new Coords(player.getBlockPos()), castContext).success()) {
+//				MagicTreasures.LOGGER.debug("spell {} successfully updated.", spell.getName().toString());
+                processUsage(player.getServerWorld(), player, event, context);
+
+                // TODO would be nice if ALL spells processed during event could sent 1 bundled message instead of individual messages
+
+                // send state message to client
+//                SpellUpdateS2C message = new SpellUpdateS2C(player.getUUID(), context);
+//				MagicTreasures.LOGGER.debug("sending message to client -> {}", message);
+//                MagicTreasuresNetworking.channel.send(PacketDistributor.PLAYER.with(() -> player), message);
+            }
+
+        });
+    }
+
+    private void processUsage(World world, PlayerEntity player, EventType event, SpellContext context) {
+        MagicTreasures.LOGGER.debug("processing usage for spell -> {}", context.getSpell().getName().toString());
+        // TODO call capability.getDecrementor.apply() or something like that.
+        ItemStack stack = context.getItemStack();
+        // get uses component
+        Jewelry.uses(stack).ifPresent(uses -> {
+            if (uses.isInfinite()) {
+                return;
+            } else {
+                // remove/destroy item stack if damage is greater than durability
+                stack.set(MagicTreasuresComponents.USES, new UsesComponent(uses.maxUses(), uses.uses() - 1));
+                if (uses.uses() <= 0) {
+                    stack.decrement(1);
+                }
+            }
+        });
     }
 }

@@ -20,7 +20,6 @@ package mod.gottsch.fabric.magic_treasures.core.spell;
 import mod.gottsch.fabric.gottschcore.enums.IRarity;
 import mod.gottsch.fabric.gottschcore.spatial.ICoords;
 import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
-import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryVitalsComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.ManaComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.SpellFactorsComponent;
 import mod.gottsch.fabric.magic_treasures.core.util.LangUtil;
@@ -39,7 +38,7 @@ import java.util.Random;
  */
 public class HealingSpell extends Spell {
     public static String HEALING_TYPE = "healing";
-    private static final EventType REGISTERED_EVENT = EventType.LIVING_TICK;
+    private static final EventType REGISTERED_EVENT = EventType.PLAYER_LIVING_TICK;
 
     /**
      *
@@ -70,8 +69,8 @@ public class HealingSpell extends Spell {
      */
 
     @Override
-    public boolean serverUpdate(World level, Random random, ICoords coords, ICastSpellContext context) {
-        boolean result = false;
+    public SpellResult cast(World level, Random random, ICoords coords, ICastSpellContext context) {
+        SpellResult result = new SpellResult();
         ManaComponent manaComponent = Jewelry.mana(context.getJewelry()).orElseThrow(IllegalStateException::new); //context.getJewelry().get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT)
         SpellFactorsComponent spellFactorsComponent = Jewelry.spellFactors(context.getJewelry()).orElseThrow(IllegalStateException::new);
 
@@ -82,7 +81,7 @@ public class HealingSpell extends Spell {
                 float amount = Math.min((float)spellFactorsComponent.modifyEffectAmount(getEffectAmount()), context.getPlayer().getMaxHealth() - context.getPlayer().getHealth());
                 context.getPlayer().setHealth(MathHelper.clamp(context.getPlayer().getHealth() + amount, 0.0F, context.getPlayer().getMaxHealth()));
                 applyCost(level, random, coords, context, spellFactorsComponent.modifySpellCost(getSpellCost()));
-                result = true;
+                result = new SpellResult(true, 0);
             }
         }
         return result;
