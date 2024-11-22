@@ -231,7 +231,22 @@ public class MagicTreasuresItems {
     );
 
     // epic / legendary
-//    public static RegistryObject<Item> RING_LIFE_DEATH = Registration.ITEMS.register("ring_of_life_death", () -> new NamedJewelry(MAGIC_TREASURES_PROPS_SUPPLIER.get()) {
+    public static Item RING_LIFE_DEATH = registerItem("ring_of_life_death",
+            new NamedJewelry(new ItemSettingsDataComponentBuilder(JewelryType.RING, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
+                    .with($ -> {
+                        $.gemstone = SAPPHIRE.getRegistryEntry().registryKey().getValue();
+                        $.maxLevelComponent = new MaxLevelComponent(7);
+                        $.manaComponent = new ManaComponent(350);
+                        $.rechargesComponent = new RechargesComponent(3);
+                        $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.SHADOW_ARMOR).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
+                    }).build()
+                    .component(DataComponentTypes.ENCHANTMENTS, new ItemEnchantmentsComponent(Enchantments.VANISHING_CURSE, true))
+            ).setBaseName("castle_ring")
+                    .setAffixer(castleRingAffixer)
+            //            if (!EnchantmentHelper.hasVanishingCurse(stack)) {
+//                stack.enchant(Enchantments.VANISHING_CURSE, 1);
+//            }
+    );
 //        public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag tag) {
 //            /*
 //             *  add enchantment
