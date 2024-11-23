@@ -56,6 +56,24 @@ public class ModLangProvider extends FabricLanguageProvider {
             translationBuilder.add(item, WordUtils.capitalizeFully(name(item).replace("_", " ")));
         });
 
+        // special jewelry
+        translationBuilder.add(MagicTreasuresItems.SILBROS_RING_OF_VITALITY, WordUtils.capitalizeFully("Silbro's Ring of Vitality"));
+        translationBuilder.add(MagicTreasuresItems.STRONGMANS_BRACERS, WordUtils.capitalizeFully("Strongman's Bracers"));
+        translationBuilder.add(MagicTreasuresItems.MALDRITCHS_FIRST_AMULET, WordUtils.capitalizeFully("Maldritch's First Amulet"));
+
+        translationBuilder.add(MagicTreasuresItems.PEASANTS_FORTUNE, WordUtils.capitalizeFully("Peasant's Fortune"));
+        translationBuilder.add(MagicTreasuresItems.AQUA_RING, WordUtils.capitalizeFully("Aqua Ring"));
+        translationBuilder.add(MagicTreasuresItems.AMULET_OF_DEFENCE, WordUtils.capitalizeFully("Amulet of Defence"));
+        translationBuilder.add(MagicTreasuresItems.JOURNEYMANS_BANDS, WordUtils.capitalizeFully("Journeyman's Bands"));
+
+        translationBuilder.add(MagicTreasuresItems.MEDICS_TOKEN, WordUtils.capitalizeFully("Medic's Token"));
+        translationBuilder.add(MagicTreasuresItems.ADEPHAGIAS_BOUNTY, WordUtils.capitalizeFully("Adephagia's Bounty"));
+        translationBuilder.add(MagicTreasuresItems.ANGELS_RING, WordUtils.capitalizeFully("Ring of Angels"));
+        translationBuilder.add(MagicTreasuresItems.SALANDAARS_WARD, WordUtils.capitalizeFully("Sal'andaar's Ward"));
+        translationBuilder.add(MagicTreasuresItems.RING_OF_FORTITUDE, WordUtils.capitalizeFully("Ring of Fortitude"));
+        translationBuilder.add(MagicTreasuresItems.EYE_OF_THE_PHOENIX, WordUtils.capitalizeFully("Eye of the Phoenix"));
+        translationBuilder.add(MagicTreasuresItems.RING_LIFE_DEATH, WordUtils.capitalizeFully("Ring of Life and Death"));
+
         // scrolls
         Registries.ITEM.forEach(o -> {
             if (o instanceof SpellScroll) {

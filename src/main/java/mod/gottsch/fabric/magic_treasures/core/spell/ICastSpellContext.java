@@ -17,6 +17,7 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.spell;
 
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
@@ -32,4 +33,6 @@ public interface ICastSpellContext {
     PlayerEntity getPlayer();
 
     double getAmount();
+
+    DamageSource getSource();
 }

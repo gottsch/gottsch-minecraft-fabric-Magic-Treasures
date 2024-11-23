@@ -17,6 +17,7 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.spell;
 
+import net.minecraft.entity.damage.DamageSource;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.ItemStack;
 
@@ -32,6 +33,7 @@ public class CastSpellContext implements ICastSpellContext {
     private List<ItemStack> manaWells;
     private PlayerEntity player;
     private double amount;
+    private DamageSource source;
 
     public CastSpellContext(ItemStack jewelry, List<ItemStack> manaWells, ISpell spell, PlayerEntity player) {
         this.jewelry = jewelry;
@@ -86,5 +88,14 @@ public class CastSpellContext implements ICastSpellContext {
 
     public void setAmount(double amount) {
         this.amount = amount;
+    }
+
+    @Override
+    public DamageSource getSource() {
+        return source;
+    }
+
+    public void setSource(DamageSource source) {
+        this.source = source;
     }
 }

@@ -20,11 +20,6 @@ package mod.gottsch.fabric.magic_treasures.core.item.component;
 import blue.endless.jankson.annotation.Nullable;
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import mod.gottsch.fabric.magic_treasures.core.registry.StoneRegistry;
-import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 
 /**

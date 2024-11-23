@@ -222,8 +222,7 @@ public class MagicTreasuresItems {
                         $.rechargesComponent = new RechargesComponent(3);
                         $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.SHADOW_ARMOR).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
                     }).build()
-                    .component(DataComponentTypes.ENCHANTMENTS, new ItemEnchantmentsComponent(Enchantments.VANISHING_CURSE, true))
-            ).setBaseName("castle_ring")
+             ).setBaseName("castle_ring")
                     .setAffixer(castleRingAffixer)
             //            if (!EnchantmentHelper.hasVanishingCurse(stack)) {
 //                stack.enchant(Enchantments.VANISHING_CURSE, 1);
@@ -232,49 +231,43 @@ public class MagicTreasuresItems {
 
     // epic / legendary
     public static Item RING_LIFE_DEATH = registerItem("ring_of_life_death",
-            new NamedJewelry(new ItemSettingsDataComponentBuilder(JewelryType.RING, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
+            (Item) new NamedJewelry(new ItemSettingsDataComponentBuilder(JewelryType.RING, JewelryMaterials.BLOOD, JewelrySizeTier.LORDS)
                     .with($ -> {
-                        $.gemstone = SAPPHIRE.getRegistryEntry().registryKey().getValue();
-                        $.maxLevelComponent = new MaxLevelComponent(7);
-                        $.manaComponent = new ManaComponent(350);
-                        $.rechargesComponent = new RechargesComponent(3);
-                        $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.SHADOW_ARMOR).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
+                        $.gemstone = RUBY.getRegistryEntry().registryKey().getValue();
+                        $.maxLevelComponent = new MaxLevelComponent(9);
+                        $.repairsComponent = new RepairsComponent(0);
+                        $.manaComponent = new ManaComponent(1000);
+                        $.rechargesComponent = new RechargesComponent(0);
+                        $.spellsComponent = new SpellsComponent(
+                                SpellRegistry.get(MagicTreasuresSpells.CHEAT_DEATH).orElse(MagicTreasuresSpells.DEFAULT_HEALING),
+                                SpellRegistry.get(MagicTreasuresSpells.GREATER_DRAIN).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
                     }).build()
-                    .component(DataComponentTypes.ENCHANTMENTS, new ItemEnchantmentsComponent(Enchantments.VANISHING_CURSE, true))
-            ).setBaseName("castle_ring")
-                    .setAffixer(castleRingAffixer)
-            //            if (!EnchantmentHelper.hasVanishingCurse(stack)) {
-//                stack.enchant(Enchantments.VANISHING_CURSE, 1);
-//            }
-    );
-//        public ICapabilityProvider initCapabilities(ItemStack stack, CompoundTag tag) {
-//            /*
-//             *  add enchantment
-//             */
+            ).setBaseName("twisted_ring")
+                    .setAffixer(p -> {return false;})
 //            if (!EnchantmentHelper.hasVanishingCurse(stack)) {
 //                stack.enchant(Enchantments.VANISHING_CURSE, 1);
 //            }
-//
-//            IJewelryHandler handler = new JewelryHandler.Builder(JewelryType.RING, JewelryMaterials.BLOOD)
-//                    .withSize(JewelrySizeTier.LORDS)
-//                    .withStone(RUBY.getId())
-//                    .with($ -> {
-//                        $.baseName = "twisted_ring";
-//                        $.spells.add(SpellRegistry.get(MagicTreasuresSpells.CHEAT_DEATH).get().entity());
-//                        $.spells.add(SpellRegistry.get(MagicTreasuresSpells.GREATER_DRAIN).get().entity());
-//                        $.maxMana = 1000;
-//                        $.maxRecharges = 0;
-//                        $.maxRepairs = 0;
-//                        $.maxLevel = 9;
-//                        $.acceptsAffixer = p -> {
-//                            return false;
-//                        };
-//                    })
-//                    .setInfinite()
-//                    .build();
-//            return new JewelryCapability(handler);
-//        }
-//    });
+    );
+
+    // rare / epic
+    public static Item EYE_OF_THE_PHOENIX = registerItem("eye_of_the_phoenix",
+            (Item) new NamedJewelry(new ItemSettingsDataComponentBuilder(JewelryType.NECKLACE, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
+                    .with($ -> {
+                        $.gemstone = BLACK_PEARL.getRegistryEntry().registryKey().getValue();
+                        $.maxLevelComponent = new MaxLevelComponent(7);
+//                        $.repairsComponent = new RepairsComponent(3);
+                        $.infinite = true;
+                        $.manaComponent = new ManaComponent(300);
+                        $.rechargesComponent = new RechargesComponent(3);
+                        $.spellsComponent = new SpellsComponent(
+                                SpellRegistry.get(MagicTreasuresSpells.BLESSING_OF_THE_PHOENIX).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
+                    }).build()
+            ).setBaseName("amulet")
+                    .setAffixer(p -> {return false;})
+//            if (!EnchantmentHelper.hasVanishingCurse(stack)) {
+//                stack.enchant(Enchantments.VANISHING_CURSE, 1);
+//            }
+    );
 
     static {
         ALL_JEWELRY.add(SILBROS_RING_OF_VITALITY);
@@ -288,6 +281,9 @@ public class MagicTreasuresItems {
         ALL_JEWELRY.add(ADEPHAGIAS_BOUNTY);
         ALL_JEWELRY.add(SALANDAARS_WARD);
         ALL_JEWELRY.add(ANGELS_RING);
+        ALL_JEWELRY.add(RING_OF_FORTITUDE);
+        ALL_JEWELRY.add(RING_LIFE_DEATH);
+        ALL_JEWELRY.add(EYE_OF_THE_PHOENIX);
 
         // spell scroll
         SpellRegistry.values().forEach(spell -> {

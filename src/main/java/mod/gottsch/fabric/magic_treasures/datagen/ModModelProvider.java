@@ -74,6 +74,46 @@ public class ModModelProvider extends FabricModelProvider {
         singleTexture(MagicTreasuresItems.SILBROS_RING_OF_VITALITY, Models.GENERATED,
                 modLoc("item/jewelry/silbros_ring_of_vitality"), itemModelGenerator.writer);
 
+        singleTexture(MagicTreasuresItems.STRONGMANS_BRACERS, Models.GENERATED,
+                modLoc("item/jewelry/wood_bracelet"), itemModelGenerator.writer);
+
+        singleTexture(MagicTreasuresItems.PEASANTS_FORTUNE, Models.GENERATED,
+                                modLoc("item/jewelry/great_iron_ring"), itemModelGenerator.writer);
+
+        singleTexture(MagicTreasuresItems.AMULET_OF_DEFENCE, Models.GENERATED,
+                modLoc("item/jewelry/copper_topaz_necklace"), itemModelGenerator.writer);
+
+        singleTexture(MagicTreasuresItems.MALDRITCHS_FIRST_AMULET, Models.GENERATED,
+                modLoc("item/jewelry/bone_onyx_necklace"), itemModelGenerator.writer);
+
+        singleTexture(MagicTreasuresItems.AQUA_RING, Models.GENERATED,
+                modLoc("item/jewelry/silver_topaz_ring"), itemModelGenerator.writer);
+
+        singleTexture(MagicTreasuresItems.JOURNEYMANS_BANDS, Models.GENERATED,
+                modLoc("item/jewelry/great_gold_jadeite_bracelet"), itemModelGenerator.writer);
+
+        singleTexture(MagicTreasuresItems.MEDICS_TOKEN, Models.GENERATED,
+                modLoc("item/jewelry/medics_token"), itemModelGenerator.writer);
+
+        singleTexture(MagicTreasuresItems.ADEPHAGIAS_BOUNTY, Models.GENERATED,
+                modLoc("item/jewelry/adephagias_bounty"), itemModelGenerator.writer);
+
+        singleTexture(MagicTreasuresItems.SALANDAARS_WARD, Models.GENERATED,
+                modLoc("item/jewelry/salandaars_ward"), itemModelGenerator.writer);
+
+        singleTexture(MagicTreasuresItems.ANGELS_RING, Models.GENERATED,
+                modLoc("item/jewelry/angels_ring"), itemModelGenerator.writer);
+
+        singleTexture(MagicTreasuresItems.RING_OF_FORTITUDE, Models.GENERATED,
+                modLoc("item/jewelry/ring_of_fortitude"), itemModelGenerator.writer);
+
+        singleTexture(MagicTreasuresItems.RING_LIFE_DEATH, Models.GENERATED,
+                modLoc("item/jewelry/ring_of_life_death"), itemModelGenerator.writer);
+
+        singleTexture(MagicTreasuresItems.EYE_OF_THE_PHOENIX, Models.GENERATED,
+                modLoc("item/jewelry/eye_of_the_phoenix"), itemModelGenerator.writer);
+
+
 //        singleTexture(MagicTreasuresItems.GOLD_RING, Models.GENERATED, modLoc("item/jewelry/" + name(MagicTreasuresItems.GOLD_RING)), itemModelGenerator.writer);
 //        singleTexture(MagicTreasuresItems.GREAT_GOLD_RING, Models.GENERATED, modLoc("item/jewelry/" + name(MagicTreasuresItems.GREAT_GOLD_RING)), itemModelGenerator.writer);
 //        singleTexture(MagicTreasuresItems.GREAT_GOLD_RUBY_RING, Models.GENERATED, modLoc("item/jewelry/" + name(MagicTreasuresItems.GREAT_GOLD_RUBY_RING)), itemModelGenerator.writer);

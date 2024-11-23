@@ -3,6 +3,10 @@
     "magictreasures:greater_healing_scroll",
     "magictreasures:regeneration_scroll",
     "magictreasures:lesser_healing_scroll",
+    "magictreasures:giant_strength_scroll",
+    "magictreasures:quick_strength_scroll",
+    "magictreasures:greater_strength_scroll",
+    "magictreasures:strength_scroll",
     "magictreasures:healing_scroll"
   ]
 }
