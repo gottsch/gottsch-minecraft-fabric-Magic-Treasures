@@ -46,7 +46,7 @@ public class PaladinStrikeSpell extends CooldownSpell {
 	private static final float MIN_HEALTH_TO_CAST = 3.0F;
 
 	public static String TYPE = "paladin_strike";
-	private static final EventType REGISTERED_EVENT = EventType.LIVING_ENTITY_DAMAGE_PRE;
+	private static final EventType REGISTERED_EVENT = EventType.MOB_DAMAGE_PRE;
 
 	// the amount of health it costs in addition to mana
 	private double lifeCost;
@@ -65,6 +65,7 @@ public class PaladinStrikeSpell extends CooldownSpell {
 		return REGISTERED_EVENT;
 	}
 
+	// TODO this currently doesn't work if this is a PVP situation.
 	/**
 	 * NOTE: it is assumed that only the allowable events are calling this action.
 	 */
@@ -156,7 +157,7 @@ public class PaladinStrikeSpell extends CooldownSpell {
 		 */
 		@Override
 		public double apply(World world, Random random, ICoords coords, ICastSpellContext context, double amount) {
-			PlayerEntity player = context.getPlayer();;
+			PlayerEntity player = context.getPlayer();
 			ISpell entity = context.getSpell();
 
 			// calculate cost and reduce mana as normal

@@ -1,11 +1,32 @@
+/*
+ * This file is part of  Magic Treasures.
+ * Copyright (c) 2024 Mark Gottschling (gottsch)
+ *
+ * Magic Treasures is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Magic Treasures is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Magic Treasures.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
 package mod.gottsch.fabric.magic_treasures.core.mixin;
 
+import mod.gottsch.fabric.magic_treasures.core.event.SpellEventHandler;
+import mod.gottsch.fabric.magic_treasures.core.spell.EventType;
 import net.minecraft.entity.Attackable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.damage.DamageSource;
+import net.minecraft.entity.mob.MobEntity;
 import net.minecraft.entity.player.PlayerEntity;
+import net.minecraft.server.network.ServerPlayerEntity;
 import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,16 +48,23 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
     // since it overrides this one, but this class targets LivingEntity
     /**
      * this is fired when an Entity is about to have damage applied, but BEFORE
-     * armor, potion and absorption modifiers have been applied to damage.
+     * armor, potion and absorption modifiers have been applied to damage,
+     * BUT after freezing, helmet modifiers have been applied.
      * @param ci
      */
-    @Inject(method = "applyDamage", at = @At(value = "INVOKE"))
-    private void onApplyDamage(DamageSource source, float amount, CallbackInfo ci) {
-        if (getWorld().isClient) {
-            return;
-        }
-
-    }
+//    @Inject(method = "applyDamage", at = @At(value = "INVOKE"))
+//    private void onApplyDamage(DamageSource source, float amount, CallbackInfo ci) {
+//        if (getWorld().isClient) {
+//            return;
+//        }
+//
+//        if ((Object)this instanceof PlayerEntity) {
+//            // TODO need the net result from the process Spells so that the amount can be updated.
+//            SpellEventHandler.processSpells(EventType.PLAYER_DAMAGE_PRE, ((ServerPlayerEntity)(Object)this), amount, source);
+//        } else if ((Object)this instanceof MobEntity && source.getAttacker() instanceof PlayerEntity) {
+//            SpellEventHandler.processSpells(EventType.MOB_DAMAGE_PRE, ((ServerPlayerEntity)source.getAttacker()), amount, source);
+//        }
+//    }
 
     /**
      * this is fire JUST BEFORE an Entity is going to have damage applied, AFTER
@@ -47,7 +75,16 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
      */
     @Inject(method = "modifyAppliedDamage", at = @At(value = "TAIL") )
     private void onModifyAppliedDamage(DamageSource source, float amount, CallbackInfoReturnable<Float> cir) {
+        if (getWorld().isClient) {
+            return;
+        }
 
+        if (((Object)this instanceof PlayerEntity) && (source.getAttacker() instanceof MobEntity)) {
+            // TODO need the net result from the process Spells so that the amount can be updated.
+            SpellEventHandler.processSpells(EventType.PLAYER_DAMAGE_POST, ((ServerPlayerEntity)(Object)this), amount, source);
+        } else if ((Object)this instanceof MobEntity && source.getAttacker() instanceof PlayerEntity) {
+            SpellEventHandler.processSpells(EventType.MOB_DAMAGE_POST, ((ServerPlayerEntity)source.getAttacker()), amount, source);
+        }
     }
 
     /**
@@ -60,5 +97,12 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
             return;
         }
 
+        // TODO right now this is only working for non-PVP
+        if (((Object)this instanceof PlayerEntity) && (source.getAttacker() instanceof MobEntity)) {
+            // TODO need the net result from the process Spells so that the amount can be updated.
+            SpellEventHandler.processSpells(EventType.PLAYER_DAMAGE_PRE, ((ServerPlayerEntity)(Object)this), amount, source);
+        } else if ((Object)this instanceof MobEntity && source.getAttacker() instanceof PlayerEntity) {
+            SpellEventHandler.processSpells(EventType.MOB_DAMAGE_PRE, ((ServerPlayerEntity)source.getAttacker()), amount, source);
+        }
     }
 }
