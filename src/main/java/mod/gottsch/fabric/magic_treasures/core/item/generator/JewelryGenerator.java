@@ -19,13 +19,17 @@ package mod.gottsch.fabric.magic_treasures.core.item.generator;
 
 import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
 import mod.gottsch.fabric.magic_treasures.core.item.SpellScroll;
-import mod.gottsch.fabric.magic_treasures.core.item.component.MagicTreasuresComponents;
-import mod.gottsch.fabric.magic_treasures.core.item.component.MaxLevelComponent;
-import mod.gottsch.fabric.magic_treasures.core.item.component.SpellsComponent;
+import mod.gottsch.fabric.magic_treasures.core.item.component.*;
+import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
+import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTier;
+import mod.gottsch.fabric.magic_treasures.core.registry.JewelryRegistry;
+import mod.gottsch.fabric.magic_treasures.core.registry.StoneRegistry;
 import mod.gottsch.fabric.magic_treasures.core.spell.ISpell;
 import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
+import mod.gottsch.fabric.magic_treasures.core.util.ModUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,7 +40,7 @@ import java.util.Optional;
  *
  */
 public class JewelryGenerator {
-//    public static final Namer STANDARD_NAMER = new Namer();
+    public static final Namer STANDARD_NAMER = new Namer();
 
     /**
      *
@@ -44,82 +48,83 @@ public class JewelryGenerator {
     public JewelryGenerator() {
     }
 
-//    public ItemStack addStone(ItemStack jewelry, ItemStack stone) {
-//        return addStone(jewelry, stone, STANDARD_NAMER);
-//    }
-//
-//    public ItemStack addStone(ItemStack jewelry, ItemStack stone, Namer namer) {
-////        IJewelryHandler sourceHandler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-//        Jewelry jewelryItem = (Jewelry)jewelry.getItem();
-//        JewelryVitalsComponent sourceVitals = Jewelry.vitals(jewelry).orElseThrow(IllegalStateException::new);
-//
-//        // ensure a valid stone stack
-//        if (stone == null || stone == ItemStack.EMPTY || !jewelryItem.acceptsAffixing(stone)
-//            // TODO
-////            || sourceHandler.getJewelryMaterial().acceptsAffixer(stone)
-////                || stoneHandler.canAffix(jewelry.getItem())
-//        ) {
-//            return ItemStack.EMPTY;
-//        }
-//
-//        Identifier location = ModUtil.asLocation(namer.name(jewelry, stone));
-//
-//        ItemStack destJewelry = JewelryRegistry.get(location).map(ItemStack::new).orElseGet(() -> new ItemStack(jewelry.getItem()));
-//
-//        // get the dest capability handlers
-////        IJewelryHandler destHandler = destJewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-//        Jewelry destJewelryItem = (Jewelry)jewelry.getItem();
-//        JewelryVitalsComponent destVitals = Jewelry.vitals(destJewelry).orElseThrow(IllegalStateException::new);
-//
-//        int mana = 0;
-//        int recharges = 0;
-//
-//        Optional<JewelryStoneTier> stoneTier = StoneRegistry.getStoneTier(stone.getItem());
-//
-//        if (stoneTier.isPresent() && stoneTier.get().canAffix(jewelry)) {
-//
-//            // TODO this is wrong - you need to get the item that is registered
-//            // with this gemstone.
-//            // TODO FRACK! gemstone needs to be a component. it is not part of the
-//            // Item because you are able to create jewelry with stones that do not
-//            // have a specific item. ie it is data/tag driven.
-//            // TODO AWWW SHITE! all the jewelry attribs need to be components.
-//            // they are NOT part of the singleton Item!! ARG.
-//            // this only holds true IFF we want other mods items to be able to be used
-//            // as jewelry in this mod.
-//
-//            // ensure stone is set
-//            destJewelryItem.setStone(ModUtil.getName(stone.getItem()));
-//
-//
-//            // update mana
-//            mana = stoneTier.map(JewelryStoneTier::getMana).orElseGet(() -> 0);
-//            mana = Math.round(mana * destHandler.getJewelrySizeTier().getManaMultiplier());
-//
-//            // update recharges
-//            recharges = stoneTier.map(JewelryStoneTier::getRecharges).orElseGet(() -> 0);
-//        }
-//
-//        // update mana
+    public ItemStack addStone(ItemStack jewelry, ItemStack stone) {
+        return addStone(jewelry, stone, STANDARD_NAMER);
+    }
+
+    public ItemStack addStone(ItemStack jewelry, ItemStack stone, Namer namer) {
+       Jewelry jewelryItem = (Jewelry)jewelry.getItem();
+       JewelryAttribsComponent sourceVitals = Jewelry.attribs(jewelry).orElseThrow(IllegalStateException::new);
+
+        // ensure a valid stone stack
+        if (stone == null || stone == ItemStack.EMPTY || !jewelryItem.acceptsAffixing(stone)) {
+            return ItemStack.EMPTY;
+        }
+
+        Identifier location = ModUtil.asLocation(namer.name(jewelry, stone));
+
+        ItemStack destJewelry = JewelryRegistry.get(location).map(ItemStack::new).orElseGet(() -> new ItemStack(jewelry.getItem()));
+
+        // get the dest capability handlers
+        Jewelry destJewelryItem = (Jewelry)jewelry.getItem();
+        JewelryAttribsComponent destAttribs = Jewelry.attribs(destJewelry).orElseThrow(IllegalStateException::new);
+
+        int mana = 0;
+        int recharges = 0;
+
+        Optional<JewelryStoneTier> stoneTier = StoneRegistry.getStoneTier(stone.getItem());
+
+        if (stoneTier.isPresent() && stoneTier.get().canAffix(jewelry)) {
+
+            // TODO this is wrong - you need to get the item that is registered
+            // with this gemstone.
+            // TODO FRACK! gemstone needs to be a component. it is not part of the
+            // Item because you are able to create jewelry with stones that do not
+            // have a specific item. ie it is data/tag driven.
+            // TODO AWWW SHITE! all the jewelry attribs need to be components.
+            // they are NOT part of the singleton Item!! ARG.
+            // this only holds true IFF we want other mods items to be able to be used
+            // as jewelry in this mod.
+
+            // ensure stone is set
+            Jewelry.setGemstone(destJewelry, ModUtil.getName(stone.getItem()));
+
+            // update mana
+            JewelrySizeTier destSizeTier = JewelrySizeTier.valueOf(destAttribs.sizeTier());
+            mana = stoneTier.map(JewelryStoneTier::getMana).orElseGet(() -> 0);
+            mana = Math.round(mana * destSizeTier.getManaMultiplier());
+
+            // update recharges
+            recharges = stoneTier.map(JewelryStoneTier::getRecharges).orElseGet(() -> 0);
+        }
+
+        // update mana
+        ManaComponent destMana = Jewelry.mana(destJewelry).orElseThrow(IllegalStateException::new);
+        destJewelry.set(MagicTreasuresComponents.MANA, new ManaComponent(destMana.maxMana() + mana, destMana.mana() + mana));
 //        destHandler.setMaxMana(sourceHandler.getMaxMana() + mana);
 //        destHandler.setMana(sourceHandler.getMana() + mana);
-//
-//        // update recharges
+
+        // update recharges
+        RechargesComponent destRecharges = Jewelry.recharges(destJewelry).orElseThrow(IllegalStateException::new);
+        destJewelry.set(MagicTreasuresComponents.RECHARGES,
+                new RechargesComponent(destRecharges.maxRecharges() + recharges, destRecharges.recharges() + recharges));
 //        destHandler.setMaxRecharges(sourceHandler.getMaxRecharges() + recharges);
 //        destHandler.setRecharges(sourceHandler.getRecharges() + recharges);
-//
-//        // update repairs
+
+        // update repairs
+        RepairsComponent sourceRepairs = Jewelry.repairs(jewelry).orElseThrow(IllegalStateException::new);
+        destJewelry.set(MagicTreasuresComponents.REPAIRS, new RepairsComponent(sourceRepairs.maxRepairs(), sourceRepairs.repairs()));
 //        destHandler.setRepairs(sourceHandler.getRepairs());
-//
-//        // update uses and item damage
-//        destJewelry.setDamageValue(jewelry.getDamageValue());
-//        destHandler.setUses(sourceHandler.getUses());
-//
-//        // transfer spells
-//        destHandler.setSpells(sourceHandler.getSpells());
-//
-//        return destJewelry;
-//    }
+
+        // update uses and item damage
+        destJewelry.setDamageValue(jewelry.getDamageValue());
+        destHandler.setUses(sourceHandler.getUses());
+
+        // transfer spells
+        destHandler.setSpells(sourceHandler.getSpells());
+
+        return destJewelry;
+    }
 //
 //    public Optional<ItemStack> removeStone(ItemStack jewelry) {
 //        return removeStone(jewelry, STANDARD_NAMER);
@@ -284,33 +289,34 @@ public class JewelryGenerator {
 //        }
 //        return Optional.empty();
 //    }
-//
-//    public static class Namer {
-//        public String name(ItemStack jewelry, ItemStack stone) {
-//            StringBuilder buffer = new StringBuilder();
-//            Jewelry jewelryItem = (Jewelry)jewelry.getItem();
-//
-////            IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-//           return buffer.append((jewelryItem.getSizeTier() != JewelrySizeTier.REGULAR ? (jewelryItem.getSizeTier().getName() + "_") : ""))
-//                   .append(jewelryItem.getMaterial().getName()).append("_")
-//                   .append(ModUtil.getName(stone.getItem()).getPath()).append("_")
-//                   .append(StringUtils.isNotBlank(jewelryItem.getBaseName()) ? jewelryItem.getBaseName() : jewelryItem.getType().getName())
-//                   .toString().toLowerCase();
-////                   .append(handler.getJewelryType().getName()).toString().toLowerCase();
-//        }
-//
-//        public String name(ItemStack jewelry) {
-//            StringBuilder buffer = new StringBuilder();
-//            Jewelry jewelryItem = (Jewelry)jewelry.getItem();
-////            IJewelryHandler handler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-//           return buffer.append((jewelryItem.getSizeTier() != JewelrySizeTier.REGULAR ? (jewelryItem.getSizeTier().getName() + "_") : ""))
-//                    .append(jewelryItem.getMaterial().getName()).append("_")
-//                    .append(
-////                      jewelryItem.getJewelryType().getName()
-//                        StringUtils.isNotBlank(jewelryItem.getBaseName()) ? jewelryItem.getBaseName() : jewelryItem.getType().getName()
-//                    ).toString().toLowerCase();
-//        }
-//    }
+
+    public static class Namer {
+        public String name(ItemStack jewelry, ItemStack stone) {
+            StringBuilder buffer = new StringBuilder();
+            Jewelry jewelryItem = (Jewelry)jewelry.getItem();
+            JewelryAttribsComponent attribsComponent = Jewelry.attribs(jewelry).orElseThrow(IllegalStateException::new);
+
+            return buffer.append((!attribsComponent.sizeTier().equals(JewelrySizeTier.REGULAR.getName()) ? (attribsComponent.sizeTier() + "_") : ""))
+                   .append(attribsComponent.material().getPath()).append("_")
+                   .append(ModUtil.getName(stone.getItem()).getPath()).append("_")
+                   .append(StringUtils.isNotBlank(jewelryItem.getBaseName()) ? jewelryItem.getBaseName() : attribsComponent.type())
+                   .toString().toLowerCase();
+//                   .append(handler.getJewelryType().getName()).toString().toLowerCase();
+        }
+
+        public String name(ItemStack jewelry) {
+            StringBuilder buffer = new StringBuilder();
+            Jewelry jewelryItem = (Jewelry)jewelry.getItem();
+            JewelryAttribsComponent attribsComponent = Jewelry.attribs(jewelry).orElseThrow(IllegalStateException::new);
+
+            return buffer.append((!attribsComponent.sizeTier().equals(JewelrySizeTier.REGULAR.getName()) ? (attribsComponent.sizeTier() + "_") : ""))
+                    .append(attribsComponent.material().getPath()).append("_")
+                    .append(
+//                      jewelryItem.getJewelryType().getName()
+                        StringUtils.isNotBlank(jewelryItem.getBaseName()) ? jewelryItem.getBaseName() : attribsComponent.type()
+                    ).toString().toLowerCase();
+        }
+    }
 
     // NOT IMPLEMENTED
 //    public static class NamingRules {

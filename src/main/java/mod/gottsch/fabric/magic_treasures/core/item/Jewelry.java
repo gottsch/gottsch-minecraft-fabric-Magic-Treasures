@@ -203,6 +203,9 @@ public class Jewelry extends Item implements IJewelry{
     }
 
     // repairs
+    public static Optional<RepairsComponent> repairs(ItemStack stack) {
+        return Optional.ofNullable(stack.get(MagicTreasuresComponents.REPAIRS));
+    }
 
     // mana
     public static Optional<ManaComponent> mana(ItemStack stack) {
@@ -210,6 +213,9 @@ public class Jewelry extends Item implements IJewelry{
     }
 
     // recharges
+    public static Optional<RechargesComponent> recharges(ItemStack stack) {
+        return Optional.ofNullable(stack.get(MagicTreasuresComponents.RECHARGES));
+    }
 
     // spells
     public static Optional<SpellsComponent> spells(ItemStack stack) {
@@ -243,6 +249,14 @@ public class Jewelry extends Item implements IJewelry{
     public static void setUses(ItemStack stack, int uses) {
         uses(stack).ifPresent(component -> {
             stack.set(MagicTreasuresComponents.USES, new UsesComponent(component.maxUses(), uses));
+        });
+    }
+
+    public static void setGemstone(ItemStack stack, Identifier gemstone) {
+        attribs(stack).ifPresent(component -> {
+            stack.set(MagicTreasuresComponents.JEWELRY_ATTRIBS,
+                    new JewelryAttribsComponent(component.type(), component.sizeTier(),
+                            component.material(), gemstone));
         });
     }
 

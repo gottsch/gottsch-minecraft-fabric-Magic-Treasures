@@ -65,8 +65,8 @@ public class SpellEventHandler {
      * @param event
      * @param player
      */
-    public static void processSpells(EventType event, ServerPlayerEntity player) {
-        processSpells(event, player, 0, null);
+    public static SpellResult processSpells(EventType event, ServerPlayerEntity player) {
+        return processSpells(event, player, 0, null);
     }
 
     /**
@@ -76,7 +76,7 @@ public class SpellEventHandler {
      * @param amount
      * @param source
      */
-    public static void processSpells(EventType event, ServerPlayerEntity player, double amount, DamageSource source) {
+    public static SpellResult processSpells(EventType event, ServerPlayerEntity player, double amount, DamageSource source) {
         /*
          * a list of spell contexts to execute
          */
@@ -89,9 +89,8 @@ public class SpellEventHandler {
         Collections.sort(spellsToExecute, SpellContext.priorityComparator);
 
         // execute spells
-        executeSpells(event, player, spellsToExecute);
+        return executeSpells(event, player, spellsToExecute, amount, source);
 
-        // TODO need to return the net spell result
     }
 
     /**
@@ -162,20 +161,24 @@ public class SpellEventHandler {
      * @param player
      * @param contexts
      */
-    private static void executeSpells(EventType event, ServerPlayerEntity player, List<SpellContext> contexts) {
+    private static SpellResult executeSpells(EventType event, ServerPlayerEntity player, List<SpellContext> contexts, double amount, DamageSource source) {
         /*
          * a list of spell types that are non-stackable that should not be executed more than once.
          */
         final List<String> executeOnceSpellTypes = new ArrayList<>(5);
 
-        contexts.forEach(context -> {
+        SpellResult result = new SpellResult();
+        double newAmount = amount;
+
+//        contexts.forEach(context -> {
+        for (SpellContext context : contexts) {
             ISpell spell = (ISpell)context.getSpell();
 //			MagicTreasures.LOGGER.debug("processing spell -> {}", spell.getName().toString());
             if (!spell.isEffectStackable()) {
                 // TODO this probably needs to change to spell.getName comparison
                 // check if this spell type is already in the monitored list
                 if (executeOnceSpellTypes.contains(spell.getType())) {
-                    return;
+                    continue;
                 }
                 else {
                     // add the spell type to the monitored list
@@ -183,17 +186,24 @@ public class SpellEventHandler {
                 }
             }
 
+            // create a cast context
+            ICastSpellContext castContext = new CastSpellContext(
+                    context.getItemStack(), null, context.getSpell(), player, newAmount, source);
+
             // if spell is executable and executes successfully
-            ICastSpellContext castContext = new CastSpellContext(context.getItemStack(), null, context.getSpell(), player);
-            if (context.getSpell().cast(player.getServerWorld(), new Random(), new Coords(player.getBlockPos()), castContext).success()) {
+            SpellResult spellResult = context.getSpell().cast(player.getServerWorld(), new Random(), Coords.of(player.getBlockPos()), castContext);
+            if (spellResult.success()) {
 //				MagicTreasures.LOGGER.debug("spell {} successfully updated.", spell.getName().toString());
                 processUsage(player.getServerWorld(), player, event, context);
+                newAmount = spellResult.amount();
             }
 
-            // TODO need the result of the spell to propagate the new amount forward to the next spell.
-        });
+            // update the final result
+            result = new SpellResult(result.success() || spellResult.success(), newAmount);
+        }
 
-        // TODO need to return the net SpellResult
+        // return the final result
+        return result;
     }
 
     /**

@@ -42,6 +42,12 @@ public class CastSpellContext implements ICastSpellContext {
         this.player = player;
     }
 
+    public CastSpellContext(ItemStack jewelry, List<ItemStack> manaWells, ISpell spell, PlayerEntity player, double amount, DamageSource source) {
+        this(jewelry, manaWells, spell, player);
+        this.amount = amount;
+        this.source = source;
+    }
+
     @Override
     public ItemStack getJewelry() {
         return jewelry;

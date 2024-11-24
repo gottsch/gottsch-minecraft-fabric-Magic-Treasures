@@ -19,6 +19,7 @@ package mod.gottsch.fabric.magic_treasures.core.mixin;
 
 import mod.gottsch.fabric.magic_treasures.core.event.SpellEventHandler;
 import mod.gottsch.fabric.magic_treasures.core.spell.EventType;
+import mod.gottsch.fabric.magic_treasures.core.spell.SpellResult;
 import net.minecraft.entity.Attackable;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityType;
@@ -79,11 +80,15 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
             return;
         }
 
+        SpellResult spellResult = new SpellResult();
         if (((Object)this instanceof PlayerEntity) && (source.getAttacker() instanceof MobEntity)) {
-            // TODO need the net result from the process Spells so that the amount can be updated.
-            SpellEventHandler.processSpells(EventType.PLAYER_DAMAGE_POST, ((ServerPlayerEntity)(Object)this), amount, source);
+            spellResult = SpellEventHandler.processSpells(EventType.PLAYER_DAMAGE_POST, ((ServerPlayerEntity)(Object)this), amount, source);
         } else if ((Object)this instanceof MobEntity && source.getAttacker() instanceof PlayerEntity) {
-            SpellEventHandler.processSpells(EventType.MOB_DAMAGE_POST, ((ServerPlayerEntity)source.getAttacker()), amount, source);
+            spellResult = SpellEventHandler.processSpells(EventType.MOB_DAMAGE_POST, ((ServerPlayerEntity)source.getAttacker()), amount, source);
+        }
+
+        if (spellResult.success()) {
+            amount = (float)spellResult.amount();
         }
     }
 
@@ -97,12 +102,16 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
             return;
         }
 
+        SpellResult spellResult = new SpellResult();
         // TODO right now this is only working for non-PVP
         if (((Object)this instanceof PlayerEntity) && (source.getAttacker() instanceof MobEntity)) {
-            // TODO need the net result from the process Spells so that the amount can be updated.
-            SpellEventHandler.processSpells(EventType.PLAYER_DAMAGE_PRE, ((ServerPlayerEntity)(Object)this), amount, source);
+            spellResult = SpellEventHandler.processSpells(EventType.PLAYER_DAMAGE_PRE, ((ServerPlayerEntity)(Object)this), amount, source);
         } else if ((Object)this instanceof MobEntity && source.getAttacker() instanceof PlayerEntity) {
-            SpellEventHandler.processSpells(EventType.MOB_DAMAGE_PRE, ((ServerPlayerEntity)source.getAttacker()), amount, source);
+            spellResult = SpellEventHandler.processSpells(EventType.MOB_DAMAGE_PRE, ((ServerPlayerEntity)source.getAttacker()), amount, source);
+        }
+
+        if (spellResult.success()) {
+            amount = (float)spellResult.amount();
         }
     }
 }

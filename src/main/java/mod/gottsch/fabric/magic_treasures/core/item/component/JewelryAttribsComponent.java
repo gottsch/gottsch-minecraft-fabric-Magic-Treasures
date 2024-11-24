@@ -33,4 +33,7 @@ public record JewelryAttribsComponent(String type, String sizeTier, Identifier m
             Identifier.CODEC.fieldOf("gemstone").forGetter(JewelryAttribsComponent::gemstone)
     ).apply(instance, JewelryAttribsComponent::new));
 
+    public boolean hasGemstone() {
+        return gemstone != null;
+    }
 }

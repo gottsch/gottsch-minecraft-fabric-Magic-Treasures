@@ -17,7 +17,10 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.mixin;
 
+import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
+import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryAttribsComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.MagicTreasuresComponents;
+import mod.gottsch.fabric.magic_treasures.core.item.component.ManaComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.generator.JewelryGenerator;
 import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
 import net.minecraft.entity.player.PlayerInventory;
@@ -54,13 +57,16 @@ public abstract class AnvilEventMixin extends ForgingScreenHandler {
         this.levelCost.set(1);
 
         ItemStack jewelryStack = this.input.getStack(0);
+        ItemStack rightStack = this.input.getStack(1);
+
         // add a spell to item
         if (!jewelryStack.isEmpty()
-                && jewelryStack.isIn(MagicTreasuresTags.Items.JEWELRY)
-                && jewelryStack.contains(MagicTreasuresComponents.SPELLS)) {
-            ItemStack scrollStack = this.input.getStack(1);
-            if (!scrollStack.isEmpty() && scrollStack.isIn(MagicTreasuresTags.Items.SPELL_SCROLLS)) {
-                Optional<ItemStack> resultStack = generator.addSpells(jewelryStack, scrollStack);
+                && jewelryStack.isIn(MagicTreasuresTags.Items.JEWELRY)) {
+
+            if (jewelryStack.contains(MagicTreasuresComponents.SPELLS)
+                    && !rightStack.isEmpty() && rightStack.isIn(MagicTreasuresTags.Items.SPELL_SCROLLS)) {
+
+                Optional<ItemStack> resultStack = generator.addSpells(jewelryStack, rightStack);
                 resultStack.ifPresent(stack -> {
                     // TODO this is moot
                     resultOutStack.set(stack);
@@ -68,6 +74,22 @@ public abstract class AnvilEventMixin extends ForgingScreenHandler {
                     this.sendContentUpdates();
                 });
                 ci.cancel();
+                // add a stone to jewelry
+            } else if (jewelryStack.contains(MagicTreasuresComponents.JEWELRY_ATTRIBS)
+                    && rightStack.isIn(MagicTreasuresTags.Items.STONES)) {
+                JewelryAttribsComponent attribs = Jewelry.attribs(jewelryStack).orElseThrow(IllegalStateException::new);
+                if (!attribs.hasGemstone()) {
+                    /*
+					 TODO need a better way of constructing a new jewelry item than using its registry name.
+					 When using items from different mods, following the naming structure may not work.
+					 ie. this ONLY works for items that use Magic Treasures naming convention AND don't
+					 overlap in the tiers. What if 2 items have the same make-up ex copper, topaz, ring
+					 */
+
+                    // TODO somehow interrogate leftStack to determine if it is a standard naming or not. - might end up being a capability property OR a tag??
+                    // TODO addStone should return an Optional
+                    resultOutStack.set(generator.addStone(jewelryStack, rightStack));
+                }
             }
         }
     }
