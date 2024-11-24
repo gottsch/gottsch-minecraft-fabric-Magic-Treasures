@@ -159,6 +159,7 @@ public class Jewelry extends Item implements IJewelry{
         tooltip.add(Text.literal(LangUtil.NEWLINE));
     }
 
+    @Deprecated
     public static boolean hasStone(ItemStack stack) {
         return attribs(stack).map(a -> {
             if (a.gemstone() != null) {
@@ -174,14 +175,17 @@ public class Jewelry extends Item implements IJewelry{
     /*
      * component accessors
      */
+    @Deprecated
     // attribs
     public static Optional<JewelryAttribsComponent> attribs(ItemStack stack) {
         return Optional.ofNullable(stack.get(MagicTreasuresComponents.JEWELRY_ATTRIBS));
     }
 
+    @Deprecated
     public static Optional<IJewelryType> jewelryType(ItemStack stack) {
         return attribs(stack).flatMap(a -> MagicTreasuresApi.getJewelryType(a.type()));
     }
+    @Deprecated
     // TODO make convenience methods for all the component properties
     public static Optional<Item> gemstone(ItemStack stack) {
         return attribs(stack).flatMap(a -> StoneRegistry.get(a.gemstone()));
@@ -192,31 +196,37 @@ public class Jewelry extends Item implements IJewelry{
 //        return Optional.ofNullable(stack.get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT));
 //    }
 
+    @Deprecated
     // max level
     public static Optional<MaxLevelComponent> maxLevel(ItemStack stack) {
         return Optional.ofNullable(stack.get(MagicTreasuresComponents.MAX_LEVEL));
     }
 
+    @Deprecated
     // uses
     public static Optional<UsesComponent> uses(ItemStack stack) {
         return Optional.ofNullable(stack.get(MagicTreasuresComponents.USES));
     }
 
+    @Deprecated
     // repairs
     public static Optional<RepairsComponent> repairs(ItemStack stack) {
         return Optional.ofNullable(stack.get(MagicTreasuresComponents.REPAIRS));
     }
 
+    @Deprecated
     // mana
     public static Optional<ManaComponent> mana(ItemStack stack) {
         return Optional.ofNullable(stack.get(MagicTreasuresComponents.MANA));
     }
 
+    @Deprecated
     // recharges
     public static Optional<RechargesComponent> recharges(ItemStack stack) {
         return Optional.ofNullable(stack.get(MagicTreasuresComponents.RECHARGES));
     }
 
+    @Deprecated
     // spells
     public static Optional<SpellsComponent> spells(ItemStack stack) {
         return Optional.ofNullable(stack.get(MagicTreasuresComponents.SPELLS));
@@ -236,6 +246,7 @@ public class Jewelry extends Item implements IJewelry{
 //        });
 //    }
 
+    @Deprecated
     /*
      * data component convenience setters
      */
@@ -246,12 +257,14 @@ public class Jewelry extends Item implements IJewelry{
         });
     }
 
+    @Deprecated
     public static void setUses(ItemStack stack, int uses) {
         uses(stack).ifPresent(component -> {
             stack.set(MagicTreasuresComponents.USES, new UsesComponent(component.maxUses(), uses));
         });
     }
 
+    @Deprecated
     public static void setGemstone(ItemStack stack, Identifier gemstone) {
         attribs(stack).ifPresent(component -> {
             stack.set(MagicTreasuresComponents.JEWELRY_ATTRIBS,

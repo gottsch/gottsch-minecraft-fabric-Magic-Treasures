@@ -17,6 +17,7 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.item.generator;
 
+import mod.gottsch.fabric.magic_treasures.core.item.IJewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
 import mod.gottsch.fabric.magic_treasures.core.item.SpellScroll;
 import mod.gottsch.fabric.magic_treasures.core.item.component.*;
@@ -27,6 +28,7 @@ import mod.gottsch.fabric.magic_treasures.core.registry.StoneRegistry;
 import mod.gottsch.fabric.magic_treasures.core.spell.ISpell;
 import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
 import mod.gottsch.fabric.magic_treasures.core.util.ModUtil;
+import net.minecraft.component.DataComponentTypes;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.StringUtils;
@@ -53,8 +55,7 @@ public class JewelryGenerator {
     }
 
     public ItemStack addStone(ItemStack jewelry, ItemStack stone, Namer namer) {
-       Jewelry jewelryItem = (Jewelry)jewelry.getItem();
-       JewelryAttribsComponent sourceVitals = Jewelry.attribs(jewelry).orElseThrow(IllegalStateException::new);
+        Jewelry jewelryItem = (Jewelry)jewelry.getItem();
 
         // ensure a valid stone stack
         if (stone == null || stone == ItemStack.EMPTY || !jewelryItem.acceptsAffixing(stone)) {
@@ -63,68 +64,45 @@ public class JewelryGenerator {
 
         Identifier location = ModUtil.asLocation(namer.name(jewelry, stone));
 
+        // duplicate (create new) the jewelry itemstack
         ItemStack destJewelry = JewelryRegistry.get(location).map(ItemStack::new).orElseGet(() -> new ItemStack(jewelry.getItem()));
-
-        // get the dest capability handlers
-        Jewelry destJewelryItem = (Jewelry)jewelry.getItem();
-        JewelryAttribsComponent destAttribs = Jewelry.attribs(destJewelry).orElseThrow(IllegalStateException::new);
 
         int mana = 0;
         int recharges = 0;
 
         Optional<JewelryStoneTier> stoneTier = StoneRegistry.getStoneTier(stone.getItem());
-
         if (stoneTier.isPresent() && stoneTier.get().canAffix(jewelry)) {
-
-            // TODO this is wrong - you need to get the item that is registered
-            // with this gemstone.
-            // TODO FRACK! gemstone needs to be a component. it is not part of the
-            // Item because you are able to create jewelry with stones that do not
-            // have a specific item. ie it is data/tag driven.
-            // TODO AWWW SHITE! all the jewelry attribs need to be components.
-            // they are NOT part of the singleton Item!! ARG.
-            // this only holds true IFF we want other mods items to be able to be used
-            // as jewelry in this mod.
-
             // ensure stone is set
-            Jewelry.setGemstone(destJewelry, ModUtil.getName(stone.getItem()));
+            ComponentHelper.updateGemstone(destJewelry, ModUtil.getName(stone.getItem()));
 
-            // update mana
-            JewelrySizeTier destSizeTier = JewelrySizeTier.valueOf(destAttribs.sizeTier());
+            // calculate mana
+            IJewelrySizeTier destSizeTier = ComponentHelper.sizeTier(destJewelry).orElse(JewelrySizeTier.REGULAR);
             mana = stoneTier.map(JewelryStoneTier::getMana).orElseGet(() -> 0);
             mana = Math.round(mana * destSizeTier.getManaMultiplier());
 
-            // update recharges
+            // calculate recharges
             recharges = stoneTier.map(JewelryStoneTier::getRecharges).orElseGet(() -> 0);
         }
 
         // update mana
-        ManaComponent destMana = Jewelry.mana(destJewelry).orElseThrow(IllegalStateException::new);
-        destJewelry.set(MagicTreasuresComponents.MANA, new ManaComponent(destMana.maxMana() + mana, destMana.mana() + mana));
-//        destHandler.setMaxMana(sourceHandler.getMaxMana() + mana);
-//        destHandler.setMana(sourceHandler.getMana() + mana);
+        ComponentHelper.incrementMana(destJewelry, mana);
 
         // update recharges
-        RechargesComponent destRecharges = Jewelry.recharges(destJewelry).orElseThrow(IllegalStateException::new);
-        destJewelry.set(MagicTreasuresComponents.RECHARGES,
-                new RechargesComponent(destRecharges.maxRecharges() + recharges, destRecharges.recharges() + recharges));
-//        destHandler.setMaxRecharges(sourceHandler.getMaxRecharges() + recharges);
-//        destHandler.setRecharges(sourceHandler.getRecharges() + recharges);
+        ComponentHelper.incrementRecharges(destJewelry, recharges);
 
         // update repairs
-        RepairsComponent sourceRepairs = Jewelry.repairs(jewelry).orElseThrow(IllegalStateException::new);
-        destJewelry.set(MagicTreasuresComponents.REPAIRS, new RepairsComponent(sourceRepairs.maxRepairs(), sourceRepairs.repairs()));
-//        destHandler.setRepairs(sourceHandler.getRepairs());
+        ComponentHelper.copyRepairsComponent(jewelry, destJewelry);
 
         // update uses and item damage
-        destJewelry.setDamageValue(jewelry.getDamageValue());
-        destHandler.setUses(sourceHandler.getUses());
+        destJewelry.set(DataComponentTypes.DAMAGE, jewelry.get(DataComponentTypes.DAMAGE));
+        ComponentHelper.copyUsesComponent(jewelry, destJewelry);
 
-        // transfer spells
-        destHandler.setSpells(sourceHandler.getSpells());
+        // copy spells
+        ComponentHelper.copySpellsComponent(jewelry, destJewelry);
 
         return destJewelry;
     }
+
 //
 //    public Optional<ItemStack> removeStone(ItemStack jewelry) {
 //        return removeStone(jewelry, STANDARD_NAMER);
@@ -296,12 +274,13 @@ public class JewelryGenerator {
             Jewelry jewelryItem = (Jewelry)jewelry.getItem();
             JewelryAttribsComponent attribsComponent = Jewelry.attribs(jewelry).orElseThrow(IllegalStateException::new);
 
-            return buffer.append((!attribsComponent.sizeTier().equals(JewelrySizeTier.REGULAR.getName()) ? (attribsComponent.sizeTier() + "_") : ""))
-                   .append(attribsComponent.material().getPath()).append("_")
-                   .append(ModUtil.getName(stone.getItem()).getPath()).append("_")
-                   .append(StringUtils.isNotBlank(jewelryItem.getBaseName()) ? jewelryItem.getBaseName() : attribsComponent.type())
-                   .toString().toLowerCase();
+            String name = buffer.append((!attribsComponent.sizeTier().equals(JewelrySizeTier.REGULAR.getName()) ? (attribsComponent.sizeTier() + "_") : ""))
+                    .append(attribsComponent.material().getPath()).append("_")
+                    .append(ModUtil.getName(stone.getItem()).getPath()).append("_")
+                    .append(StringUtils.isNotBlank(jewelryItem.getBaseName()) ? jewelryItem.getBaseName() : attribsComponent.type())
+                    .toString().toLowerCase();
 //                   .append(handler.getJewelryType().getName()).toString().toLowerCase();
+            return name;
         }
 
         public String name(ItemStack jewelry) {
@@ -313,7 +292,7 @@ public class JewelryGenerator {
                     .append(attribsComponent.material().getPath()).append("_")
                     .append(
 //                      jewelryItem.getJewelryType().getName()
-                        StringUtils.isNotBlank(jewelryItem.getBaseName()) ? jewelryItem.getBaseName() : attribsComponent.type()
+                            StringUtils.isNotBlank(jewelryItem.getBaseName()) ? jewelryItem.getBaseName() : attribsComponent.type()
                     ).toString().toLowerCase();
         }
     }

@@ -18,6 +18,7 @@
 package mod.gottsch.fabric.magic_treasures.core.mixin;
 
 import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
+import mod.gottsch.fabric.magic_treasures.core.item.component.ComponentHelper;
 import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryAttribsComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.MagicTreasuresComponents;
 import mod.gottsch.fabric.magic_treasures.core.item.component.ManaComponent;
@@ -77,8 +78,9 @@ public abstract class AnvilEventMixin extends ForgingScreenHandler {
                 // add a stone to jewelry
             } else if (jewelryStack.contains(MagicTreasuresComponents.JEWELRY_ATTRIBS)
                     && rightStack.isIn(MagicTreasuresTags.Items.STONES)) {
-                JewelryAttribsComponent attribs = Jewelry.attribs(jewelryStack).orElseThrow(IllegalStateException::new);
-                if (!attribs.hasGemstone()) {
+//                JewelryAttribsComponent attribs = ComponentHelper.attribs(jewelryStack).orElseThrow(IllegalStateException::new);
+                if (!ComponentHelper.hasGemstone(jewelryStack)) {
+//                if (!attribs.hasGemstone()) {
                     /*
 					 TODO need a better way of constructing a new jewelry item than using its registry name.
 					 When using items from different mods, following the naming structure may not work.
@@ -88,7 +90,11 @@ public abstract class AnvilEventMixin extends ForgingScreenHandler {
 
                     // TODO somehow interrogate leftStack to determine if it is a standard naming or not. - might end up being a capability property OR a tag??
                     // TODO addStone should return an Optional
-                    resultOutStack.set(generator.addStone(jewelryStack, rightStack));
+//                    resultOutStack.set(generator.addStone(jewelryStack, rightStack));
+                    ItemStack resultStack = generator.addStone(jewelryStack, rightStack);
+                    this.output.setStack(0, resultStack);
+                    this.sendContentUpdates();
+                    ci.cancel();
                 }
             }
         }

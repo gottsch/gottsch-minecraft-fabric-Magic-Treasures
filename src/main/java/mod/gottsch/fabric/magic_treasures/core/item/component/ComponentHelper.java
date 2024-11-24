@@ -10,6 +10,7 @@ import net.minecraft.component.ComponentType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.util.Identifier;
 
 import java.util.Optional;
 
@@ -108,20 +109,81 @@ public class ComponentHelper {
         return stack.set(MagicTreasuresComponents.MANA, new ManaComponent(max, mana));
     }
 
+    public static RechargesComponent setRecharges(ItemStack stack, int max, int recharges) {
+        return stack.set(MagicTreasuresComponents.RECHARGES, new RechargesComponent(max, recharges));
+    }
+
+    public static JewelryAttribsComponent setJewelryAttribs(ItemStack stack , IJewelryType type, IJewelrySizeTier sizeTier, JewelryMaterial material, Item gemstone) {
+        return stack.set(MagicTreasuresComponents.JEWELRY_ATTRIBS,
+                new JewelryAttribsComponent(type.getName(), sizeTier.getName(), material.getId(), gemstone.getRegistryEntry().registryKey().getValue()));
+    }
+
+    public static JewelryAttribsComponent setJewelryAttribs(ItemStack stack , String type, String sizeTier, Identifier material, Identifier gemstone) {
+        return stack.set(MagicTreasuresComponents.JEWELRY_ATTRIBS,
+                new JewelryAttribsComponent(type, sizeTier, material, gemstone));
+    }
+
     /*
      * component updaters
      * updaters assume the item stack already contains the component.
      * if it doesn't, no action is taken.
      */
+    // uses
+    public static Optional<UsesComponent> updateUses(ItemStack stack, int uses) {
+        return uses(stack).map(component -> stack.set(MagicTreasuresComponents.USES, new UsesComponent(component.maxUses(), uses)));
+    }
+
+    // repairs
+    public static Optional<RepairsComponent> updateRepairs(ItemStack stack, int repairs) {
+        return repairs(stack).map(component -> stack.set(MagicTreasuresComponents.REPAIRS, new RepairsComponent(component.maxRepairs(), repairs)));
+    }
+
     // mana
     public static Optional<ManaComponent> updateMana(ItemStack stack, double mana) {
         return mana(stack).map(component -> stack.set(MagicTreasuresComponents.MANA, new ManaComponent(component.maxMana(), mana)));
     }
+    public static Optional<ManaComponent> incrementMana(ItemStack stack, int amount) {
+        return mana(stack).map(component -> stack.set(MagicTreasuresComponents.MANA,
+                new ManaComponent(component.maxMana() + amount, component.mana() + amount)));
+    }
+
+    // recharges
+
+    public static Optional<RechargesComponent> incrementRecharges(ItemStack stack, int amount) {
+        return recharges(stack).map(component -> stack.set(MagicTreasuresComponents.RECHARGES,
+                new RechargesComponent(component.maxRecharges() + amount, component.recharges() + amount)));
+    }
+
+    // gemstone
+    public static Optional<JewelryAttribsComponent> updateGemstone(ItemStack stack, Identifier gemstone) {
+        return attribs(stack).map(component -> stack.set(MagicTreasuresComponents.JEWELRY_ATTRIBS,
+                new JewelryAttribsComponent(component.type(), component.sizeTier(), component.material(), gemstone)));
+    }
 
     /*
-     * component copiers - necessary?
+     * component copiers
      */
-    public static void copyMana(ItemStack source, ItemStack dest) {
+    public static void copyUsesComponent(ItemStack source, ItemStack dest) {
+        dest.set(MagicTreasuresComponents.USES, source.get(MagicTreasuresComponents.USES));
+    }
+    public static void copyRepairsComponent(ItemStack source, ItemStack dest) {
+        dest.set(MagicTreasuresComponents.REPAIRS, source.get(MagicTreasuresComponents.REPAIRS));
+    }
+    public static void copyManaComponent(ItemStack source, ItemStack dest) {
         dest.set(MagicTreasuresComponents.MANA, source.get(MagicTreasuresComponents.MANA));
+    }
+    public static void copySpellsComponent(ItemStack source, ItemStack dest) {
+        dest.set(MagicTreasuresComponents.SPELLS, source.get(MagicTreasuresComponents.SPELLS));
+    }
+
+    /*
+     * component property copiers
+     */
+    // uses
+    public static Optional<UsesComponent> copyUses(ItemStack source, ItemStack dest) {
+        return uses(dest).map(destComponent -> dest.set(MagicTreasuresComponents.USES,
+                new UsesComponent(destComponent.maxUses(), uses(source).map(UsesComponent::uses).orElse(destComponent.uses()))
+            )
+        );
     }
 }

@@ -35,11 +35,34 @@ public class MagicTreasuresTags {
         public static final TagKey<Item> STONE_RARITY_RARE = createTag(MagicTreasures.MOD_ID, "jewelry/stones/rarity/rare");
         public static final TagKey<Item> STONE_RARITY_EPIC = createTag(MagicTreasures.MOD_ID, "jewelry/stones/rarity/epic");
 
+        // categorization by tier
+        public static final TagKey<Item> WOOD = createTag(MagicTreasures.MOD_ID, "jewelry/tiers/materials/wood");
+        public static final TagKey<Item> IRON = createTag(MagicTreasures.MOD_ID, "jewelry/tiers/materials/iron");
+        public static final TagKey<Item> COPPER = createTag(MagicTreasures.MOD_ID, "jewelry/tiers/materials/copper");
+        public static final TagKey<Item> SILVER = createTag(MagicTreasures.MOD_ID, "jewelry/tiers/materials/silver");
+        public static final TagKey<Item> GOLD = createTag(MagicTreasures.MOD_ID, "jewelry/tiers/materials/gold");
+        public static final TagKey<Item> BLOOD = createTag(MagicTreasures.MOD_ID, "jewelry/tiers/materials/blood");
+        public static final TagKey<Item> BONE = createTag(MagicTreasures.MOD_ID, "jewelry/tiers/materials/bone");
+        public static final TagKey<Item> SHADOW = createTag(MagicTreasures.MOD_ID, "jewelry/tiers/materials/shadow");
+        public static final TagKey<Item> ATIUM = createTag(MagicTreasures.MOD_ID, "jewelry/tiers/materials/atium");
+
+        public static final TagKey<Item> REGULAR = createTag(MagicTreasures.MOD_ID, "jewelry/tiers/sizes/regular");
+        public static final TagKey<Item> GREAT = createTag(MagicTreasures.MOD_ID, "jewelry/tiers/sizes/great");
+        public static final TagKey<Item> LORDS = createTag(MagicTreasures.MOD_ID, "jewelry/tiers/sizes/lords");
+
+        public static final TagKey<Item> JEWELRY_COMMON = createTag(MagicTreasures.MOD_ID, "jewelry/rarity/common");
+        public static final TagKey<Item> JEWELRY_UNCOMMON = createTag(MagicTreasures.MOD_ID, "jewelry/rarity/uncommon");
+        public static final TagKey<Item> JEWELRY_SCARCE = createTag(MagicTreasures.MOD_ID, "jewelry/rarity/scarce");
+        public static final TagKey<Item> JEWELRY_RARE = createTag(MagicTreasures.MOD_ID, "jewelry/rarity/rare");
+        public static final TagKey<Item> JEWELRY_EPIC = createTag(MagicTreasures.MOD_ID, "jewelry/rarity/epic");
+        public static final TagKey<Item> JEWELRY_LEGENDARY = createTag(MagicTreasures.MOD_ID, "jewelry/rarity/legendary");
+        public static final TagKey<Item> JEWELRY_MYTHICAL = createTag(MagicTreasures.MOD_ID, "jewelry/rarity/mythical");
+        
         // jewelry
         public static final TagKey<Item> RINGS = createTag(MagicTreasures.MOD_ID, "jewelry/rings");
         public static final TagKey<Item> BRACELETS = createTag(MagicTreasures.MOD_ID, "jewelry/bracelets");
         public static final TagKey<Item> NECKLACES = createTag(MagicTreasures.MOD_ID, "jewelry/necklaces");
-        //        public static final TagKey<Item> CHARMS = mod(MagicTreasures.MOD_ID, "jewelry/charms");
+        //        public static final TagKey<Item> CHARMS = createTag(MagicTreasures.MOD_ID, "jewelry/charms");
         public static final TagKey<Item> POCKETS = createTag(MagicTreasures.MOD_ID, "jewelry/pockets");
         public static final TagKey<Item> JEWELRY = createTag(MagicTreasures.MOD_ID, "jewelry/all_jewelry");
 

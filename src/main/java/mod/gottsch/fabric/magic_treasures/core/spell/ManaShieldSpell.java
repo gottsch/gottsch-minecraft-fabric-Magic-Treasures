@@ -22,6 +22,7 @@ import mod.gottsch.fabric.gottschcore.enums.IRarity;
 import mod.gottsch.fabric.gottschcore.spatial.ICoords;
 import mod.gottsch.fabric.magic_treasures.MagicTreasures;
 import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
+import mod.gottsch.fabric.magic_treasures.core.item.component.ComponentHelper;
 import mod.gottsch.fabric.magic_treasures.core.item.component.ManaComponent;
 import mod.gottsch.fabric.magic_treasures.core.util.LangUtil;
 import mod.gottsch.fabric.magic_treasures.core.util.MathUtil;
@@ -69,7 +70,7 @@ public class ManaShieldSpell extends CooldownSpell {
 	public SpellResult execute(World world, Random random, ICoords coords, ICastSpellContext context) {
 		SpellResult result = new SpellResult();
 		ItemStack jewelry = context.getJewelry();
-		ManaComponent manaComponent = Jewelry.mana(jewelry).orElseThrow(IllegalStateException::new);
+		ManaComponent manaComponent = ComponentHelper.mana(jewelry).orElseThrow(IllegalStateException::new);
 
 		if (manaComponent.mana() > 0 && context.getPlayer().isAlive()) {
 			// get the source and amount from the context
@@ -83,11 +84,11 @@ public class ManaShieldSpell extends CooldownSpell {
 				// cost eval
 				double cost = applyCost(world, random, coords, context, amountToSpell);
 				MagicTreasures.LOGGER.debug("cost (mana) incurred to jewelry -> {}", cost);
-				if (cost < amountToSpell) {
-					newAmount =+ (amountToSpell - cost);
-				}
-				MagicTreasures.LOGGER.debug("new amount to player -> {}", amountToPlayer);
-				result = new SpellResult(true, newAmount);
+//				if (cost < amountToSpell) {
+//					newAmount =+ (amountToSpell - cost);
+//				}
+				MagicTreasures.LOGGER.debug("new amount to player -> {}", newAmount);
+				result = new SpellResult(true, amountToPlayer);
 			}
 		}
 		return result;

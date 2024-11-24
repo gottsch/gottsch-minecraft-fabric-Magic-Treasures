@@ -1,4 +1,4 @@
-// 1.21.1	2024-11-23T16:43:09.5835006	Magic Treasures/Model Definitions
+// 1.21.1	2024-11-24T15:36:13.0579723	Magic Treasures/Model Definitions
 8d3d82771dc12c6bec92b3a67b6b483af8b03f18 assets\magictreasures\models\item\great_gold_onyx_ring.json
 a31ee2754b88bd0eba12589f9119c42b70e40c2d assets\magictreasures\blockstates\silver_ore.json
 f2425912dd8db97f8e2ee37e547f660c1fc6dc47 assets\magictreasures\models\item\copper_sapphire_ring.json
@@ -382,8 +382,8 @@ d6c5ae66b29dab438a6f28b97ef6cbdfe4a7eba8 assets\magictreasures\models\item\great
 afc235fb122efea62562b57cbd044015f9ef02fb assets\magictreasures\models\item\lords_iron_jadeite_necklace.json
 8237bdb13196315768715a722c75b8727c3d6e29 assets\magictreasures\models\item\lords_gold_ruby_ring.json
 40e9edd7aed41373a96836daeacc3538abfd5f8e assets\magictreasures\models\item\iron_sapphire_necklace.json
-656b1d7461c9938b7132e0d7b954f58143d9bda0 assets\magictreasures\models\item\great_silver_sapphire_ring.json
 8651a72b760ae518a82028d567c2f630c000e6ec assets\magictreasures\models\item\gold_jadeite_necklace.json
+656b1d7461c9938b7132e0d7b954f58143d9bda0 assets\magictreasures\models\item\great_silver_sapphire_ring.json
 acb7b48c0cf4bfd7e7435b300e515c69807e99cc assets\magictreasures\models\item\great_iron_diamond_ring.json
 1a5bc916f88f4f699590174c2a2d67bcea35bd4d assets\magictreasures\models\item\invisibility_scroll.json
 756a04b6e934eb5fa1867f9ee4931ef976610650 assets\magictreasures\models\item\great_bone_necklace.json

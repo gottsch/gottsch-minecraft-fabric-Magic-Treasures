@@ -17,6 +17,7 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.mixin;
 
+import mod.gottsch.fabric.magic_treasures.MagicTreasures;
 import mod.gottsch.fabric.magic_treasures.core.event.SpellEventHandler;
 import mod.gottsch.fabric.magic_treasures.core.spell.EventType;
 import mod.gottsch.fabric.magic_treasures.core.spell.SpellResult;
@@ -82,6 +83,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
 
         SpellResult spellResult = new SpellResult();
         if (((Object)this instanceof PlayerEntity) && (source.getAttacker() instanceof MobEntity)) {
+            MagicTreasures.LOGGER.debug("modifyAppliedDamage");
             spellResult = SpellEventHandler.processSpells(EventType.PLAYER_DAMAGE_POST, ((ServerPlayerEntity)(Object)this), amount, source);
         } else if ((Object)this instanceof MobEntity && source.getAttacker() instanceof PlayerEntity) {
             spellResult = SpellEventHandler.processSpells(EventType.MOB_DAMAGE_POST, ((ServerPlayerEntity)source.getAttacker()), amount, source);
@@ -89,6 +91,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
 
         if (spellResult.success()) {
             amount = (float)spellResult.amount();
+            cir.setReturnValue((float)spellResult.amount());
         }
     }
 
@@ -96,7 +99,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
      * this is fired when an Entity is set to be damaged, BEFORE ANY
      * processing or modifiers have been execute/applied.
      */
-    @Inject(method = "damage", at = @At(value = "INVOKE"))
+    @Inject(method = "damage", at = @At(value = "HEAD"))
     private void onDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
         if (getWorld().isClient) {
             return;
@@ -105,6 +108,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         SpellResult spellResult = new SpellResult();
         // TODO right now this is only working for non-PVP
         if (((Object)this instanceof PlayerEntity) && (source.getAttacker() instanceof MobEntity)) {
+            MagicTreasures.LOGGER.debug("damage");
             spellResult = SpellEventHandler.processSpells(EventType.PLAYER_DAMAGE_PRE, ((ServerPlayerEntity)(Object)this), amount, source);
         } else if ((Object)this instanceof MobEntity && source.getAttacker() instanceof PlayerEntity) {
             spellResult = SpellEventHandler.processSpells(EventType.MOB_DAMAGE_PRE, ((ServerPlayerEntity)source.getAttacker()), amount, source);
