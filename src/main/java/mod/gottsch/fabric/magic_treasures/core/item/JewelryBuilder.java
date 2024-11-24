@@ -4,6 +4,7 @@ import mod.gottsch.fabric.magic_treasures.MagicTreasures;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
+import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryType;
 import mod.gottsch.fabric.magic_treasures.core.util.ModUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -20,6 +21,7 @@ import java.util.function.Predicate;
 import static mod.gottsch.fabric.magic_treasures.core.item.MagicTreasuresItems.*;
 
 /**
+ * this is a helper class to build Jewelry Items at registration time.
  * Created by Mark Gottschling on 11/21/2024
  */
 public class JewelryBuilder {

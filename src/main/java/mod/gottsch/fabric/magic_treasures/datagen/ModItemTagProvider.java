@@ -3,7 +3,7 @@ package mod.gottsch.fabric.magic_treasures.datagen;
 import com.google.common.collect.Maps;
 import mod.gottsch.fabric.magic_treasures.MagicTreasures;
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
-import mod.gottsch.fabric.magic_treasures.core.item.JewelryType;
+import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryType;
 import mod.gottsch.fabric.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.fabric.magic_treasures.core.item.SpellScroll;
 import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
@@ -16,11 +16,8 @@ import net.minecraft.registry.RegistryWrapper;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
-import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.CompletableFuture;
-
-import static net.fabricmc.fabric.api.biome.v1.BiomeSelectors.tag;
 
 /**
  * Created by Mark Gottschling on Nov 14, 2024

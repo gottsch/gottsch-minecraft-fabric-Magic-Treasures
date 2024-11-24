@@ -2,7 +2,7 @@ package mod.gottsch.fabric.magic_treasures.core.setup;
 
 import mod.gottsch.fabric.magic_treasures.core.api.MagicTreasuresApi;
 import mod.gottsch.fabric.magic_treasures.core.integration.MagicTreasuresIntegrations;
-import mod.gottsch.fabric.magic_treasures.core.item.JewelryType;
+import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryType;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTiers;

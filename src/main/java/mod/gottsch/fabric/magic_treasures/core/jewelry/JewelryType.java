@@ -15,11 +15,10 @@
  * You should have received a copy of the GNU Lesser General Public License
  * along with Magic Treasures.  If not, see <http://www.gnu.org/licenses/lgpl>.
  */
-package mod.gottsch.fabric.magic_treasures.core.item;
+package mod.gottsch.fabric.magic_treasures.core.jewelry;
 
-import com.mojang.serialization.Codec;
 import mod.gottsch.fabric.gottschcore.enums.IEnum;
-import net.minecraft.util.Identifier;
+import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
 
 import java.util.EnumSet;
 import java.util.HashMap;

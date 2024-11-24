@@ -20,6 +20,7 @@ package mod.gottsch.fabric.magic_treasures.core.item;
 import mod.gottsch.fabric.magic_treasures.core.item.component.*;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
+import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryType;
 import net.minecraft.item.Item;
 import net.minecraft.util.Identifier;
 
