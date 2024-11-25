@@ -17,6 +17,8 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.mixin;
 
+import com.llamalad7.mixinextras.sugar.Local;
+import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import mod.gottsch.fabric.magic_treasures.MagicTreasures;
 import mod.gottsch.fabric.magic_treasures.core.event.SpellEventHandler;
 import mod.gottsch.fabric.magic_treasures.core.spell.EventType;
@@ -33,8 +35,11 @@ import net.minecraft.world.World;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 /**
  * Created by Mark Gottschling on 11/20/2024
@@ -75,7 +80,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
      * @param amount
      * @param cir
      */
-    @Inject(method = "modifyAppliedDamage", at = @At(value = "TAIL") )
+    @Inject(method = "modifyAppliedDamage", at = @At(value = "RETURN"), cancellable = true)
     private void onModifyAppliedDamage(DamageSource source, float amount, CallbackInfoReturnable<Float> cir) {
         if (getWorld().isClient) {
             return;
@@ -90,7 +95,6 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         }
 
         if (spellResult.success()) {
-            amount = (float)spellResult.amount();
             cir.setReturnValue((float)spellResult.amount());
         }
     }
@@ -99,10 +103,12 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
      * this is fired when an Entity is set to be damaged, BEFORE ANY
      * processing or modifiers have been execute/applied.
      */
-    @Inject(method = "damage", at = @At(value = "HEAD"))
-    private void onDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir) {
+    @ModifyVariable(method = "damage", at = @At(value = "HEAD"), ordinal = 0)
+//    @Inject(method = "damage", at = @At(value = "INVOKE"))
+    private float injectedDamage(float amount, DamageSource source) {
+//    private void onDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir, @Local LocalRef<Float> localRef) {
         if (getWorld().isClient) {
-            return;
+            return amount;
         }
 
         SpellResult spellResult = new SpellResult();
@@ -117,5 +123,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
         if (spellResult.success()) {
             amount = (float)spellResult.amount();
         }
+
+        return amount;
     }
 }

@@ -94,7 +94,7 @@ public class SpellEventHandler {
     }
 
     /**
-     * Examine and collect all Spells (not SpellEntity) that the player has in valid slots.
+     * Examine and collect all Spells that the player has in valid slots.
      * @param event
      * @param player
      * @return

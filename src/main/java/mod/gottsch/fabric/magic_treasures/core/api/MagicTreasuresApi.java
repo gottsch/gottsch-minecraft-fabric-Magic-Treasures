@@ -104,6 +104,15 @@ public class MagicTreasuresApi {
         return JewelryMaterialRegistry.get(name);
     }
 
+    // TODO this has to be renamed to the specific rarity ie for Stone, Material, Jewelry
+    public static void registerStoneRarityTag(IRarity rarity, TagKey<Item> tagKey) {
+        TagRegistry.registerJewelryStoneRarity(rarity, tagKey);
+    }
+
+    public static void registerJewelryRarityTag(IRarity rarity, TagKey<Item> tagKey) {
+        TagRegistry.registerJewelryRarity(rarity, tagKey);
+    }
+
     public static void registerJewelryStoneTier(JewelryStoneTier tier) {
         JewelryStoneTierRegistry.register(tier);
     }
@@ -117,5 +126,9 @@ public class MagicTreasuresApi {
     }
     public static void registerJewelryStoneRarityTag(IRarity rarity, TagKey<Item> tagKey) {
         TagRegistry.registerJewelryStoneRarity(rarity, tagKey);
+    }
+
+    public static void registerJewerlyTypeTag(IJewelryType type, TagKey<Item> tagKey) {
+        TagRegistry.registerJewelryType(type, tagKey);
     }
 }

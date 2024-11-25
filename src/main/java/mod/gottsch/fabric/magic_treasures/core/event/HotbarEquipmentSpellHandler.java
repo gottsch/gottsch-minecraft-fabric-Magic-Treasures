@@ -62,9 +62,9 @@ public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 						if (spell.isEmpty()) {
 							continue;
 						}
-//						if (!entity.getSpell().getRegisteredEvent().equals(event.getClass())) {
-//							continue;
-//						}
+						if (spell.get().getRegisteredEvent() != event) {
+							continue;
+						}
 						index.set(i);
 						SpellContext context  = new SpellContext.Builder().with($ -> {
 							$.slotProviderId = "minecraft";

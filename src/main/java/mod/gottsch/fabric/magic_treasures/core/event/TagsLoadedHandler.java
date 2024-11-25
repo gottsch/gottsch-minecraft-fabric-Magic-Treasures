@@ -2,19 +2,19 @@ package mod.gottsch.fabric.magic_treasures.core.event;
 
 import mod.gottsch.fabric.magic_treasures.MagicTreasures;
 import mod.gottsch.fabric.magic_treasures.core.api.MagicTreasuresApi;
+import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTier;
+import mod.gottsch.fabric.magic_treasures.core.registry.JewelryRegistry;
 import mod.gottsch.fabric.magic_treasures.core.registry.StoneRegistry;
 import mod.gottsch.fabric.magic_treasures.core.registry.TagRegistry;
 import mod.gottsch.fabric.magic_treasures.core.util.ModUtil;
-import net.fabricmc.fabric.api.entity.event.v1.ServerEntityWorldChangeEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.CommonLifecycleEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerEntityEvents;
-import net.fabricmc.fabric.api.event.lifecycle.v1.ServerWorldEvents;
 import net.minecraft.item.Item;
 import net.minecraft.registry.DynamicRegistryManager;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.tag.TagKey;
 
+import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -25,6 +25,27 @@ public class TagsLoadedHandler implements CommonLifecycleEvents.TagsLoaded {
     @Override
     public void onTagsLoaded(DynamicRegistryManager dynamicRegistryManager, boolean b) {
         MagicTreasures.LOGGER.debug("in onTagLoaded event");
+
+        // clear any registries
+        JewelryRegistry.clear();
+
+        /*
+         * register all jewelry items by looking up the jewelry type tags.
+         */
+        // process all items in the JewelryType tags
+        List<IJewelryType> types = MagicTreasuresApi.getJewelryTypes();
+        types.forEach(type -> {
+            TagKey<Item> tagKey = TagRegistry.getJewelryTypeTag(type);
+            if (tagKey != null) {
+                // get the tag
+                List<Item> tagItems = getItemsFromTag(tagKey);
+                // for each item in the tag
+                for (Item jewelry : tagItems) {
+                    JewelryRegistry.register(jewelry);
+                    MagicTreasures.LOGGER.debug("registering jewelry -> {} ", ModUtil.getName(jewelry));
+                }
+            }
+        });
 
         // process all items in the JewelryStoneTier tags
         List<JewelryStoneTier> tiers = MagicTreasuresApi.getJewelryStoneTiers();

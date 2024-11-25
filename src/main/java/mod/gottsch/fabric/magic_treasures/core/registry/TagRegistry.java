@@ -34,7 +34,7 @@ public class TagRegistry {
 	public static void registerJewelryType(IJewelryType type, TagKey<Item> tagKey) {
 		JEWELRY_TYPE_TAGS_REGISTRY.put(type, tagKey);
 	}
-	
+
 	/**
 	 * register a stoneTier tag to a stoneTier
 	 * @param tier
