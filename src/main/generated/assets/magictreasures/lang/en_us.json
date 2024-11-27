@@ -381,6 +381,7 @@
   "tooltip.magictreasures.jewelry.spells": "Spells:",
   "tooltip.magictreasures.jewelry.stats.cooldown_factor": "Cd:%s",
   "tooltip.magictreasures.jewelry.stats.cost_factor": "C:%s",
+  "tooltip.magictreasures.jewelry.stats.duration_factor": "D:%s",
   "tooltip.magictreasures.jewelry.stats.effect_amount_factor": "E:%s",
   "tooltip.magictreasures.jewelry.stats.frequency_factor": "Fq:%s",
   "tooltip.magictreasures.jewelry.stats.range_factor": "R:%s",

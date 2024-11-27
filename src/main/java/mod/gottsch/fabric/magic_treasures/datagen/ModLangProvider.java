@@ -126,6 +126,7 @@ public class ModLangProvider extends FabricLanguageProvider {
 
         translationBuilder.add(LangUtil.tooltip("jewelry.stats.cost_factor"), "C:%s");
         translationBuilder.add(LangUtil.tooltip("jewelry.stats.cooldown_factor"), "Cd:%s");
+        translationBuilder.add(LangUtil.tooltip("jewelry.stats.duration_factor"), "D:%s");
         translationBuilder.add(LangUtil.tooltip("jewelry.stats.effect_amount_factor"), "E:%s");
         translationBuilder.add(LangUtil.tooltip("jewelry.stats.frequency_factor"), "Fq:%s");
         translationBuilder.add(LangUtil.tooltip("jewelry.stats.range_factor"), "R:%s");

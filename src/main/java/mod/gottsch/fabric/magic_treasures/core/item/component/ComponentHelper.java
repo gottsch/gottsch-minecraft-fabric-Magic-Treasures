@@ -103,6 +103,9 @@ public class ComponentHelper {
     public static Optional<Double> manaValue(ItemStack stack) {
         return mana(stack).map((ManaComponent::mana));
     }
+    public static double manaValueOrDefault(ItemStack stack, double defaultValue) {
+        return mana(stack).map((ManaComponent::mana)).orElse(defaultValue);
+    }
     public static Optional<Double> maxManaValue(ItemStack stack) {
         return mana(stack).map((ManaComponent::maxMana));
     }
@@ -162,12 +165,15 @@ public class ComponentHelper {
         return mana(stack).map(component -> stack.set(MagicTreasuresComponents.MANA, new ManaComponent(component.maxMana(), mana)));
     }
     public static Optional<ManaComponent> incrementMana(ItemStack stack, double amount) {
-        return mana(stack).map(component -> stack.set(MagicTreasuresComponents.MANA,
+        return mana(stack).map(
+                component -> stack.set(MagicTreasuresComponents.MANA,
                 new ManaComponent(component.maxMana() + amount, component.mana() + amount)));
     }
 
     // recharges
-
+    public static Optional<RechargesComponent> updateRecharges(ItemStack stack, int recharges) {
+        return recharges(stack).map(component -> stack.set(MagicTreasuresComponents.RECHARGES, new RechargesComponent(component.maxRecharges(), recharges)));
+    }
     public static Optional<RechargesComponent> incrementRecharges(ItemStack stack, int amount) {
         return recharges(stack).map(component -> stack.set(MagicTreasuresComponents.RECHARGES,
                 new RechargesComponent(component.maxRecharges() + amount, component.recharges() + amount)));

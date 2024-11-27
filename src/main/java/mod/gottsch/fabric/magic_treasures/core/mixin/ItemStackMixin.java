@@ -17,32 +17,26 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.mixin;
 
-import mod.gottsch.fabric.magic_treasures.MagicTreasures;
-import mod.gottsch.fabric.magic_treasures.core.api.MagicTreasuresApi;
-import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
-import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryComponentBuilder;
+import com.mojang.datafixers.functions.Functions;
+import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryComponents;
 import mod.gottsch.fabric.magic_treasures.core.item.component.MagicTreasuresComponents;
 import mod.gottsch.fabric.magic_treasures.core.registry.JewelryRegistry;
-import net.minecraft.component.ComponentMapImpl;
-import net.minecraft.component.ComponentType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemConvertible;
 import net.minecraft.item.ItemStack;
-import net.minecraft.util.Pair;
-import org.spongepowered.asm.mixin.Final;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.List;
 
 /**
  * Created by Mark Gottschling on 11/23/2024
  */
 @Mixin(ItemStack.class)
 public class ItemStackMixin {
+    private static final Logger log = LoggerFactory.getLogger(ItemStackMixin.class);
 
 //    @Shadow private ComponentMapImpl components;
 
@@ -56,16 +50,29 @@ public class ItemStackMixin {
 //            MagicTreasures.LOGGER.debug("has attribs component");
 //        }
         JewelryRegistry.getAttribs(item.asItem()).ifPresent(j -> {
-            List<Pair<ComponentType<?>, Object>> jewelryComponents = new JewelryComponentBuilder(MagicTreasures.MOD_ID)
+//            List<Pair<ComponentType<?>, Object>> jewelryComponents = new JewelryComponentBuilder(MagicTreasures.MOD_ID)
+            JewelryComponents components = new JewelryComponents.Builder()
                     .with($ -> {
                         $.type = j.getRight().getType();
                         $.material = j.getRight().getMaterial();
                         $.size = j.getRight().getSizeTier();
                         $.stone = j.getRight().getStone();
                     }).build();
-            jewelryComponents.forEach(jc -> {
-                (((ItemStack)(Object)this).set(jc.getLeft(), jc.getRight());
-            });
+//            jewelryComponents.forEach(jc -> {
+//                (((ItemStack)(Object)this).set(jc.getLeft().cl, jc.getRight());
+//                Item.Settings ukjhjh
+//            });
+
+            // TODO this is an explicit way of doing this..... research having a map of component<T>
+            ((ItemStack)(Object)this).set(MagicTreasuresComponents.JEWELRY_ATTRIBS, components.getAttribs());
+            ((ItemStack)(Object)this).set(MagicTreasuresComponents.MAX_LEVEL, components.getMaxLevel());
+            ((ItemStack)(Object)this).set(MagicTreasuresComponents.USES, components.getUses());
+            ((ItemStack)(Object)this).set(MagicTreasuresComponents.REPAIRS, components.getRepairs());
+            ((ItemStack)(Object)this).set(MagicTreasuresComponents.MANA, components.getMana());
+            ((ItemStack)(Object)this).set(MagicTreasuresComponents.RECHARGES, components.getRecharges());
+            ((ItemStack)(Object)this).set(MagicTreasuresComponents.SPELL_FACTORS, components.getSpellFactors());
+            ((ItemStack)(Object)this).set(MagicTreasuresComponents.SPELLS, components.getSpells());
         });
-    });
+//    });
+    }
 }

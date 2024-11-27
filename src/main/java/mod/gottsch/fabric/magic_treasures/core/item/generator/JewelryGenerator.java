@@ -60,49 +60,59 @@ public class JewelryGenerator {
         Jewelry jewelryItem = (Jewelry)jewelry.getItem();
 
         // ensure a valid stone stack
-        if (stone == null || stone == ItemStack.EMPTY || !jewelryItem.acceptsAffixing(stone)) {
+        if (stone == null || stone.isEmpty() || !jewelryItem.acceptsAffixing(stone)) {
             return ItemStack.EMPTY;
         }
 
-        Identifier location = ModUtil.asLocation(namer.name(jewelry, stone));
-
-        // duplicate (create new) the jewelry itemstack
-        ItemStack destJewelry = JewelryRegistry.get(location).map(ItemStack::new).orElseGet(() -> new ItemStack(jewelry.getItem()));
-
-        int mana = 0;
-        int recharges = 0;
-
         Optional<JewelryStoneTier> stoneTier = StoneRegistry.getStoneTier(stone.getItem());
         if (stoneTier.isPresent() && stoneTier.get().canAffix(jewelry)) {
-            // ensure stone is set
-            ComponentHelper.updateGemstone(destJewelry, ModUtil.getName(stone.getItem()));
+            int gemMana = 0;
+            int gemRecharges = 0;
+            Identifier location = ModUtil.asLocation(namer.name(jewelry, stone));
 
-            // calculate mana
+            // duplicate (create new) the jewelry itemstack
+            ItemStack destJewelry = JewelryRegistry.get(location).map(ItemStack::new).orElseGet(() -> new ItemStack(jewelry.getItem()));
+            // NOTE that destJewelry at this point is created with the default values of the jewelry + stone version.
+            // therefor, the max values don't need to be changed but the current values do.
+
+            // ensure stone is set (in the component)
+//            ComponentHelper.updateGemstone(destJewelry, ModUtil.getName(stone.getItem()));
+
+            /*
+             * calculate mana derived from the gem
+             * NOTE only applying the sizeTier multiplier to the gem as that is the only thing changing.
+             */
             IJewelrySizeTier destSizeTier = ComponentHelper.sizeTier(destJewelry).orElse(JewelrySizeTier.REGULAR);
-            mana = stoneTier.map(JewelryStoneTier::getMana).orElseGet(() -> 0);
-            mana = Math.round(mana * destSizeTier.getManaMultiplier());
+            gemMana = stoneTier.map(JewelryStoneTier::getMana).orElseGet(() -> 0);
+            gemMana = Math.round(gemMana * destSizeTier.getManaMultiplier());
+            // TODO get min of maxMana and current+gemMana
+            gemMana = (int) Math.min(ComponentHelper.maxManaValue(destJewelry).get(), ComponentHelper.manaValueOrDefault(destJewelry, 0) + gemMana);
 
-            // calculate recharges
-            recharges = stoneTier.map(JewelryStoneTier::getRecharges).orElseGet(() -> 0);
+            // TODO could use ManaComponent.Builder here instead. it will calculate the mana like above.
+            // update mana
+            ComponentHelper.updateMana(destJewelry, gemMana);
+//        ComponentHelper.incrementMana(destJewelry, gemMana);//
+
+            // update recharges
+            gemRecharges = stoneTier.map(JewelryStoneTier::getRecharges).orElseGet(() -> 0);
+            gemRecharges = Math.min(ComponentHelper.maxRechargesValue(destJewelry).get(), ComponentHelper.rechargesValueOrDefault(destJewelry, 0) + gemRecharges);
+//        ComponentHelper.incrementRecharges(destJewelry, gemRecharges);
+            ComponentHelper.updateRecharges(destJewelry, gemRecharges);
+
+            // update repairs
+            ComponentHelper.copyRepairsComponent(jewelry, destJewelry);
+
+            // update uses and item damage
+            destJewelry.set(DataComponentTypes.DAMAGE, jewelry.get(DataComponentTypes.DAMAGE));
+            ComponentHelper.copyUsesComponent(jewelry, destJewelry);
+
+            // copy spells
+            ComponentHelper.copySpellsComponent(jewelry, destJewelry);
+
+            return destJewelry;
         }
 
-        // update mana
-        ComponentHelper.incrementMana(destJewelry, mana);
-
-        // update recharges
-        ComponentHelper.incrementRecharges(destJewelry, recharges);
-
-        // update repairs
-        ComponentHelper.copyRepairsComponent(jewelry, destJewelry);
-
-        // update uses and item damage
-        destJewelry.set(DataComponentTypes.DAMAGE, jewelry.get(DataComponentTypes.DAMAGE));
-        ComponentHelper.copyUsesComponent(jewelry, destJewelry);
-
-        // copy spells
-        ComponentHelper.copySpellsComponent(jewelry, destJewelry);
-
-        return destJewelry;
+        return ItemStack.EMPTY;
     }
 
 
@@ -111,6 +121,7 @@ public class JewelryGenerator {
     }
 
     public Optional<ItemStack> removeStone(ItemStack jewelry, Namer namer) {
+        // TODO this is wrong. need to build the name without them gem.
         Identifier location = ModUtil.asLocation(namer.name(jewelry));
         ItemStack destJewelry = JewelryRegistry.get(location).map(ItemStack::new).orElseGet(() -> new ItemStack(jewelry.getItem()));
 
@@ -148,13 +159,13 @@ public class JewelryGenerator {
         // remove mana
 ////        destHandler.setMaxMana(sourceHandler.getMaxMana() - mana);
 //        destHandler.setMana(Math.min(sourceHandler.getMana(), destHandler.getMaxMana()));
-        ComponentHelper.incrementMana(destJewelry,
+        ComponentHelper.updateMana(destJewelry,
                 Math.min(ComponentHelper.manaValue(jewelry).orElse(0D), ComponentHelper.maxManaValue(destJewelry).orElse(0D)));
 
         // remove recharges
 //        destHandler.setMaxRecharges(sourceHandler.getMaxRecharges() - recharges);
 //        destHandler.setRecharges(Math.min(sourceHandler.getRecharges(), destHandler.getMaxRecharges()));
-        ComponentHelper.incrementRecharges(destJewelry,
+        ComponentHelper.updateRecharges(destJewelry,
                 Math.min(ComponentHelper.rechargesValue(jewelry).orElse(0),
                         ComponentHelper.maxRechargesValue(destJewelry).orElse(0)));
 
@@ -298,12 +309,13 @@ public class JewelryGenerator {
             Jewelry jewelryItem = (Jewelry)jewelry.getItem();
             JewelryAttribsComponent attribsComponent = Jewelry.attribs(jewelry).orElseThrow(IllegalStateException::new);
 
-            return buffer.append((!attribsComponent.sizeTier().equals(JewelrySizeTier.REGULAR.getName()) ? (attribsComponent.sizeTier() + "_") : ""))
+           String name = buffer.append((!attribsComponent.sizeTier().equals(JewelrySizeTier.REGULAR.getName()) ? (attribsComponent.sizeTier() + "_") : ""))
                     .append(attribsComponent.material().getPath()).append("_")
                     .append(
 //                      jewelryItem.getJewelryType().getName()
                             StringUtils.isNotBlank(jewelryItem.getBaseName()) ? jewelryItem.getBaseName() : attribsComponent.type()
                     ).toString().toLowerCase();
+            return name;
         }
     }
 

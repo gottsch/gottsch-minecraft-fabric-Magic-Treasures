@@ -165,6 +165,11 @@ public class Jewelry extends Item implements IJewelry{
                 component.append(Text.translatable(LangUtil.tooltip("jewelry.stats.effect_amount_factor"), Formatting.AQUA + formatStat(spellFactors.get().spellEffectAmountFactor())))
                         .append(" ");
             }
+            if (spellFactors.get().spellDurationFactor() != 1.0) {
+                c = c.isEmpty() ? Optional.of(component) : c;
+                component.append(Text.translatable(LangUtil.tooltip("jewelry.stats.duration_factor"), Formatting.AQUA + formatStat(1.0 + (1.0 - spellFactors.get().spellDurationFactor()))))
+                        .append(" ");
+            }
             if (spellFactors.get().spellFrequencyFactor() != 1.0) {
                 c = c.isEmpty() ? Optional.of(component) : c;
                 component.append(Text.translatable(LangUtil.tooltip("jewelry.stats.frequency_factor"), Formatting.AQUA + formatStat(1.0 + (1.0 - spellFactors.get().spellFrequencyFactor()))))
