@@ -91,8 +91,6 @@ public record ManaComponent(double maxMana, double mana) {
             if (this.maxMana <= 0) {
                 int mana = stoneTier.map(JewelryStoneTier::getMana).orElseGet(() -> 0);
                 this.maxMana = Math.round((this.material.getMana() + mana) * this.sizeTier.getManaMultiplier());
-            } else {
-                this.maxMana = this.maxMana;
             }
             this.mana = this.maxMana;
 

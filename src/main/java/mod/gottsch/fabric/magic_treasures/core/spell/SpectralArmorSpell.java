@@ -20,6 +20,7 @@ import mod.gottsch.fabric.gottschcore.enums.IRarity;
 import mod.gottsch.fabric.gottschcore.spatial.ICoords;
 import mod.gottsch.fabric.magic_treasures.MagicTreasures;
 import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
+import mod.gottsch.fabric.magic_treasures.core.item.component.ComponentHelper;
 import mod.gottsch.fabric.magic_treasures.core.item.component.ManaComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.SpellFactorsComponent;
 import mod.gottsch.fabric.magic_treasures.core.util.LangUtil;
@@ -68,7 +69,7 @@ public class SpectralArmorSpell extends CooldownSpell {
 		SpellResult result = new SpellResult();
 		ItemStack jewelry = context.getJewelry();
 		PlayerEntity player = context.getPlayer();
-		ManaComponent manaComponent = Jewelry.mana(jewelry).orElseThrow(IllegalStateException::new);
+		ManaComponent manaComponent = ComponentHelper.mana(jewelry).orElseThrow(IllegalStateException::new);
 		SpellFactorsComponent spellFactorsComponent = Jewelry.spellFactors(jewelry).orElseThrow(IllegalStateException::new);
 
 		if (manaComponent.mana() > 0 && player.isAlive()) {

@@ -20,6 +20,7 @@ package mod.gottsch.fabric.magic_treasures.core.spell;
 import mod.gottsch.fabric.gottschcore.enums.IRarity;
 import mod.gottsch.fabric.gottschcore.spatial.ICoords;
 import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
+import mod.gottsch.fabric.magic_treasures.core.item.component.ComponentHelper;
 import mod.gottsch.fabric.magic_treasures.core.item.component.ManaComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.SpellFactorsComponent;
 import mod.gottsch.fabric.magic_treasures.core.util.LangUtil;
@@ -69,7 +70,7 @@ public class CheatDeathSpell extends CooldownSpell {
 	public SpellResult execute(World world, Random random, ICoords coords, ICastSpellContext context) {
 		SpellResult result = new SpellResult();
 		ItemStack jewelry = context.getJewelry();
-		ManaComponent manaComponent = Jewelry.mana(jewelry).orElseThrow(IllegalStateException::new);
+		ManaComponent manaComponent = ComponentHelper.mana(jewelry).orElseThrow(IllegalStateException::new);
 		SpellFactorsComponent spellFactorsComponent = Jewelry.spellFactors(context.getJewelry()).orElseThrow(IllegalStateException::new);
 
 		PlayerEntity player = context.getPlayer();

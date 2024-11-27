@@ -1,7 +1,9 @@
 {
   "values": [
-    "#magictreasures:jewelry/rings",
-    "#magictreasures:jewelry/necklaces",
-    "#magictreasures:jewelry/bracelets"
+    {
+      "id": "#magictreasures:jewelry/rings",
+      "required": false
+    },
+    "magictreasures:adephagias_bounty"
   ]
 }

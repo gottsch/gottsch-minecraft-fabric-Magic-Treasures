@@ -19,6 +19,7 @@ package mod.gottsch.fabric.magic_treasures.core.spell.cost;
 
 import mod.gottsch.fabric.gottschcore.spatial.ICoords;
 import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
+import mod.gottsch.fabric.magic_treasures.core.item.component.ComponentHelper;
 import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryAttribsComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.ManaComponent;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
@@ -45,7 +46,7 @@ public class CostEvaluator implements ICostEvaluator {
 	@Override
 	public double apply(World level, Random random, ICoords coords, ICastSpellContext context, double amount) {
 		JewelryAttribsComponent attribs = Jewelry.attribs(context.getJewelry()).orElseThrow(IllegalStateException::new);
-		ManaComponent manaComponent = Jewelry.mana(context.getJewelry()).orElseThrow(IllegalStateException::new); //context.getJewelry().get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT)
+		ManaComponent manaComponent = ComponentHelper.mana(context.getJewelry()).orElseThrow(IllegalStateException::new); //context.getJewelry().get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT)
 		Optional<Item> stone = StoneRegistry.get(attribs.gemstone());
 		JewelryStoneTier stoneTier = StoneRegistry.getStoneTier(stone.orElseGet(() -> Items.AIR)).orElse(JewelryStoneTiers.NONE);
 		JewelryMaterial material = JewelryMaterialRegistry.get(attribs.material()).orElse(JewelryMaterials.NONE);
@@ -57,11 +58,11 @@ public class CostEvaluator implements ICostEvaluator {
 		double cost = 0;
 		if (manaComponent.mana() >= newAmount) {
 			cost = newAmount;
-			Jewelry.setMana(context.getJewelry(), MathHelper.clamp(manaComponent.mana() - newAmount, 0D, manaComponent.mana()));
+			ComponentHelper.updateMana(context.getJewelry(), MathHelper.clamp(manaComponent.mana() - newAmount, 0D, manaComponent.mana()));
 			}
 		else {
 			cost = manaComponent.mana();
-			Jewelry.setMana(context.getJewelry(), 0);
+			ComponentHelper.updateMana(context.getJewelry(), 0);
 		}
 		return cost;
 	}

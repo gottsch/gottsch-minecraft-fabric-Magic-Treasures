@@ -21,6 +21,7 @@ import mod.gottsch.fabric.gottschcore.enums.IRarity;
 import mod.gottsch.fabric.gottschcore.spatial.ICoords;
 import mod.gottsch.fabric.magic_treasures.MagicTreasures;
 import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
+import mod.gottsch.fabric.magic_treasures.core.item.component.ComponentHelper;
 import mod.gottsch.fabric.magic_treasures.core.item.component.ManaComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.SpellFactorsComponent;
 import mod.gottsch.fabric.magic_treasures.core.util.LangUtil;
@@ -64,7 +65,7 @@ public class HarmSpell extends CooldownSpell {
     @Override
     public SpellResult execute(World level, Random random, ICoords coords, ICastSpellContext context) {
         SpellResult result = new SpellResult();
-        ManaComponent manaComponent = Jewelry.mana(context.getJewelry()).orElseThrow(IllegalStateException::new); //context.getJewelry().get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT)
+        ManaComponent manaComponent = ComponentHelper.mana(context.getJewelry()).orElseThrow(IllegalStateException::new); //context.getJewelry().get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT)
         SpellFactorsComponent spellFactorsComponent = Jewelry.spellFactors(context.getJewelry()).orElseThrow(IllegalStateException::new);
         PlayerEntity player = context.getPlayer();
         if (manaComponent.mana() > 0 && context.getPlayer().isAlive()) {

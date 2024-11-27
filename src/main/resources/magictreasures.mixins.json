@@ -5,7 +5,8 @@
 	"mixins": [
       "PlayerMixins",
 		"AnvilEventMixin",
-		"LivingEntityMixin"
+		"LivingEntityMixin",
+		"ItemStackMixin"
 	],
 	"server": [
 

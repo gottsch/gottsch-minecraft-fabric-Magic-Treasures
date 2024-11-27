@@ -47,6 +47,9 @@ public class ModItemGroups {
                         // add all scrolls
                         MagicTreasuresItems.ALL_SPELL_SCROLLS.forEach(entries::add);
 
+                        // recharge scroll
+                        entries.add(MagicTreasuresItems.RECHARGE_SCROLL);
+
                     }).build());
 
 

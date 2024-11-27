@@ -29,7 +29,9 @@ import mod.gottsch.fabric.magic_treasures.core.spell.ISpell;
 import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
 import mod.gottsch.fabric.magic_treasures.core.util.ModUtil;
 import net.minecraft.component.DataComponentTypes;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 import org.apache.commons.lang3.StringUtils;
 
@@ -103,67 +105,75 @@ public class JewelryGenerator {
         return destJewelry;
     }
 
-//
-//    public Optional<ItemStack> removeStone(ItemStack jewelry) {
-//        return removeStone(jewelry, STANDARD_NAMER);
-//    }
-//
-//    public Optional<ItemStack> removeStone(ItemStack jewelry, Namer namer) {
-//        Identifier location = ModUtil.asLocation(namer.name(jewelry));
-//        ItemStack destJewelry = JewelryRegistry.get(location).map(ItemStack::new).orElseGet(() -> new ItemStack(jewelry.getItem()));
-//
-//        // TODO get components
-//        IJewelryHandler sourceHandler = null;
-//        IJewelryHandler destHandler = null;
-//        try {
-//            sourceHandler = jewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-//            destHandler = destJewelry.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-//        } catch(Exception e) {
-//            return Optional.empty();
-//        }
-//
-//        // get the stone item from the sourceHandler
-//        Item stone = ForgeRegistries.ITEMS.getValue(sourceHandler.getStone());
-//
-//        int mana = 0;
-//        int recharges = 0;
-//        if (stone != null) {
-//            Optional<JewelryStoneTier> stoneTier = StoneRegistry.getStoneTier(stone);
-//
-//            // remove the stone
-//            destHandler.setStone(null);
-//
-//            if (stoneTier.isPresent()) {
-//                // get stone mana
+
+    public Optional<ItemStack> removeStone(ItemStack jewelry) {
+        return removeStone(jewelry, STANDARD_NAMER);
+    }
+
+    public Optional<ItemStack> removeStone(ItemStack jewelry, Namer namer) {
+        Identifier location = ModUtil.asLocation(namer.name(jewelry));
+        ItemStack destJewelry = JewelryRegistry.get(location).map(ItemStack::new).orElseGet(() -> new ItemStack(jewelry.getItem()));
+
+        if (!jewelry.contains(MagicTreasuresComponents.JEWELRY_ATTRIBS)
+            || !destJewelry.contains(MagicTreasuresComponents.JEWELRY_ATTRIBS)) {
+            return Optional.empty();
+        }
+
+        // get the stone item from the sourceHandler
+        Item stone = ComponentHelper.gemstoneItem(jewelry).orElse(Items.AIR);
+
+        int mana = 0;
+        int recharges = 0;
+        if (stone != null && stone != Items.AIR) {
+            Optional<JewelryStoneTier> stoneTier = StoneRegistry.getStoneTier(stone);
+
+            // remove the stone
+            ComponentHelper.updateGemstone(destJewelry, ModUtil.getName(Items.AIR));
+
+            if (stoneTier.isPresent()) {
+                // get stone mana
 //                mana = stoneTier.map(JewelryStoneTier::getMana).orElseGet(() -> 0);
 //                mana = Math.round(mana * destHandler.getJewelrySizeTier().getManaMultiplier());
-//
-//                // get stone recharges
+                // calculate mana
+//                IJewelrySizeTier destSizeTier = ComponentHelper.sizeTier(destJewelry).orElse(JewelrySizeTier.REGULAR);
+//                mana = stoneTier.map(JewelryStoneTier::getMana).orElseGet(() -> 0);
+//                mana = Math.round(mana * destSizeTier.getManaMultiplier());
+
+                // get stone recharges
 //                recharges = stoneTier.map(JewelryStoneTier::getRecharges).orElseGet(() -> 0);
-//            }
-//        }
-//
-//        // NOTE at this point, destHandler contains the correct max values (it is the item w/o the gem)
-//        // remove mana
+            }
+        }
+
+        // NOTE at this point, destHandler contains the correct max values (it is the item w/o the gem)
+        // remove mana
 ////        destHandler.setMaxMana(sourceHandler.getMaxMana() - mana);
 //        destHandler.setMana(Math.min(sourceHandler.getMana(), destHandler.getMaxMana()));
-//
-//        // remove recharges
-////        destHandler.setMaxRecharges(sourceHandler.getMaxRecharges() - recharges);
+        ComponentHelper.incrementMana(destJewelry,
+                Math.min(ComponentHelper.manaValue(jewelry).orElse(0D), ComponentHelper.maxManaValue(destJewelry).orElse(0D)));
+
+        // remove recharges
+//        destHandler.setMaxRecharges(sourceHandler.getMaxRecharges() - recharges);
 //        destHandler.setRecharges(Math.min(sourceHandler.getRecharges(), destHandler.getMaxRecharges()));
-//
-//        // update repairs
+        ComponentHelper.incrementRecharges(destJewelry,
+                Math.min(ComponentHelper.rechargesValue(jewelry).orElse(0),
+                        ComponentHelper.maxRechargesValue(destJewelry).orElse(0)));
+
+
+        // update repairs
 //        destHandler.setRepairs(sourceHandler.getRepairs());
-//
-//        // update uses and item damage
+        ComponentHelper.copyRepairsComponent(jewelry, destJewelry);
+
+
+        // update uses and item damage
 ////        destJewelry.setDamageValue(jewelry.getDamageValue());
 //        destHandler.setUses(sourceHandler.getUses());
-//
-//        // transfer spells
-//        destHandler.setSpells(sourceHandler.getSpells());
-//
-//        return Optional.of(destJewelry);
-//    }
+        ComponentHelper.copyUsesComponent(jewelry, destJewelry);
+
+        // copy spells
+        ComponentHelper.copySpellsComponent(jewelry, destJewelry);
+
+        return Optional.of(destJewelry);
+    }
 
     public Optional<ItemStack> addSpells(ItemStack jewelry, ItemStack spellStack) {
         if (!spellStack.isIn(MagicTreasuresTags.Items.SPELL_SCROLLS)) return Optional.empty();

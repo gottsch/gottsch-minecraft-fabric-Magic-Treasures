@@ -97,6 +97,22 @@ public abstract class AnvilEventMixin extends ForgingScreenHandler {
                     ci.cancel();
                 }
             }
+            // remove a stone from jewelry
+            else if (ComponentHelper.hasGemstone(jewelryStack) && rightStack.isIn(MagicTreasuresTags.Items.STONE_REMOVAL_TOOLS)) {
+                Optional<ItemStack> resultStack = generator.removeStone(jewelryStack);
+                resultStack.ifPresent(resultOutStack::set);
+                if (resultStack.isPresent()) {
+                    this.output.setStack(0, resultStack.get());
+                    this.sendContentUpdates();
+                    ci.cancel();
+                }
+            }
+            // recharge jewelry
+//            else if (ComponentHelper.hasGemstone(jewelryStack) && handler.getRecharges() > 0
+//                    && rightStack.isIn(MagicTreasuresTags.Items.RECHARGERS)) {
+//                Optional<ItemStack> resultStack = generator.recharge(leftStack);
+//                resultStack.ifPresent(resultOutStack::set);
+//            }
         }
     }
 }

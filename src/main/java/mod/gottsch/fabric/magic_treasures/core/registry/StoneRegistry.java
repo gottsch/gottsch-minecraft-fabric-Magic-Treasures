@@ -1,6 +1,7 @@
 package mod.gottsch.fabric.magic_treasures.core.registry;
 
 import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import mod.gottsch.fabric.gottschcore.enums.IRarity;
@@ -32,6 +33,10 @@ public class StoneRegistry {
 
     public static boolean has(Identifier name) {
         return REGISTRY.containsKey(name);
+    }
+
+    public static List<Item> getStones() {
+        return Lists.newArrayList(REGISTRY.values());
     }
 
     /**

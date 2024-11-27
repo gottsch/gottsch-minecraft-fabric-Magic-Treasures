@@ -6,7 +6,6 @@ import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.fabric.magic_treasures.core.registry.StoneRegistry;
 import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
-import net.minecraft.component.ComponentType;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -82,7 +81,10 @@ public class ComponentHelper {
         return attribs(stack).flatMap(a -> MagicTreasuresApi.getJewelryMaterial(a.material()));
     }
 
-    public static Optional<Item> gemstone(ItemStack stack) {
+    public static Optional<Identifier> gemstone(ItemStack stack) {
+        return attribs(stack).map(JewelryAttribsComponent::gemstone);
+    }
+    public static Optional<Item> gemstoneItem(ItemStack stack) {
         return attribs(stack).flatMap(a -> StoneRegistry.get(a.gemstone()));
     }
 
@@ -100,6 +102,23 @@ public class ComponentHelper {
 
     public static Optional<Double> manaValue(ItemStack stack) {
         return mana(stack).map((ManaComponent::mana));
+    }
+    public static Optional<Double> maxManaValue(ItemStack stack) {
+        return mana(stack).map((ManaComponent::maxMana));
+    }
+
+    public static Optional<Integer> repairsValue(ItemStack stack) {
+        return repairs(stack).map((RepairsComponent::repairs));
+    }
+
+    public static Optional<Integer> rechargesValue(ItemStack stack) {
+        return recharges(stack).map((RechargesComponent::recharges));
+    }
+    public static int rechargesValueOrDefault(ItemStack stack, int defaultValue) {
+        return recharges(stack).map((RechargesComponent::recharges)).orElse(defaultValue);
+    }
+    public static Optional<Integer> maxRechargesValue(ItemStack stack) {
+        return recharges(stack).map((RechargesComponent::maxRecharges));
     }
 
     /*
@@ -142,7 +161,7 @@ public class ComponentHelper {
     public static Optional<ManaComponent> updateMana(ItemStack stack, double mana) {
         return mana(stack).map(component -> stack.set(MagicTreasuresComponents.MANA, new ManaComponent(component.maxMana(), mana)));
     }
-    public static Optional<ManaComponent> incrementMana(ItemStack stack, int amount) {
+    public static Optional<ManaComponent> incrementMana(ItemStack stack, double amount) {
         return mana(stack).map(component -> stack.set(MagicTreasuresComponents.MANA,
                 new ManaComponent(component.maxMana() + amount, component.mana() + amount)));
     }

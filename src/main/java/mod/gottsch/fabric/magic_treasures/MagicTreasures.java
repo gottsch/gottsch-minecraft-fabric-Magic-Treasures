@@ -41,6 +41,7 @@ public class MagicTreasures implements ModInitializer {
 	public static final MyConfig CONFIG = MyConfig.createAndLoad();
 
 	public MagicTreasures() {
+		CommonSetup.init();
 		// force load of static blocks
 		MagicTreasuresSpells.init();
 	}
@@ -48,7 +49,5 @@ public class MagicTreasures implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		Registration.register();
-		CommonSetup.init();
-
 	}
 }

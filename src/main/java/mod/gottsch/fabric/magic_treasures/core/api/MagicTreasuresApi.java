@@ -6,10 +6,7 @@ import mod.gottsch.fabric.magic_treasures.core.item.IJewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTier;
-import mod.gottsch.fabric.magic_treasures.core.registry.EnumRegistry;
-import mod.gottsch.fabric.magic_treasures.core.registry.JewelryMaterialRegistry;
-import mod.gottsch.fabric.magic_treasures.core.registry.JewelryStoneTierRegistry;
-import mod.gottsch.fabric.magic_treasures.core.registry.TagRegistry;
+import mod.gottsch.fabric.magic_treasures.core.registry.*;
 import net.minecraft.item.Item;
 import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
@@ -86,6 +83,15 @@ public class MagicTreasuresApi {
         EnumRegistry.register(JEWELRY_SIZE, size);
     }
 
+    public static List<IJewelrySizeTier> getJewelrySizeTiers() {
+        List<IEnum> enums = EnumRegistry.getValues(JEWELRY_SIZE);
+        ArrayList<IJewelrySizeTier> sizeTiers = new ArrayList<>();
+        if (!enums.isEmpty()) {
+            sizeTiers.addAll(enums.stream().map(e -> (IJewelrySizeTier)e).toList());
+        }
+        return sizeTiers;
+    }
+
     public static Optional<IJewelrySizeTier> getJewelrySize(String key) {
         IEnum ienum = EnumRegistry.get(JEWELRY_SIZE, key);
         if (ienum == null) {
@@ -100,6 +106,10 @@ public class MagicTreasuresApi {
         JewelryMaterialRegistry.register(material);
     }
 
+    public static List<JewelryMaterial> getJewelryMaterials() {
+        return JewelryMaterialRegistry.getMaterials();
+    }
+
     public static Optional<JewelryMaterial> getJewelryMaterial(Identifier name) {
         return JewelryMaterialRegistry.get(name);
     }
@@ -111,6 +121,20 @@ public class MagicTreasuresApi {
 
     public static void registerJewelryRarityTag(IRarity rarity, TagKey<Item> tagKey) {
         TagRegistry.registerJewelryRarity(rarity, tagKey);
+    }
+
+    public static Optional<TagKey<Item>> getJewelryRarityTag(IRarity rarity) {
+        TagKey<Item> key = TagRegistry.getJewelryRarityTag(rarity);
+        if (key == null) {
+            return Optional.empty();
+        }
+        else {
+            return Optional.of(key);
+        }
+    }
+
+    public static List<Item> getJewelryStones() {
+        return StoneRegistry.getStones();
     }
 
     public static void registerJewelryStoneTier(JewelryStoneTier tier) {
@@ -130,5 +154,17 @@ public class MagicTreasuresApi {
 
     public static void registerJewerlyTypeTag(IJewelryType type, TagKey<Item> tagKey) {
         TagRegistry.registerJewelryType(type, tagKey);
+    }
+
+    public static void registerJewelryMaterialTag(JewelryMaterial material, TagKey<Item> tagKey) {
+        TagRegistry.registerJewelryMaterial(material, tagKey);
+    }
+
+    public static void registerJewerlySizeTierTag(IJewelrySizeTier sizeTier, TagKey<Item> tagKey) {
+        TagRegistry.registerJewelrySizeTier(sizeTier, tagKey);
+    }
+
+    public static void registerJewerlyStoneTag(Identifier stone, TagKey<Item> tagKey) {
+        TagRegistry.registerJewelryStone(stone, tagKey);
     }
 }

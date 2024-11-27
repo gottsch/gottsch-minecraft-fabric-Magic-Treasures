@@ -103,7 +103,7 @@ public abstract class LivingEntityMixin extends Entity implements Attackable {
      * this is fired when an Entity is set to be damaged, BEFORE ANY
      * processing or modifiers have been execute/applied.
      */
-    @ModifyVariable(method = "damage", at = @At(value = "HEAD"), ordinal = 0)
+    @ModifyVariable(method = "damage", at = @At(value = "HEAD"), argsOnly = true, ordinal = 0)
 //    @Inject(method = "damage", at = @At(value = "INVOKE"))
     private float injectedDamage(float amount, DamageSource source) {
 //    private void onDamage(DamageSource source, float amount, CallbackInfoReturnable<Boolean> cir, @Local LocalRef<Float> localRef) {

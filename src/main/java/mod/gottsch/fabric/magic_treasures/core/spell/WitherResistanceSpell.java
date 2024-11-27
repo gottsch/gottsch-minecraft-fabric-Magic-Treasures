@@ -19,7 +19,7 @@ package mod.gottsch.fabric.magic_treasures.core.spell;
 
 import mod.gottsch.fabric.gottschcore.enums.IRarity;
 import mod.gottsch.fabric.gottschcore.spatial.ICoords;
-import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
+import mod.gottsch.fabric.magic_treasures.core.item.component.ComponentHelper;
 import mod.gottsch.fabric.magic_treasures.core.item.component.ManaComponent;
 import mod.gottsch.fabric.magic_treasures.core.util.LangUtil;
 import net.minecraft.entity.damage.DamageTypes;
@@ -60,7 +60,7 @@ public class WitherResistanceSpell extends Spell {
 	public SpellResult cast(World world, Random random, ICoords coords, ICastSpellContext context) {
 		SpellResult result = new SpellResult();
 		ItemStack jewelry = context.getJewelry();
-		ManaComponent manaComponent = Jewelry.mana(jewelry).orElseThrow(IllegalStateException::new);
+		ManaComponent manaComponent = ComponentHelper.mana(jewelry).orElseThrow(IllegalStateException::new);
 
 		// exit if not magic damage
 		if (context.getSource().isOf(DamageTypes.WITHER)) {

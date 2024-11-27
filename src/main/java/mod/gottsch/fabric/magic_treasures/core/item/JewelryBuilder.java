@@ -6,6 +6,7 @@ import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryType;
 import mod.gottsch.fabric.magic_treasures.core.util.ModUtil;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
@@ -145,7 +146,7 @@ public class JewelryBuilder {
     }
 
     public Jewelry createJewelry(JewelryType type, JewelryMaterial material, JewelrySizeTier size, Identifier stone) {
-            Jewelry j = new Jewelry(createSettings(type, material, size, stone));
+            Jewelry j = new Jewelry(new Item.Settings()/*createSettings(type, material, size, stone)*/);
             return (Jewelry) j.setLoreKey(JewelryBuilder.this.loreKey);
     }
 
