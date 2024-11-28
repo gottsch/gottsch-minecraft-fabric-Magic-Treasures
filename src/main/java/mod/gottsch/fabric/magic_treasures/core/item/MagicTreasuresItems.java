@@ -295,90 +295,90 @@ public class MagicTreasuresItems {
         jewelry.addAll(builder.useStoneDefaults().build());
 
         // wood jewelry (only regular size)
-//        JewelryBuilder woodBuilder = new JewelryBuilder(MagicTreasures.MOD_ID);
-//        jewelry.addAll(woodBuilder
-//                .materials(JewelryMaterials.WOOD)
-//                .sizes(JewelrySizeTier.REGULAR)
-//                .types(JewelryType.RING, JewelryType.BRACELET, JewelryType.NECKLACE)
-//                .build()
-//        );
-//        jewelry.addAll(woodBuilder.useStoneDefaults().build());
-//
-//        // lord's rings and necklaces
-//        JewelryBuilder lordsNecklacesBuilder = new JewelryBuilder(MagicTreasures.MOD_ID);
-//        jewelry.addAll(lordsNecklacesBuilder
-//                .materials(
-//                        JewelryMaterials.IRON,
-//                        JewelryMaterials.COPPER,
-//                        JewelryMaterials.SILVER,
-//                        JewelryMaterials.GOLD,
-//                        JewelryMaterials.BONE)
-//                .sizes(JewelrySizeTier.LORDS)
-//                .types(JewelryType.RING, JewelryType.NECKLACE)
-//                .build()
-//        );
-//        jewelry.addAll(lordsNecklacesBuilder.useStoneDefaults().build());
-//
-//        // castle rings
-//        JewelryBuilder castleRingBuilder = new JewelryBuilder(MagicTreasures.MOD_ID);
-//        jewelry.addAll(castleRingBuilder
-//                .types(JewelryType.RING)
-//                .materials(JewelryMaterials.SILVER)
-//                .sizes(JewelrySizeTier.REGULAR)
-//                .with($ -> {
-//                    $.baseName = "castle_ring";
-//                    $.loreKey = "jewelry.castle_ring.lore";
-//                    $.maxUses = 500;
-//                    $.maxMana = 200;
-//                    $.maxRepairs = 0;
-//                    $.acceptsAffixer = p -> {
-//                        return p.isIn(MagicTreasuresTags.Items.CASTLE_RING_RUBY)
-//                                | p.isIn(MagicTreasuresTags.Items.CASTLE_RING_SAPPHIRE);
-//                    };
-//                    // TODO all castle rings should be infinite or very high durability
-//                })
-//                .build());
-//        jewelry.addAll(castleRingBuilder
-//                .stones(RUBY.getRegistryEntry().registryKey().getValue(),
-//                        SAPPHIRE.getRegistryEntry().registryKey().getValue())
-//                .build());
-//
-//        // haws rings
-//        JewelryBuilder hawkRingBuilder = new HawkJewelryBuilder(MagicTreasures.MOD_ID);
-//        jewelry.addAll(hawkRingBuilder
-//                .materials(
-//                        JewelryMaterials.WOOD,
-//                        JewelryMaterials.IRON,
-//                        JewelryMaterials.COPPER,
-//                        JewelryMaterials.SILVER,
-//                        JewelryMaterials.GOLD
-//                )
-//                .sizes(JewelrySizeTier.REGULAR)
-//                .types(JewelryType.RING)
-//                .with($ -> {
-//                    $.baseName = "hawk_ring";
-//                    $.acceptsAffixer = p -> {return false;};
-//                })
-//                .build()
-//        );
-//
-//        // great and lord's hawk rings
-//        JewelryBuilder hawkRingBuilder2 = new HawkJewelryBuilder(MagicTreasures.MOD_ID);
-//        jewelry.addAll(hawkRingBuilder2
-//                .materials(
-//                        JewelryMaterials.IRON,
-//                        JewelryMaterials.COPPER,
-//                        JewelryMaterials.SILVER,
-//                        JewelryMaterials.GOLD
-//                )
-//                .sizes(JewelrySizeTier.GREAT, JewelrySizeTier.LORDS)
-//                .types(JewelryType.RING)
-//                .with($ -> {
-//                    $.baseName = "hawk_ring";
-//                    $.acceptsAffixer = p -> {return false;};
-//                })
-//                .build()
-//        );
+        JewelryBuilder woodBuilder = new JewelryBuilder(MagicTreasures.MOD_ID);
+        jewelry.addAll(woodBuilder
+                .materials(JewelryMaterials.WOOD)
+                .sizes(JewelrySizeTier.REGULAR)
+                .types(JewelryType.RING, JewelryType.BRACELET, JewelryType.NECKLACE)
+                .build()
+        );
+        jewelry.addAll(woodBuilder.useStoneDefaults().build());
+
+        // lord's rings and necklaces
+        JewelryBuilder lordsNecklacesBuilder = new JewelryBuilder(MagicTreasures.MOD_ID);
+        jewelry.addAll(lordsNecklacesBuilder
+                .materials(
+                        JewelryMaterials.IRON,
+                        JewelryMaterials.COPPER,
+                        JewelryMaterials.SILVER,
+                        JewelryMaterials.GOLD,
+                        JewelryMaterials.BONE)
+                .sizes(JewelrySizeTier.LORDS)
+                .types(JewelryType.RING, JewelryType.NECKLACE)
+                .build()
+        );
+        jewelry.addAll(lordsNecklacesBuilder.useStoneDefaults().build());
+
+        // castle rings
+        JewelryBuilder castleRingBuilder = new JewelryBuilder(MagicTreasures.MOD_ID);
+        jewelry.addAll(castleRingBuilder
+                .types(JewelryType.RING)
+                .materials(JewelryMaterials.SILVER)
+                .sizes(JewelrySizeTier.REGULAR)
+                .with($ -> {
+                    $.baseName = "castle_ring";
+                    $.loreKey = "jewelry.castle_ring.lore";
+                    $.maxUses = 500;
+                    $.maxMana = 200;
+                    $.maxRepairs = 0;
+                    $.acceptsAffixer = p -> {
+                        return p.isIn(MagicTreasuresTags.Items.CASTLE_RING_RUBY)
+                                | p.isIn(MagicTreasuresTags.Items.CASTLE_RING_SAPPHIRE);
+                    };
+                    // TODO all castle rings should be infinite or very high durability
+                })
+                .build());
+        jewelry.addAll(castleRingBuilder
+                .stones(RUBY.getRegistryEntry().registryKey().getValue(),
+                        SAPPHIRE.getRegistryEntry().registryKey().getValue())
+                .build());
+
+        // hawks rings
+        JewelryBuilder hawkRingBuilder = new HawkJewelryBuilder(MagicTreasures.MOD_ID);
+        jewelry.addAll(hawkRingBuilder
+                .materials(
+                        JewelryMaterials.WOOD,
+                        JewelryMaterials.IRON,
+                        JewelryMaterials.COPPER,
+                        JewelryMaterials.SILVER,
+                        JewelryMaterials.GOLD
+                )
+                .sizes(JewelrySizeTier.REGULAR)
+                .types(JewelryType.RING)
+                .with($ -> {
+                    $.baseName = "hawk_ring";
+                    $.acceptsAffixer = p -> {return false;};
+                })
+                .build()
+        );
+
+        // great and lord's hawk rings
+        JewelryBuilder hawkRingBuilder2 = new HawkJewelryBuilder(MagicTreasures.MOD_ID);
+        jewelry.addAll(hawkRingBuilder2
+                .materials(
+                        JewelryMaterials.IRON,
+                        JewelryMaterials.COPPER,
+                        JewelryMaterials.SILVER,
+                        JewelryMaterials.GOLD
+                )
+                .sizes(JewelrySizeTier.GREAT, JewelrySizeTier.LORDS)
+                .types(JewelryType.RING)
+                .with($ -> {
+                    $.baseName = "hawk_ring";
+                    $.acceptsAffixer = p -> {return false;};
+                })
+                .build()
+        );
 
         // register all the jewelry
         jewelry.forEach(pair -> {

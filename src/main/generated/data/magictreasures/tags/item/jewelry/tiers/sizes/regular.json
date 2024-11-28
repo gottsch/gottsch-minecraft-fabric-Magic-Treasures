@@ -89,6 +89,24 @@
     "magictreasures:bone_topaz_ring",
     "magictreasures:bone_onyx_ring",
     "magictreasures:bone_ruby_ring",
-    "magictreasures:bone_sapphire_ring"
+    "magictreasures:bone_sapphire_ring",
+    "magictreasures:wood_ring",
+    "magictreasures:wood_bracelet",
+    "magictreasures:wood_necklace",
+    "magictreasures:wood_jadeite_ring",
+    "magictreasures:wood_topaz_ring",
+    "magictreasures:wood_onyx_ring",
+    "magictreasures:wood_ruby_ring",
+    "magictreasures:wood_sapphire_ring",
+    "magictreasures:wood_jadeite_bracelet",
+    "magictreasures:wood_topaz_bracelet",
+    "magictreasures:wood_onyx_bracelet",
+    "magictreasures:wood_ruby_bracelet",
+    "magictreasures:wood_sapphire_bracelet",
+    "magictreasures:wood_jadeite_necklace",
+    "magictreasures:wood_topaz_necklace",
+    "magictreasures:wood_onyx_necklace",
+    "magictreasures:wood_ruby_necklace",
+    "magictreasures:wood_sapphire_necklace"
   ]
 }

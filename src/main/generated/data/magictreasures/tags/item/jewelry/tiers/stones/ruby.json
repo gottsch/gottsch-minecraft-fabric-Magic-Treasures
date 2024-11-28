@@ -29,6 +29,19 @@
     "magictreasures:great_copper_ruby_ring",
     "magictreasures:great_silver_ruby_ring",
     "magictreasures:great_gold_ruby_ring",
-    "magictreasures:great_bone_ruby_ring"
+    "magictreasures:great_bone_ruby_ring",
+    "magictreasures:wood_ruby_ring",
+    "magictreasures:wood_ruby_bracelet",
+    "magictreasures:wood_ruby_necklace",
+    "magictreasures:lords_iron_ruby_ring",
+    "magictreasures:lords_copper_ruby_ring",
+    "magictreasures:lords_silver_ruby_ring",
+    "magictreasures:lords_gold_ruby_ring",
+    "magictreasures:lords_bone_ruby_ring",
+    "magictreasures:lords_iron_ruby_necklace",
+    "magictreasures:lords_copper_ruby_necklace",
+    "magictreasures:lords_silver_ruby_necklace",
+    "magictreasures:lords_gold_ruby_necklace",
+    "magictreasures:lords_bone_ruby_necklace"
   ]
 }

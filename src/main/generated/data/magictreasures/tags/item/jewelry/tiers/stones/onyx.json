@@ -29,6 +29,19 @@
     "magictreasures:great_copper_onyx_ring",
     "magictreasures:great_silver_onyx_ring",
     "magictreasures:great_gold_onyx_ring",
-    "magictreasures:great_bone_onyx_ring"
+    "magictreasures:great_bone_onyx_ring",
+    "magictreasures:wood_onyx_ring",
+    "magictreasures:wood_onyx_bracelet",
+    "magictreasures:wood_onyx_necklace",
+    "magictreasures:lords_iron_onyx_ring",
+    "magictreasures:lords_copper_onyx_ring",
+    "magictreasures:lords_silver_onyx_ring",
+    "magictreasures:lords_gold_onyx_ring",
+    "magictreasures:lords_bone_onyx_ring",
+    "magictreasures:lords_iron_onyx_necklace",
+    "magictreasures:lords_copper_onyx_necklace",
+    "magictreasures:lords_silver_onyx_necklace",
+    "magictreasures:lords_gold_onyx_necklace",
+    "magictreasures:lords_bone_onyx_necklace"
   ]
 }

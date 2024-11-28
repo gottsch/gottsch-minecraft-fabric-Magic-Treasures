@@ -29,6 +29,19 @@
     "magictreasures:great_copper_jadeite_ring",
     "magictreasures:great_silver_jadeite_ring",
     "magictreasures:great_gold_jadeite_ring",
-    "magictreasures:great_bone_jadeite_ring"
+    "magictreasures:great_bone_jadeite_ring",
+    "magictreasures:wood_jadeite_ring",
+    "magictreasures:wood_jadeite_bracelet",
+    "magictreasures:wood_jadeite_necklace",
+    "magictreasures:lords_iron_jadeite_ring",
+    "magictreasures:lords_copper_jadeite_ring",
+    "magictreasures:lords_silver_jadeite_ring",
+    "magictreasures:lords_gold_jadeite_ring",
+    "magictreasures:lords_bone_jadeite_ring",
+    "magictreasures:lords_iron_jadeite_necklace",
+    "magictreasures:lords_copper_jadeite_necklace",
+    "magictreasures:lords_silver_jadeite_necklace",
+    "magictreasures:lords_gold_jadeite_necklace",
+    "magictreasures:lords_bone_jadeite_necklace"
   ]
 }
