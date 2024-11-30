@@ -20,7 +20,6 @@ package mod.gottsch.fabric.magic_treasures.core.spell;
 import mod.gottsch.fabric.gottschcore.enums.IRarity;
 import mod.gottsch.fabric.gottschcore.spatial.ICoords;
 import mod.gottsch.fabric.magic_treasures.MagicTreasures;
-import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
 import mod.gottsch.fabric.magic_treasures.core.item.component.ComponentHelper;
 import mod.gottsch.fabric.magic_treasures.core.item.component.ManaComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.SpellFactorsComponent;
@@ -96,11 +95,6 @@ public abstract class Spell implements ISpell {
         this.costEvaluator = builder.costEvaluator;
     }
 
-//    @Override
-//    public SpellEntity entity() {
-//        return new SpellEntity(this);
-//    }
-
     /**
      * wrapper method that checks for the existence of a ICostEvaluator else uses cost property
      * @param amount
@@ -121,37 +115,46 @@ public abstract class Spell implements ISpell {
     }
 
     public double modifySpellCost(ItemStack jewelry) {
-       SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
-       return factorsComponent.modifySpellCost(getSpellCost());
+//       SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
+//       return factorsComponent.modifySpellCost(getSpellCost());
+        return ComponentHelper.spellFactors(jewelry).map(f ->
+                f.modifySpellCost(getSpellCost())).orElse(getSpellCost());
    }
 
     public double modifyEffectAmount(ItemStack jewelry) {
-        SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
-        return factorsComponent.modifyEffectAmount(getEffectAmount());
+//        SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
+        return ComponentHelper.spellFactors(jewelry).map(f -> {
+            return f.modifyEffectAmount(getEffectAmount());
+        }).orElse(getEffectAmount());
+//        return factorsComponent.modifyEffectAmount(getEffectAmount());
    }
 
     public long modifyCooldown(ItemStack jewelry) {
-        SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
-        return factorsComponent.modifyCooldown(getCooldown());
+//        SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
+//        return factorsComponent.modifyCooldown(getCooldown());
+        return ComponentHelper.spellFactors(jewelry).map(f ->
+                f.modifyCooldown(getCooldown())).orElse(getCooldown());
    }
 
     public long modifyDuration(ItemStack jewelry) {
-        SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
-        return factorsComponent.modifyDuration(getDuration());
+//        SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
+//        return factorsComponent.modifyDuration(getDuration());
+        return ComponentHelper.spellFactors(jewelry).map(f ->
+                f.modifyDuration(getDuration())).orElse(getDuration());
     }
 
     public long modifyFrequency(ItemStack jewelry) {
-        SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
-        return factorsComponent.modifyFrequency(getFrequency());
+//        SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
+//        return factorsComponent.modifyFrequency(getFrequency());
+        return ComponentHelper.spellFactors(jewelry).map(f ->
+                f.modifyFrequency(getFrequency())).orElse(getFrequency());
    }
 
     public double modifyRange(ItemStack jewelry) {
-        SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
-        return factorsComponent.modifyRange(getRange());
-   }
-
-   private SpellFactorsComponent getSpellFactors(ItemStack jewelry) {
-        return Jewelry.spellFactors(jewelry).orElseThrow(IllegalStateException::new);
+//        SpellFactorsComponent factorsComponent = getSpellFactors(jewelry);
+//        return factorsComponent.modifyRange(getRange());
+        return ComponentHelper.spellFactors(jewelry).map(f ->
+                f.modifyRange(getRange())).orElse(getRange());
    }
 
     @SuppressWarnings("deprecation")

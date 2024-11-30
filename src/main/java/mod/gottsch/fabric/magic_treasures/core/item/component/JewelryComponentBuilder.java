@@ -19,12 +19,9 @@ package mod.gottsch.fabric.magic_treasures.core.item.component;
 
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
-import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
-import mod.gottsch.fabric.magic_treasures.core.item.JewelryBuilder;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
-import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryType;
 import mod.gottsch.fabric.magic_treasures.core.util.ModUtil;
 import net.minecraft.component.ComponentType;
 import net.minecraft.item.ItemStack;
@@ -33,7 +30,6 @@ import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -41,11 +37,12 @@ import java.util.function.Predicate;
 /**
  * Created by Mark Gottschling on 11/26/2024
  */
+@Deprecated
 public class JewelryComponentBuilder {
     public IJewelryType type;
-    public IJewelrySizeTier size;
+    public IJewelrySizeTier sizeTier;
     public JewelryMaterial material;
-    public Identifier stone;
+    public Identifier gemstone;
     public boolean useItemName = false;
     public String baseName;
     public String loreKey;
@@ -58,15 +55,30 @@ public class JewelryComponentBuilder {
     @Deprecated
     protected String modid;
 
+    @Deprecated
     public JewelryComponentBuilder(String modid) {
         this.modid = modid;
     }
 
+    public JewelryComponentBuilder(IJewelryType type, JewelryMaterial material) {
+        this.type = type;
+        this.material = material;
+        this.sizeTier = JewelrySizeTier.REGULAR;
+        this.gemstone = null;
+    }
+
+    public JewelryComponentBuilder(IJewelryType type, JewelryMaterial material, IJewelrySizeTier sizeTier) {
+        this.type = type;
+        this.material = material;
+        this.sizeTier = sizeTier;
+        this.gemstone = null;
+    }
+
     public JewelryComponentBuilder clear() {
         type = null;
-        size = null;
+        sizeTier = null;
         material = null;
-        stone = null;
+        gemstone = null;
         return this;
     }
 
@@ -78,10 +90,10 @@ public class JewelryComponentBuilder {
     public List<Pair<ComponentType<?>, Object>>  build() {
         List<Pair<ComponentType<?>, Object>> components = new ArrayList<>();
         if (type == null) return components;
-        if (size == null) size = JewelrySizeTier.REGULAR;
+        if (sizeTier == null) sizeTier = JewelrySizeTier.REGULAR;
         if (material == null) material = JewelryMaterials.SILVER;
-        if (stone == null) {
-            stone = ModUtil.getName(Items.AIR);
+        if (gemstone == null) {
+            gemstone = ModUtil.getName(Items.AIR);
         }
 
         /*
@@ -89,25 +101,25 @@ public class JewelryComponentBuilder {
          */
         // create the attribs component
         components.add(new Pair<ComponentType<?>, Object>(MagicTreasuresComponents.JEWELRY_ATTRIBS,
-                new JewelryAttribsComponent(type.getName(), size.getName(), material.getId(), stone)));
+                new JewelryAttribsComponent(type.getName(), sizeTier.getName(), material.getId(), gemstone)));
         // max level
         components.add(new Pair<ComponentType<?>, Object>(MagicTreasuresComponents.MAX_LEVEL,
-                new MaxLevelComponent.Builder(material, size).build()));
+                new MaxLevelComponent.Builder(material, sizeTier).build()));
         // uses
         components.add(new Pair<>(MagicTreasuresComponents.USES,
-                new UsesComponent.Builder(material, size).build()));
+                new UsesComponent.Builder(material, sizeTier).build()));
         // repairs
         components.add(new Pair<>(MagicTreasuresComponents.REPAIRS,
-                new RepairsComponent.Builder(material, size).build()));
+                new RepairsComponent.Builder(material, sizeTier).build()));
         // mana
         components.add(new Pair<>(MagicTreasuresComponents.MANA,
-                new ManaComponent.Builder(material, size, stone).build()));
+                new ManaComponent.Builder(material, sizeTier, gemstone).build()));
         // recharges
         components.add(new Pair<>(MagicTreasuresComponents.RECHARGES,
-                new RechargesComponent.Builder(material, stone).build()));
+                new RechargesComponent.Builder(material, gemstone).build()));
         // spell factors
         components.add(new Pair<>(MagicTreasuresComponents.SPELL_FACTORS,
-                new SpellFactorsComponent.Builder(material, stone).build()));
+                new SpellFactorsComponent.Builder(material, gemstone).build()));
         // spells
         components.add(new Pair<>(MagicTreasuresComponents.SPELLS,
                 new SpellsComponent((List<Identifier>)null)));

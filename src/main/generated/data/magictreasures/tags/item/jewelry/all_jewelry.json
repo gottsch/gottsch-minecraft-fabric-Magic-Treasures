@@ -4,6 +4,17 @@
       "id": "#magictreasures:jewelry/rings",
       "required": false
     },
-    "magictreasures:adephagias_bounty"
+    {
+      "id": "#magictreasures:jewelry/necklaces",
+      "required": false
+    },
+    {
+      "id": "#magictreasures:jewelry/bracelets",
+      "required": false
+    },
+    {
+      "id": "#magictreasures:jewelry/pockets",
+      "required": false
+    }
   ]
 }
