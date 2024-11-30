@@ -76,8 +76,11 @@ public class MagicTreasuresTags {
         public static final TagKey<Item> NECKLACES = createTag(MagicTreasures.MOD_ID, "jewelry/necklaces");
         //        public static final TagKey<Item> CHARMS = createTag(MagicTreasures.MOD_ID, "jewelry/charms");
         public static final TagKey<Item> POCKETS = createTag(MagicTreasures.MOD_ID, "jewelry/pockets");
-        public static final TagKey<Item> JEWELRY = createTag(MagicTreasures.MOD_ID, "jewelry/all_jewelry");
 
+        // all jewelry (optional tags of the other types)
+        public static final TagKey<Item> JEWELRY = createTag(MagicTreasures.MOD_ID, "jewelry/all_jewelry");
+        // special/custom jewelry - a subset of all jewelry
+        public static final TagKey<Item> CUSTOM_JEWELRY = createTag(MagicTreasures.MOD_ID, "jewelry/custom_jewelry");
         // castle rings
         public static final TagKey<Item> CASTLE_RING_RUBY = createTag(MagicTreasures.MOD_ID, "jewelry/castle_ring/ruby");
         public static final TagKey<Item> CASTLE_RING_SAPPHIRE = createTag(MagicTreasures.MOD_ID, "jewelry/castle_ring/sapphire");
