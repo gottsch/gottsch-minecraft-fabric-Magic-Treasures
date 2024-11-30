@@ -76,7 +76,7 @@ public class PaladinStrikeSpell extends CooldownSpell {
 		ItemStack jewelry = context.getJewelry();
 		PlayerEntity player = context.getPlayer();
 		ManaComponent manaComponent = ComponentHelper.mana(context.getJewelry()).orElseThrow(IllegalStateException::new); //context.getJewelry().get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT)
-		SpellFactorsComponent spellFactorsComponent = Jewelry.spellFactors(context.getJewelry()).orElseThrow(IllegalStateException::new);
+		SpellFactorsComponent spellFactorsComponent =  ComponentHelper.spellFactors(context.getJewelry()).orElseThrow(IllegalStateException::new);
 
 		if (manaComponent.mana() > 0 && player.isAlive()) {
 			DamageSource source = context.getSource();

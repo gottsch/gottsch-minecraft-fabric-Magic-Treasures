@@ -66,7 +66,7 @@ public class SatietySpell extends Spell {
 		ItemStack jewelry = context.getJewelry();
 		PlayerEntity player = context.getPlayer();
 		ManaComponent manaComponent = ComponentHelper.mana(jewelry).orElseThrow(IllegalStateException::new);
-		SpellFactorsComponent spellFactorsComponent = Jewelry.spellFactors(jewelry).orElseThrow(IllegalStateException::new);
+		SpellFactorsComponent spellFactorsComponent =  ComponentHelper.spellFactors(jewelry).orElseThrow(IllegalStateException::new);
 
 		if (world.getTime() % modifyFrequency(jewelry) == 0) {
 			if (player.isAlive() && manaComponent.mana() > 0 && player.getHungerManager().getFoodLevel() < MAX_FOOD_LEVEL) {

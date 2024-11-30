@@ -73,7 +73,7 @@ public class HealingSpell extends Spell {
     public SpellResult cast(World level, Random random, ICoords coords, ICastSpellContext context) {
         SpellResult result = new SpellResult();
         ManaComponent manaComponent = ComponentHelper.mana(context.getJewelry()).orElseThrow(IllegalStateException::new); //context.getJewelry().get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT)
-        SpellFactorsComponent spellFactorsComponent = Jewelry.spellFactors(context.getJewelry()).orElseThrow(IllegalStateException::new);
+        SpellFactorsComponent spellFactorsComponent =  ComponentHelper.spellFactors(context.getJewelry()).orElseThrow(IllegalStateException::new);
 
         if (level.getTime() % spellFactorsComponent.modifyFrequency(getFrequency()) == 0) {
             if (manaComponent.mana() > 0 && context.getPlayer().getHealth() < context.getPlayer().getMaxHealth() && context.getPlayer().isAlive()) {

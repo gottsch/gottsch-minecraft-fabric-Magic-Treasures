@@ -55,7 +55,12 @@ public class ModLangProvider extends FabricLanguageProvider {
         MagicTreasuresItems.STANDARD_JEWELRY.forEach(item -> {
             translationBuilder.add(item, WordUtils.capitalizeFully(name(item).replace("_", " ")));
         });
+        MagicTreasuresItems.CUSTOM_JEWELRY.forEach(item -> {
+            if (name(item).contains("castle") || name(item).contains("hawk")) {
+                translationBuilder.add(item, WordUtils.capitalizeFully(name(item).replace("_", " ")));
 
+            }
+        });
         // special jewelry
         translationBuilder.add(MagicTreasuresItems.SILBROS_RING_OF_VITALITY, WordUtils.capitalizeFully("Silbro's Ring of Vitality"));
         translationBuilder.add(MagicTreasuresItems.STRONGMANS_BRACERS, WordUtils.capitalizeFully("Strongman's Bracers"));

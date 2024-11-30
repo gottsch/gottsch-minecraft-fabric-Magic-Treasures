@@ -69,6 +69,12 @@ public class ModModelProvider extends FabricModelProvider {
             singleTexture(item, Models.GENERATED,
                     modLoc("item/jewelry/" + name(item)), itemModelGenerator.writer);
         });
+        MagicTreasuresItems.CUSTOM_JEWELRY.forEach(item -> {
+            if (name(item).contains("castle") || name(item).contains("hawk")) {
+                singleTexture(item, Models.GENERATED,
+                        modLoc("item/jewelry/" + name(item)), itemModelGenerator.writer);
+            }
+        });
 
         // special / non-standard jewelry
         singleTexture(MagicTreasuresItems.SILBROS_RING_OF_VITALITY, Models.GENERATED,
@@ -112,11 +118,6 @@ public class ModModelProvider extends FabricModelProvider {
 
         singleTexture(MagicTreasuresItems.EYE_OF_THE_PHOENIX, Models.GENERATED,
                 modLoc("item/jewelry/eye_of_the_phoenix"), itemModelGenerator.writer);
-
-
-//        singleTexture(MagicTreasuresItems.GOLD_RING, Models.GENERATED, modLoc("item/jewelry/" + name(MagicTreasuresItems.GOLD_RING)), itemModelGenerator.writer);
-//        singleTexture(MagicTreasuresItems.GREAT_GOLD_RING, Models.GENERATED, modLoc("item/jewelry/" + name(MagicTreasuresItems.GREAT_GOLD_RING)), itemModelGenerator.writer);
-//        singleTexture(MagicTreasuresItems.GREAT_GOLD_RUBY_RING, Models.GENERATED, modLoc("item/jewelry/" + name(MagicTreasuresItems.GREAT_GOLD_RUBY_RING)), itemModelGenerator.writer);
 
         // scrolls
         SpellRegistry.values().forEach(spell -> {

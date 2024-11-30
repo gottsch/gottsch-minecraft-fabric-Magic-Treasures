@@ -78,6 +78,10 @@ public class JewelryGenerator {
             // ensure stone is set (in the component)
 //            ComponentHelper.updateGemstone(destJewelry, ModUtil.getName(stone.getItem()));
 
+            // TODO working for specials like castle ring to build the correct item
+            // however, it is not using the correct component builder.
+            // TODO need to check if it has a component builder first
+
             /*
              * calculate mana derived from the gem
              * NOTE only applying the sizeTier multiplier to the gem as that is the only thing changing.
@@ -194,8 +198,8 @@ public class JewelryGenerator {
         // copy values from jewelry to destStack
         copyStack(jewelry, destStack);
 
-        Optional<MaxLevelComponent> maxLevelComponent = Jewelry.maxLevel(destStack);
-        Optional<SpellsComponent> spellsComponent = Jewelry.spells(destStack);
+        Optional<MaxLevelComponent> maxLevelComponent = ComponentHelper.maxLevel(destStack);
+        Optional<SpellsComponent> spellsComponent = ComponentHelper.spells(destStack);
         if (maxLevelComponent.isPresent() && spellsComponent.isPresent()) {
             ISpell spell = ((SpellScroll) spellStack.getItem()).getSpell();
 
@@ -293,7 +297,7 @@ public class JewelryGenerator {
         public String name(ItemStack jewelry, ItemStack stone) {
             StringBuilder buffer = new StringBuilder();
             Jewelry jewelryItem = (Jewelry)jewelry.getItem();
-            JewelryAttribsComponent attribsComponent = Jewelry.attribs(jewelry).orElseThrow(IllegalStateException::new);
+            JewelryAttribsComponent attribsComponent = ComponentHelper.attribs(jewelry).orElseThrow(IllegalStateException::new);
 
             String name = buffer.append((!attribsComponent.sizeTier().equals(JewelrySizeTier.REGULAR.getName()) ? (attribsComponent.sizeTier() + "_") : ""))
                     .append(attribsComponent.material().getPath()).append("_")
@@ -307,7 +311,7 @@ public class JewelryGenerator {
         public String name(ItemStack jewelry) {
             StringBuilder buffer = new StringBuilder();
             Jewelry jewelryItem = (Jewelry)jewelry.getItem();
-            JewelryAttribsComponent attribsComponent = Jewelry.attribs(jewelry).orElseThrow(IllegalStateException::new);
+            JewelryAttribsComponent attribsComponent = ComponentHelper.attribs(jewelry).orElseThrow(IllegalStateException::new);
 
            String name = buffer.append((!attribsComponent.sizeTier().equals(JewelrySizeTier.REGULAR.getName()) ? (attribsComponent.sizeTier() + "_") : ""))
                     .append(attribsComponent.material().getPath()).append("_")

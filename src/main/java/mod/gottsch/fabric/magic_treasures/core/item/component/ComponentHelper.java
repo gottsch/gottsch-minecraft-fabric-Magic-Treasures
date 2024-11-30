@@ -9,6 +9,7 @@ import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
+import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 
 import java.util.Optional;
@@ -86,6 +87,10 @@ public class ComponentHelper {
     }
     public static Optional<Item> gemstoneItem(ItemStack stack) {
         return attribs(stack).flatMap(a -> StoneRegistry.get(a.gemstone()));
+    }
+    // datagen method
+    public static Optional<Item> gemstoneMinecraftItem(ItemStack stack) {
+        return attribs(stack).map((a -> Registries.ITEM.get(a.gemstone())));
     }
 
     public static boolean hasGemstone(ItemStack stack) {

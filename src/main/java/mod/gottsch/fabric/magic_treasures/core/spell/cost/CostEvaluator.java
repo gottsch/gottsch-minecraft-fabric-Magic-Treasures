@@ -45,7 +45,7 @@ import java.util.Random;
 public class CostEvaluator implements ICostEvaluator {
 	@Override
 	public double apply(World level, Random random, ICoords coords, ICastSpellContext context, double amount) {
-		JewelryAttribsComponent attribs = Jewelry.attribs(context.getJewelry()).orElseThrow(IllegalStateException::new);
+		JewelryAttribsComponent attribs = ComponentHelper.attribs(context.getJewelry()).orElseThrow(IllegalStateException::new);
 		ManaComponent manaComponent = ComponentHelper.mana(context.getJewelry()).orElseThrow(IllegalStateException::new); //context.getJewelry().get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT)
 		Optional<Item> stone = StoneRegistry.get(attribs.gemstone());
 		JewelryStoneTier stoneTier = StoneRegistry.getStoneTier(stone.orElseGet(() -> Items.AIR)).orElse(JewelryStoneTiers.NONE);

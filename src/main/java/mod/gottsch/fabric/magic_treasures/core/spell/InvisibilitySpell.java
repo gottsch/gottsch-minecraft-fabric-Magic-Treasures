@@ -67,7 +67,7 @@ public class InvisibilitySpell extends CooldownSpell {
 	public SpellResult execute(World world, Random random, ICoords coords, ICastSpellContext context) {
 		SpellResult result = new SpellResult();
 		ManaComponent manaComponent = ComponentHelper.mana(context.getJewelry()).orElseThrow(IllegalStateException::new); //context.getJewelry().get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT)
-		SpellFactorsComponent spellFactorsComponent = Jewelry.spellFactors(context.getJewelry()).orElseThrow(IllegalStateException::new);
+		SpellFactorsComponent spellFactorsComponent =  ComponentHelper.spellFactors(context.getJewelry()).orElseThrow(IllegalStateException::new);
 
 		if (manaComponent.mana() > 0 && context.getPlayer().isAlive()) {
 			if (!context.getPlayer().hasStatusEffect(StatusEffects.INVISIBILITY)) {

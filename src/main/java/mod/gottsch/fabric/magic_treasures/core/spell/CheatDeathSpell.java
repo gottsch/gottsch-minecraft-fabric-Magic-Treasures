@@ -71,7 +71,7 @@ public class CheatDeathSpell extends CooldownSpell {
 		SpellResult result = new SpellResult();
 		ItemStack jewelry = context.getJewelry();
 		ManaComponent manaComponent = ComponentHelper.mana(jewelry).orElseThrow(IllegalStateException::new);
-		SpellFactorsComponent spellFactorsComponent = Jewelry.spellFactors(context.getJewelry()).orElseThrow(IllegalStateException::new);
+		SpellFactorsComponent spellFactorsComponent = ComponentHelper.spellFactors(context.getJewelry()).orElseThrow(IllegalStateException::new);
 
 		PlayerEntity player = context.getPlayer();
 

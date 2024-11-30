@@ -20,6 +20,7 @@ package mod.gottsch.fabric.magic_treasures.core.event;
 import mod.gottsch.fabric.gottschcore.spatial.Coords;
 import mod.gottsch.fabric.magic_treasures.MagicTreasures;
 import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
+import mod.gottsch.fabric.magic_treasures.core.item.component.ComponentHelper;
 import mod.gottsch.fabric.magic_treasures.core.item.component.MagicTreasuresComponents;
 import mod.gottsch.fabric.magic_treasures.core.item.component.SpellsComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.UsesComponent;
@@ -130,7 +131,7 @@ public class SpellEventHandler {
     private static List<SpellContext> getSpellsFromStack(EventType event, Hand hand, String slot, ItemStack itemStack) {
         final List<SpellContext> contexts = new ArrayList<>(5);
 
-        Optional<SpellsComponent> spellsComponent = Jewelry.spells(itemStack);
+        Optional<SpellsComponent> spellsComponent = ComponentHelper.spells(itemStack);
         if (spellsComponent.isPresent()) {
             int index = 0;
             for (int i = 0; i < spellsComponent.get().spellNames().size(); i++) {
@@ -217,7 +218,7 @@ public class SpellEventHandler {
         MagicTreasures.LOGGER.debug("processing usage for spell -> {}", context.getSpell().getName().toString());
         ItemStack stack = context.getItemStack();
         // get uses component
-        Jewelry.uses(stack).ifPresent(uses -> {
+        ComponentHelper.uses(stack).ifPresent(uses -> {
             if (uses.isInfinite()) {
                 return;
             } else {

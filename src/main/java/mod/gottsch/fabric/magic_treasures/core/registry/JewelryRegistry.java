@@ -25,7 +25,9 @@ import mod.gottsch.fabric.magic_treasures.core.api.MagicTreasuresApi;
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
 import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
+import mod.gottsch.fabric.magic_treasures.core.item.component.ComponentHelper;
 import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryAttribsComponent;
+import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryComponents;
 import mod.gottsch.fabric.magic_treasures.core.item.component.MagicTreasuresComponents;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryAttribs;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
@@ -47,19 +49,74 @@ import java.util.Map.Entry;
  *
  */
 public class JewelryRegistry {
+	private static final Map<Identifier, JewelryComponents.Builder> COMPONENT_BUILDER_MAP = Maps.newHashMap();
 	private static final Map<Identifier, Item> NAME_MAP = Maps.newHashMap();
 	private static final Map<Identifier, Pair<Item, JewelryAttribs>> NAME_ATTRIBS_MAP = Maps.newHashMap();
+	@Deprecated
+	// no longer needed - use COMPONENT_BUILDER_MAP instead
+	private static final Map<Identifier, Pair<Item, JewelryComponents>> NAME_COMPONENTS_MAP = Maps.newHashMap();
+
 
 	// NOT used
 	private static final Multimap<JewelryRegistryKey, Item> KEY_MAP = ArrayListMultimap.create();
 	// NOT used
 	private static final Multimap<IRarity, Item> RARITY_MAP = ArrayListMultimap.create();
 
+	public static void register(Item item, JewelryComponents.Builder builder) {
+		COMPONENT_BUILDER_MAP.put(ModUtil.getName(item), builder);
+		// register by name
+		register(item);
+	}
+
+	public static Optional<JewelryComponents.Builder> getComponentsBuilder(Item item) {
+		return getComponentsBuilder(ModUtil.getName(item));
+	}
+
+	public static Optional<JewelryComponents.Builder> getComponentsBuilder(Identifier name) {
+		if (COMPONENT_BUILDER_MAP.containsKey(name)) {
+			return Optional.of(COMPONENT_BUILDER_MAP.get(name));
+		}
+		return Optional.empty();
+	}
+
+	public static Set<Entry<Identifier, JewelryComponents.Builder>> getComponentsBuilders() {
+		return COMPONENT_BUILDER_MAP.entrySet();
+	}
+
+	/**
+	 *
+	 * @param item
+	 * @param attribs
+	 */
 	public static void register(Item item, JewelryAttribs attribs) {
 		NAME_ATTRIBS_MAP.put(ModUtil.getName(item), new Pair<>(item, attribs));
-
-		// register legacy maps
 		register(item);
+	}
+
+	@Deprecated
+	public static void register(Identifier name, Item item , JewelryAttribs attribs) {
+		NAME_ATTRIBS_MAP.put(name, new Pair<>(item, attribs));
+	}
+
+	/**
+	 *
+	 * @param item
+	 * @param components
+	 */
+	@Deprecated
+	public static void register(Item item, JewelryComponents components) {
+		NAME_COMPONENTS_MAP.put(ModUtil.getName(item), new Pair<>(item, components));
+	}
+
+	public static Optional<Pair<Item, JewelryComponents>> getComponents(Item item) {
+		return getComponents((ModUtil.getName(item)));
+	}
+
+	public static Optional<Pair<Item, JewelryComponents>> getComponents(Identifier id) {
+		if (NAME_COMPONENTS_MAP.containsKey(id)) {
+			return Optional.of(NAME_COMPONENTS_MAP.get(id));
+		}
+		return Optional.empty();
 	}
 
 	public static Optional<Pair<Item, JewelryAttribs>> getAttribs(Item item) {
@@ -73,49 +130,53 @@ public class JewelryRegistry {
 		return Optional.empty();
 	}
 
+	public static List<Pair<Item, JewelryAttribs>> getAllAttribs() {
+		return new ArrayList<>(NAME_ATTRIBS_MAP.values());
+	}
+
 	/**
 	 * Note: this registers a known item.
 	 * @param item
 	 */
-	@Deprecated
 	// can't use this on tags load because data components haven't been set yet on items.
-	public static void register(Item item) {		
-		ItemStack stack = new ItemStack(item);
-		JewelryStoneTier stoneTier = JewelryStoneTiers.NONE;
+	public static void register(Item item) {
+		NAME_MAP.put(ModUtil.getName(item), item);
 
-		if (stack.contains(MagicTreasuresComponents.JEWELRY_ATTRIBS)) {
-			JewelryAttribsComponent attribs = Jewelry.attribs(stack).get();
-
-//			if (Jewelry.hasStone(stack)) {
-//				Optional<Item> optionalStone = StoneRegistry.get(attribs.gemstone());
-			// NOTE have to do this explicitly instead of lambdas since we need to the stoneTier
-			Optional<Item> optionalStone = Jewelry.gemstone(stack);
-			if (optionalStone.isPresent()) {
-				Item stone = optionalStone.get();
-				Optional<JewelryStoneTier> tier = StoneRegistry.getStoneTier(stone);
-				if (tier.isPresent()) {
-					// update the stone tier
-					stoneTier = tier.get();
-				}
-			}
+//		ItemStack stack = new ItemStack(item);
+//		JewelryStoneTier stoneTier = JewelryStoneTiers.NONE;
+//
+//		if (stack.contains(MagicTreasuresComponents.JEWELRY_ATTRIBS)) {
+//			JewelryAttribsComponent attribs = ComponentHelper.attribs(stack).get();
+//
+////			if (Jewelry.hasStone(stack)) {
+////				Optional<Item> optionalStone = StoneRegistry.get(attribs.gemstone());
+//			// NOTE have to do this explicitly instead of lambdas since we need to the stoneTier
+//			Optional<Item> optionalStone = ComponentHelper.gemstoneItem(stack);
+//			if (optionalStone.isPresent()) {
+//				Item stone = optionalStone.get();
+//				Optional<JewelryStoneTier> tier = StoneRegistry.getStoneTier(stone);
+//				if (tier.isPresent()) {
+//					// update the stone tier
+//					stoneTier = tier.get();
+//				}
 //			}
-
-			Optional<IJewelryType> jewelryType = MagicTreasuresApi.getJewelryType(attribs.type());
-			Optional<IJewelrySizeTier> sizeTier = MagicTreasuresApi.getJewelrySize(attribs.sizeTier());
-			Optional<JewelryMaterial> material = MagicTreasuresApi.getJewelryMaterial(attribs.material());
-
-			if (jewelryType.isPresent() && sizeTier.isPresent() && material.isPresent()) {
-				// generate keys
-				JewelryRegistryKey key = new JewelryRegistryKey(
-						jewelryType.get(),
-						material.get(),
-						stoneTier,
-						sizeTier.get());
-
-				NAME_MAP.put(ModUtil.getName(item), item);
-				KEY_MAP.put(key, item);
-			}
-		}
+////			}
+//
+//			Optional<IJewelryType> jewelryType = MagicTreasuresApi.getJewelryType(attribs.type());
+//			Optional<IJewelrySizeTier> sizeTier = MagicTreasuresApi.getJewelrySize(attribs.sizeTier());
+//			Optional<JewelryMaterial> material = MagicTreasuresApi.getJewelryMaterial(attribs.material());
+//
+//			if (jewelryType.isPresent() && sizeTier.isPresent() && material.isPresent()) {
+//				// generate keys
+//				JewelryRegistryKey key = new JewelryRegistryKey(
+//						jewelryType.get(),
+//						material.get(),
+//						stoneTier,
+//						sizeTier.get());
+//
+//				KEY_MAP.put(key, item);
+//			}
+//		}
 
 		// TODO get all the components
 //		stack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(c -> {
@@ -157,7 +218,12 @@ public class JewelryRegistry {
 	public static boolean register(IRarity rarity, Item item) {
 		return RARITY_MAP.put(rarity, item);
 	}
-		
+
+	@Deprecated
+	public static boolean contains(Identifier name) {
+		return NAME_MAP.containsKey(name);
+	}
+
 	/**
 	 * 
 	 * @param name
@@ -202,9 +268,11 @@ public class JewelryRegistry {
 	 * 
 	 */
 	public static void clear() {
-		NAME_MAP.clear();
+		NAME_ATTRIBS_MAP.clear();
+//		NAME_MAP.clear();
 		KEY_MAP.clear();
 		RARITY_MAP.clear();
+		// NOTE the NAME_COMPONENTS_BUILDERS_MAP map isn't cleared as it is setup only 1 time during item creating for custom items
 	}
 
 	public static List<Item> getAll() {

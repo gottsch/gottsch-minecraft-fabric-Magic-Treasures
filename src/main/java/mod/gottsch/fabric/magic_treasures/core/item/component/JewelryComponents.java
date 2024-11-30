@@ -19,6 +19,7 @@ package mod.gottsch.fabric.magic_treasures.core.item.component;
 
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
+import mod.gottsch.fabric.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
@@ -46,30 +47,46 @@ public class JewelryComponents {
 
     public static class Builder {
         public IJewelryType type;
-        public IJewelrySizeTier size;
+        public IJewelrySizeTier sizeTier;
         public JewelryMaterial material;
-        public Identifier stone;
-        public boolean useItemName = false;
-        public String baseName;
-        public String loreKey;
-        public int maxUses = -1;
-        public int maxMana = -1;
-        public int maxRepairs = -1;
-        public int maxLevel = 0;
-        public Predicate<ItemStack> acceptsAffixer = p -> true;
+        public Identifier gemstone;
 
-        @Deprecated
-        protected String modid;
+        public JewelryAttribsComponent attribsComponent;
+        public MaxLevelComponent maxLevelComponent;
+        public UsesComponent usesComponent;
+        public RepairsComponent repairsComponent;
+        public ManaComponent manaComponent;
+        public ManaComponent.Builder manaComponentBuilder;
+        public RechargesComponent rechargesComponent;
+        public SpellFactorsComponent spellFactorsComponent;
+        public SpellsComponent spellsComponent;
 
-//        public JewelryComponentBuilder(String modid) {
-//            this.modid = modid;
-//        }
+        public boolean infinite;
+
+        public Builder(IJewelryType type, JewelryMaterial material) {
+            this.type = type;
+            this.material = material;
+            this.sizeTier = JewelrySizeTier.REGULAR;
+            this.gemstone = null;
+        }
+
+        public Builder(IJewelryType type, JewelryMaterial material, IJewelrySizeTier sizeTier) {
+            this.type = type;
+            this.material = material;
+            this.sizeTier = sizeTier;
+            this.gemstone = null;
+        }
 
         public Builder clear() {
             type = null;
-            size = null;
+            sizeTier = null;
             material = null;
-            stone = null;
+            gemstone = null;
+            return this;
+        }
+
+        public Builder setInfinite() {
+            this.infinite = true;
             return this;
         }
 
@@ -79,52 +96,62 @@ public class JewelryComponents {
         }
 
         public JewelryComponents build() {
-//            List<Pair<ComponentType<?>, Object>> components = new ArrayList<>();
             JewelryComponents components = new JewelryComponents();
 
             if (type == null) return components;
-            if (size == null) size = JewelrySizeTier.REGULAR;
+            if (sizeTier == null) sizeTier = JewelrySizeTier.REGULAR;
             if (material == null) material = JewelryMaterials.SILVER;
-            if (stone == null) {
-                stone = ModUtil.getName(Items.AIR);
+            if (gemstone == null) {
+                gemstone = ModUtil.getName(Items.AIR);
             }
 
             /*
              *build the components
              */
-            // create the attribs component
-//            components.add(new Pair<ComponentType<?>, Object>(MagicTreasuresComponents.JEWELRY_ATTRIBS,
-//                    new JewelryAttribsComponent(type.getName(), size.getName(), material.getId(), stone)));
-//            // max level
-//            components.add(new Pair<ComponentType<?>, Object>(MagicTreasuresComponents.MAX_LEVEL,
-//                    new MaxLevelComponent.Builder(material, size).build()));
-//            // uses
-//            components.add(new Pair<>(MagicTreasuresComponents.USES,
-//                    new UsesComponent.Builder(material, size).build()));
-//            // repairs
-//            components.add(new Pair<>(MagicTreasuresComponents.REPAIRS,
-//                    new RepairsComponent.Builder(material, size).build()));
-//            // mana
-//            components.add(new Pair<>(MagicTreasuresComponents.MANA,
-//                    new ManaComponent.Builder(material, size, stone).build()));
-//            // recharges
-//            components.add(new Pair<>(MagicTreasuresComponents.RECHARGES,
-//                    new RechargesComponent.Builder(material, stone).build()));
-//            // spell factors
-//            components.add(new Pair<>(MagicTreasuresComponents.SPELL_FACTORS,
-//                    new SpellFactorsComponent.Builder(material, stone).build()));
-//            // spells
-//            components.add(new Pair<>(MagicTreasuresComponents.SPELLS,
-//                    new SpellsComponent((List<Identifier>)null)));
-
-            components.setAttribs(new JewelryAttribsComponent(type.getName(), size.getName(), material.getId(), stone));
-            components.setMaxLevel(new MaxLevelComponent.Builder(material, size).build());
-            components.setUses(new UsesComponent.Builder(material, size).build());
-            components.setRepairs(new RepairsComponent.Builder(material, size).build());
-            components.setMana(new ManaComponent.Builder(material, size, stone).build());
-            components.setRecharges(new RechargesComponent.Builder(material, stone).build());
-            components.setSpellFactors(new SpellFactorsComponent.Builder(material, stone).build());
-            components.setSpells(new SpellsComponent((List<Identifier>)null));
+            // attribs
+            if (attribsComponent == null)
+                components.setAttribs(new JewelryAttribsComponent(type.getName(), sizeTier.getName(), material.getId(), gemstone));
+            else
+                components.setAttribs(attribsComponent);
+            // max levels
+            if (maxLevelComponent == null)
+                components.setMaxLevel(new MaxLevelComponent.Builder(material, sizeTier).build());
+            else
+                components.setMaxLevel(maxLevelComponent);
+            // uses
+            if (this.infinite)
+                components.setUses(new UsesComponent(Integer.MAX_VALUE));
+            else if (usesComponent == null)
+                components.setUses(new UsesComponent.Builder(material, sizeTier).build());
+            else
+                components.setUses(usesComponent);
+            // repairs
+            if (repairsComponent == null)
+                components.setRepairs(new RepairsComponent.Builder(material, sizeTier).build());
+            else
+                components.setRepairs(repairsComponent);
+            // mana
+            if (manaComponentBuilder != null)
+                components.setMana(manaComponentBuilder.build());
+            else if (manaComponent == null)
+                components.setMana(new ManaComponent.Builder(material, sizeTier, gemstone).build());
+            else
+                components.setMana(manaComponent);
+            // recharges
+            if (rechargesComponent == null)
+                components.setRecharges(new RechargesComponent.Builder(material, gemstone).build());
+            else
+                components.setRecharges(rechargesComponent);
+            // spell factors
+            if (spellFactorsComponent == null)
+                components.setSpellFactors(new SpellFactorsComponent.Builder(material, gemstone).build());
+            else
+                components.setSpellFactors(spellFactorsComponent);
+            // spells
+            if (spellsComponent == null)
+                components.setSpells(new SpellsComponent((List<Identifier>)null));
+            else
+                components.setSpells(spellsComponent);
 
             // naming and affixers
 

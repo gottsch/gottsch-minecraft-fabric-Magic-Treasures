@@ -18,6 +18,7 @@
 package mod.gottsch.fabric.magic_treasures.core.event;
 
 import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
+import mod.gottsch.fabric.magic_treasures.core.item.component.ComponentHelper;
 import mod.gottsch.fabric.magic_treasures.core.item.component.SpellsComponent;
 import mod.gottsch.fabric.magic_treasures.core.spell.EventType;
 import mod.gottsch.fabric.magic_treasures.core.spell.ISpell;
@@ -51,7 +52,7 @@ public class HotbarEquipmentSpellHandler implements IEquipmentSpellHandler {
 			hotbarSlotStr.set(String.valueOf(hotbarSlot));
 			ItemStack inventoryStack = player.getInventory().getStack(hotbarSlot);
 			if (inventoryStack != player.getMainHandStack()) {
-				Jewelry.spells(inventoryStack).ifPresent(spells -> {
+				ComponentHelper.spells(inventoryStack).ifPresent(spells -> {
 //				inventoryStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).ifPresent(cap -> {
 
 					AtomicInteger index = new AtomicInteger();

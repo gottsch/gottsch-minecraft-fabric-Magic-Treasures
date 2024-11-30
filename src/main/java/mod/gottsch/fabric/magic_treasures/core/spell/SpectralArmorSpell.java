@@ -70,7 +70,7 @@ public class SpectralArmorSpell extends CooldownSpell {
 		ItemStack jewelry = context.getJewelry();
 		PlayerEntity player = context.getPlayer();
 		ManaComponent manaComponent = ComponentHelper.mana(jewelry).orElseThrow(IllegalStateException::new);
-		SpellFactorsComponent spellFactorsComponent = Jewelry.spellFactors(jewelry).orElseThrow(IllegalStateException::new);
+		SpellFactorsComponent spellFactorsComponent =  ComponentHelper.spellFactors(jewelry).orElseThrow(IllegalStateException::new);
 
 		if (manaComponent.mana() > 0 && player.isAlive()) {
 			// TODO only execute if damage is coming from a Mob ie not Fire, Fall etc

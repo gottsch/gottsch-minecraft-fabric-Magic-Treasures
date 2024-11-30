@@ -76,7 +76,7 @@ public class DrainSpell extends Spell {
 		ItemStack jewelry = context.getJewelry();
 		PlayerEntity player = context.getPlayer();
 		ManaComponent manaComponent = ComponentHelper.mana(jewelry).orElseThrow(IllegalStateException::new);
-		SpellFactorsComponent spellFactorsComponent = Jewelry.spellFactors(jewelry).orElseThrow(IllegalStateException::new);
+		SpellFactorsComponent spellFactorsComponent =  ComponentHelper.spellFactors(jewelry).orElseThrow(IllegalStateException::new);
 
 		if (level.getTime() % spellFactorsComponent.modifyFrequency(getFrequency()) == 0) {
 			if (manaComponent.mana() > 0 && player.getHealth() < player.getMaxHealth() && player.isAlive()) {

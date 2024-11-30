@@ -26,8 +26,6 @@ import net.minecraft.util.Identifier;
 
 import java.util.List;
 
-import static mod.gottsch.fabric.magic_treasures.core.item.MagicTreasuresItems.createSettings;
-
 /**
  * Created by Mark Gottschling on 11/21/2024
  */
@@ -41,9 +39,10 @@ public class HawkJewelryBuilder extends JewelryBuilder {
     public Jewelry createJewelry(JewelryType type, JewelryMaterial material, JewelrySizeTier sizeTier, Identifier gemstone) {
 
         /*
-          * NOTE can't use createSettings method but instead have to explicitly create the
-          * setting with each component where we change the values.
+         * NOTE can't use createSettings method but instead have to explicitly create the
+         * setting with each component where we change the values.
          */
+        @Deprecated
         Item.Settings settings = new Item.Settings()
                 .component(MagicTreasuresComponents.JEWELRY_ATTRIBS,
                         new JewelryAttribsComponent(type.getName(), sizeTier.getName(),
@@ -58,7 +57,7 @@ public class HawkJewelryBuilder extends JewelryBuilder {
                                 .build())
                 .component(MagicTreasuresComponents.USES,
                         new UsesComponent.Builder(material, sizeTier)
-                                .with($ -> {$.maxUses = HawkJewelryBuilder.this.maxUses;})
+                                .with($ -> {$.maxUses = this.maxUses;})
                                 .build())
                 .component(MagicTreasuresComponents.REPAIRS,
                         new RepairsComponent.Builder(material, sizeTier)
@@ -77,8 +76,27 @@ public class HawkJewelryBuilder extends JewelryBuilder {
         Jewelry j = new Jewelry(settings);
 
         return (Jewelry) j.setBaseName(HawkJewelryBuilder.this.getBaseName())
-                .setAffixer(HawkJewelryBuilder.this.acceptsAffixer)
+                .setAcceptsAffixing(HawkJewelryBuilder.this.acceptsAffixer)
                 .setLoreKey("jewelry.hawk_ring.lore");
+    }
+
+    @Override
+    public JewelryComponents.Builder createComponentsBuilder(JewelryType type, JewelryMaterial material, JewelrySizeTier size, Identifier stone) {
+        JewelryComponents.Builder builder = new JewelryComponents.Builder(type, material, size)
+                .with($ -> {
+                    $.gemstone = stone;
+                    $.maxLevelComponent = this.maxLevel <= 0 ? new MaxLevelComponent(material.getMaxLevel() + 1) : new MaxLevelComponent(this.maxLevel);
+                    $.usesComponent = this.maxUses <= 0 ? null : new UsesComponent(this.maxUses);
+                    $.repairsComponent = this.maxRepairs <=0 ? null : new RepairsComponent(this.maxRepairs);
+                    $.infinite = this.infinite;
+                    $.manaComponent = this.maxMana <= 0 ? new ManaComponent.Builder(material, size, stone)
+                            .with($$ -> {
+                                $$.maxMana = material.getUses() * Math.max(1, material.getRepairs() + size.getRepairs()) * Math.max(1, size.getUsesMultiplier());
+                            }).build() : new ManaComponent(this.maxMana);
+                    $.rechargesComponent = this.maxRecharges <= 0 ? null : new RechargesComponent(this.maxRecharges);
+                    $.spellsComponent = null;
+                });
+        return builder;
     }
 }
 

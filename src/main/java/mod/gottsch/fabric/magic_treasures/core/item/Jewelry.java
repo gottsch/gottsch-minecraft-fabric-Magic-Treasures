@@ -235,89 +235,6 @@ public class Jewelry extends Item implements IJewelry{
         return "";
     }
 
-    @Deprecated
-    public static boolean hasStone(ItemStack stack) {
-        return attribs(stack).map(a -> {
-            if (a.gemstone() != null) {
-                Item stoneItem = StoneRegistry.get(a.gemstone()).orElse(Items.AIR);
-                return stoneItem != null
-                        && stoneItem != Items.AIR
-                        && stoneItem.getRegistryEntry().isIn(MagicTreasuresTags.Items.STONES);
-            }
-            return false;
-        }).orElse(false);
-    }
-
-    /*
-     * component accessors
-     */
-    @Deprecated
-    // attribs
-    public static Optional<JewelryAttribsComponent> attribs(ItemStack stack) {
-        return Optional.ofNullable(stack.get(MagicTreasuresComponents.JEWELRY_ATTRIBS));
-    }
-
-    @Deprecated
-    public static Optional<IJewelryType> jewelryType(ItemStack stack) {
-        return attribs(stack).flatMap(a -> MagicTreasuresApi.getJewelryType(a.type()));
-    }
-    @Deprecated
-    // TODO make convenience methods for all the component properties
-    public static Optional<Item> gemstone(ItemStack stack) {
-        return attribs(stack).flatMap(a -> StoneRegistry.get(a.gemstone()));
-    }
-
-    @Deprecated
-    // max level
-    public static Optional<MaxLevelComponent> maxLevel(ItemStack stack) {
-        return Optional.ofNullable(stack.get(MagicTreasuresComponents.MAX_LEVEL));
-    }
-
-    @Deprecated
-    // uses
-    public static Optional<UsesComponent> uses(ItemStack stack) {
-        return Optional.ofNullable(stack.get(MagicTreasuresComponents.USES));
-    }
-
-    @Deprecated
-    // repairs
-    public static Optional<RepairsComponent> repairs(ItemStack stack) {
-        return Optional.ofNullable(stack.get(MagicTreasuresComponents.REPAIRS));
-    }
-
-    @Deprecated
-    // recharges
-    public static Optional<RechargesComponent> recharges(ItemStack stack) {
-        return Optional.ofNullable(stack.get(MagicTreasuresComponents.RECHARGES));
-    }
-
-    @Deprecated
-    // spells
-    public static Optional<SpellsComponent> spells(ItemStack stack) {
-        return Optional.ofNullable(stack.get(MagicTreasuresComponents.SPELLS));
-    }
-
-    @Deprecated
-    public static void setUses(ItemStack stack, int uses) {
-        uses(stack).ifPresent(component -> {
-            stack.set(MagicTreasuresComponents.USES, new UsesComponent(component.maxUses(), uses));
-        });
-    }
-
-    @Deprecated
-    public static void setGemstone(ItemStack stack, Identifier gemstone) {
-        attribs(stack).ifPresent(component -> {
-            stack.set(MagicTreasuresComponents.JEWELRY_ATTRIBS,
-                    new JewelryAttribsComponent(component.type(), component.sizeTier(),
-                            component.material(), gemstone));
-        });
-    }
-
-    @Deprecated
-    public static Optional<SpellFactorsComponent> spellFactors(ItemStack stack) {
-        return Optional.ofNullable(stack.get(MagicTreasuresComponents.SPELL_FACTORS));
-    }
-
     @Override
     public String getBaseName() {
         return baseName;
@@ -330,8 +247,8 @@ public class Jewelry extends Item implements IJewelry{
     }
 
     @Override
-    public IJewelry setAffixer(Predicate<ItemStack> acceptsAffixer) {
-        this.affixer = acceptsAffixer;
+    public IJewelry setAcceptsAffixing(Predicate<ItemStack> acceptsAffixing) {
+        this.affixer = acceptsAffixing;
         return this;
     }
 
