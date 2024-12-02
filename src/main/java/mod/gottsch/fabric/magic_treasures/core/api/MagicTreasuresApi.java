@@ -4,6 +4,7 @@ import mod.gottsch.fabric.gottschcore.enums.IEnum;
 import mod.gottsch.fabric.gottschcore.enums.IRarity;
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
+import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryComponents;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTier;
 import mod.gottsch.fabric.magic_treasures.core.registry.*;
@@ -134,7 +135,7 @@ public class MagicTreasuresApi {
     }
 
     public static List<Item> getJewelryStones() {
-        return StoneRegistry.getStones();
+        return GemstoneRegistry.getStones();
     }
 
     public static void registerJewelryStoneTier(JewelryStoneTier tier) {
@@ -164,7 +165,15 @@ public class MagicTreasuresApi {
         TagRegistry.registerJewelrySizeTier(sizeTier, tagKey);
     }
 
-    public static void registerJewerlyStoneTag(Identifier stone, TagKey<Item> tagKey) {
+    public static void registerJewerlyGemstoneTag(Identifier stone, TagKey<Item> tagKey) {
         TagRegistry.registerJewelryStone(stone, tagKey);
+    }
+
+    public static void registerGemstone(Item gemstone) {
+        GemstoneRegistry.register(gemstone);
+    }
+
+    public static void registerJewelryCustomComponentBuilder(Item item, JewelryComponents.Builder builder) {
+        JewelryRegistry.register(item, builder);
     }
 }

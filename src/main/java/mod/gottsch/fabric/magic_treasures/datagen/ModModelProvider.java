@@ -13,6 +13,7 @@ import net.minecraft.item.Item;
 import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
 
+import java.util.Optional;
 import java.util.function.BiConsumer;
 import java.util.function.Supplier;
 
@@ -44,6 +45,8 @@ public class ModModelProvider extends FabricModelProvider {
 
     @Override
     public void generateItemModels(ItemModelGenerator itemModelGenerator) {
+        Model JEWELRY_PARENT = withParent(modLoc("item/jewelry"), TextureKey.LAYER0);
+
         // tabs
         singleTexture(MagicTreasuresItems.MAGIC_TREASURES_TAB,
                 Models.GENERATED, modLoc("item/" + name(MagicTreasuresItems.MAGIC_TREASURES_TAB)), itemModelGenerator.writer);
@@ -66,57 +69,57 @@ public class ModModelProvider extends FabricModelProvider {
 
         // jewelry
         MagicTreasuresItems.STANDARD_JEWELRY.forEach(item -> {
-            singleTexture(item, Models.GENERATED,
+            singleTexture(item, JEWELRY_PARENT,
                     modLoc("item/jewelry/" + name(item)), itemModelGenerator.writer);
         });
         MagicTreasuresItems.CUSTOM_JEWELRY.forEach(item -> {
             if (name(item).contains("castle") || name(item).contains("hawk")) {
-                singleTexture(item, Models.GENERATED,
+                singleTexture(item, JEWELRY_PARENT,
                         modLoc("item/jewelry/" + name(item)), itemModelGenerator.writer);
             }
         });
 
         // special / non-standard jewelry
-        singleTexture(MagicTreasuresItems.SILBROS_RING_OF_VITALITY, Models.GENERATED,
+        singleTexture(MagicTreasuresItems.SILBROS_RING_OF_VITALITY, JEWELRY_PARENT,
                 modLoc("item/jewelry/silbros_ring_of_vitality"), itemModelGenerator.writer);
 
-        singleTexture(MagicTreasuresItems.STRONGMANS_BRACERS, Models.GENERATED,
+        singleTexture(MagicTreasuresItems.STRONGMANS_BRACERS, JEWELRY_PARENT,
                 modLoc("item/jewelry/wood_bracelet"), itemModelGenerator.writer);
 
-        singleTexture(MagicTreasuresItems.PEASANTS_FORTUNE, Models.GENERATED,
+        singleTexture(MagicTreasuresItems.PEASANTS_FORTUNE, JEWELRY_PARENT,
                                 modLoc("item/jewelry/great_iron_ring"), itemModelGenerator.writer);
 
-        singleTexture(MagicTreasuresItems.AMULET_OF_DEFENCE, Models.GENERATED,
+        singleTexture(MagicTreasuresItems.AMULET_OF_DEFENCE, JEWELRY_PARENT,
                 modLoc("item/jewelry/copper_topaz_necklace"), itemModelGenerator.writer);
 
-        singleTexture(MagicTreasuresItems.MALDRITCHS_FIRST_AMULET, Models.GENERATED,
+        singleTexture(MagicTreasuresItems.MALDRITCHS_FIRST_AMULET, JEWELRY_PARENT,
                 modLoc("item/jewelry/bone_onyx_necklace"), itemModelGenerator.writer);
 
-        singleTexture(MagicTreasuresItems.AQUA_RING, Models.GENERATED,
+        singleTexture(MagicTreasuresItems.AQUA_RING, JEWELRY_PARENT,
                 modLoc("item/jewelry/silver_topaz_ring"), itemModelGenerator.writer);
 
-        singleTexture(MagicTreasuresItems.JOURNEYMANS_BANDS, Models.GENERATED,
+        singleTexture(MagicTreasuresItems.JOURNEYMANS_BANDS, JEWELRY_PARENT,
                 modLoc("item/jewelry/great_gold_jadeite_bracelet"), itemModelGenerator.writer);
 
-        singleTexture(MagicTreasuresItems.MEDICS_TOKEN, Models.GENERATED,
+        singleTexture(MagicTreasuresItems.MEDICS_TOKEN, JEWELRY_PARENT,
                 modLoc("item/jewelry/medics_token"), itemModelGenerator.writer);
 
-        singleTexture(MagicTreasuresItems.ADEPHAGIAS_BOUNTY, Models.GENERATED,
+        singleTexture(MagicTreasuresItems.ADEPHAGIAS_BOUNTY, JEWELRY_PARENT,
                 modLoc("item/jewelry/adephagias_bounty"), itemModelGenerator.writer);
 
-        singleTexture(MagicTreasuresItems.SALANDAARS_WARD, Models.GENERATED,
+        singleTexture(MagicTreasuresItems.SALANDAARS_WARD, JEWELRY_PARENT,
                 modLoc("item/jewelry/salandaars_ward"), itemModelGenerator.writer);
 
-        singleTexture(MagicTreasuresItems.ANGELS_RING, Models.GENERATED,
+        singleTexture(MagicTreasuresItems.ANGELS_RING, JEWELRY_PARENT,
                 modLoc("item/jewelry/angels_ring"), itemModelGenerator.writer);
 
-        singleTexture(MagicTreasuresItems.RING_OF_FORTITUDE, Models.GENERATED,
+        singleTexture(MagicTreasuresItems.RING_OF_FORTITUDE, JEWELRY_PARENT,
                 modLoc("item/jewelry/ring_of_fortitude"), itemModelGenerator.writer);
 
-        singleTexture(MagicTreasuresItems.RING_LIFE_DEATH, Models.GENERATED,
+        singleTexture(MagicTreasuresItems.RING_LIFE_DEATH, JEWELRY_PARENT,
                 modLoc("item/jewelry/ring_of_life_death"), itemModelGenerator.writer);
 
-        singleTexture(MagicTreasuresItems.EYE_OF_THE_PHOENIX, Models.GENERATED,
+        singleTexture(MagicTreasuresItems.EYE_OF_THE_PHOENIX, JEWELRY_PARENT,
                 modLoc("item/jewelry/eye_of_the_phoenix"), itemModelGenerator.writer);
 
         // scrolls
@@ -148,6 +151,10 @@ public class ModModelProvider extends FabricModelProvider {
 
     public void singleTexture(Identifier itemIdentifier, Model model, Identifier path, BiConsumer<Identifier, Supplier<JsonElement>> writer) {
         model.upload(itemIdentifier, TextureMap.layer0(path), writer);
+    }
+
+    private static Model withParent(Identifier parent, TextureKey... requiredTextureKeys) {
+        return new Model(Optional.of(parent), Optional.empty(), requiredTextureKeys);
     }
 
     public final Identifier modLoc(String path) {

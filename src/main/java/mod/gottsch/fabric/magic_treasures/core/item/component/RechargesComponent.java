@@ -2,12 +2,9 @@ package mod.gottsch.fabric.magic_treasures.core.item.component;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import mod.gottsch.fabric.magic_treasures.core.item.IJewelrySizeTier;
-import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
-import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTier;
-import mod.gottsch.fabric.magic_treasures.core.registry.StoneRegistry;
+import mod.gottsch.fabric.magic_treasures.core.registry.GemstoneRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
@@ -58,9 +55,9 @@ public record RechargesComponent(int maxRecharges, int recharges) {
 
         public RechargesComponent build() {
             // get the stone and stone tier
-            Item stone = StoneRegistry.get(this.stone).orElse(Items.AIR);
+            Item stone = GemstoneRegistry.get(this.stone).orElse(Items.AIR);
             // determine the tier
-            Optional<JewelryStoneTier> stoneTier = StoneRegistry.getStoneTier(stone);
+            Optional<JewelryStoneTier> stoneTier = GemstoneRegistry.getStoneTier(stone);
 
             if (this.maxRecharges < 0) {
                 this.maxRecharges =

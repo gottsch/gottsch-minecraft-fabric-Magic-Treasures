@@ -23,6 +23,7 @@ import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
 import mod.gottsch.fabric.magic_treasures.core.item.component.ComponentHelper;
 import mod.gottsch.fabric.magic_treasures.core.item.component.ManaComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.SpellFactorsComponent;
+import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.fabric.magic_treasures.core.util.LangUtil;
 import mod.gottsch.fabric.magic_treasures.core.util.MathUtil;
 import net.minecraft.item.ItemStack;
@@ -72,8 +73,10 @@ public class HealingSpell extends Spell {
     @Override
     public SpellResult cast(World level, Random random, ICoords coords, ICastSpellContext context) {
         SpellResult result = new SpellResult();
-        ManaComponent manaComponent = ComponentHelper.mana(context.getJewelry()).orElseThrow(IllegalStateException::new); //context.getJewelry().get(MagicTreasuresComponents.JEWELRY_VITALS_COMPONENT)
-        SpellFactorsComponent spellFactorsComponent =  ComponentHelper.spellFactors(context.getJewelry()).orElseThrow(IllegalStateException::new);
+        ManaComponent manaComponent = ComponentHelper.mana(context.getJewelry()).orElseThrow(IllegalStateException::new);
+        // TODO update the jewelry with the generic spell factor is not found OR generate a new one based on it's attribs and stone. If attribs = null then use default NONE.
+        // TODO expand this for all instances where an IllegalStateException is thrown
+        SpellFactorsComponent spellFactorsComponent =  ComponentHelper.spellFactors(context.getJewelry()).orElse(new SpellFactorsComponent.Builder(JewelryMaterials.NONE).build());
 
         if (level.getTime() % spellFactorsComponent.modifyFrequency(getFrequency()) == 0) {
             if (manaComponent.mana() > 0 && context.getPlayer().getHealth() < context.getPlayer().getMaxHealth() && context.getPlayer().isAlive()) {

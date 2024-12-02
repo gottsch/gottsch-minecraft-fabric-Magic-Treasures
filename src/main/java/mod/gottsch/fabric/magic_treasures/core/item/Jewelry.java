@@ -17,17 +17,13 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.item;
 
-import mod.gottsch.fabric.magic_treasures.core.api.MagicTreasuresApi;
 import mod.gottsch.fabric.magic_treasures.core.item.component.*;
-import mod.gottsch.fabric.magic_treasures.core.registry.StoneRegistry;
 import mod.gottsch.fabric.magic_treasures.core.spell.ISpell;
 import mod.gottsch.fabric.magic_treasures.core.spell.SpellRegistry;
-import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
 import mod.gottsch.fabric.magic_treasures.core.util.LangUtil;
 import mod.gottsch.fabric.magic_treasures.core.util.ModUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
-import net.minecraft.item.Items;
 import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;

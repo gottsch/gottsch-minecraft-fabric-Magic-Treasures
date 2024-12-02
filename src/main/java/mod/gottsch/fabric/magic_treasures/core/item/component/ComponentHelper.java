@@ -1,10 +1,11 @@
 package mod.gottsch.fabric.magic_treasures.core.item.component;
 
+import mod.gottsch.fabric.gottschcore.enums.IRarity;
 import mod.gottsch.fabric.magic_treasures.core.api.MagicTreasuresApi;
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
-import mod.gottsch.fabric.magic_treasures.core.registry.StoneRegistry;
+import mod.gottsch.fabric.magic_treasures.core.registry.GemstoneRegistry;
 import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -67,6 +68,11 @@ public class ComponentHelper {
         return Optional.ofNullable(stack.get(MagicTreasuresComponents.COOLDOWN));
     }
 
+    public static Optional<IRarity> rarity(ItemStack stack) {
+       return Optional.ofNullable(stack.get(MagicTreasuresComponents.RARITY))
+                .flatMap(MagicTreasuresApi::getRarity);
+    }
+
     /*
      * component property accessors
      */
@@ -86,7 +92,7 @@ public class ComponentHelper {
         return attribs(stack).map(JewelryAttribsComponent::gemstone);
     }
     public static Optional<Item> gemstoneItem(ItemStack stack) {
-        return attribs(stack).flatMap(a -> StoneRegistry.get(a.gemstone()));
+        return attribs(stack).flatMap(a -> GemstoneRegistry.get(a.gemstone()));
     }
     // datagen method
     public static Optional<Item> gemstoneMinecraftItem(ItemStack stack) {
@@ -96,13 +102,23 @@ public class ComponentHelper {
     public static boolean hasGemstone(ItemStack stack) {
         return attribs(stack).map(a -> {
             if (a.gemstone() != null) {
-                Item stoneItem = StoneRegistry.get(a.gemstone()).orElse(Items.AIR);
+                Item stoneItem = GemstoneRegistry.get(a.gemstone()).orElse(Items.AIR);
                 return stoneItem != null
                         && stoneItem != Items.AIR
                         && stoneItem.getRegistryEntry().isIn(MagicTreasuresTags.Items.STONES);
             }
             return false;
         }).orElse(false);
+    }
+
+    public static Optional<Integer> usesValue(ItemStack stack) {
+        return uses(stack).map((UsesComponent::uses));
+    }
+    public static double usesValueOrDefault(ItemStack stack, int defaultValue) {
+        return uses(stack).map((UsesComponent::uses)).orElse(defaultValue);
+    }
+    public static Optional<Integer> maxUsesValue(ItemStack stack) {
+        return uses(stack).map((UsesComponent::maxUses));
     }
 
     public static Optional<Double> manaValue(ItemStack stack) {
@@ -163,6 +179,10 @@ public class ComponentHelper {
     // repairs
     public static Optional<RepairsComponent> updateRepairs(ItemStack stack, int repairs) {
         return repairs(stack).map(component -> stack.set(MagicTreasuresComponents.REPAIRS, new RepairsComponent(component.maxRepairs(), repairs)));
+    }
+    public static Optional<RepairsComponent> incrementRepairs(ItemStack stack, int amount) {
+        return repairs(stack).map(component -> stack.set(MagicTreasuresComponents.REPAIRS,
+                new RepairsComponent(component.maxRepairs() + amount, component.repairs() + amount)));
     }
 
     // mana

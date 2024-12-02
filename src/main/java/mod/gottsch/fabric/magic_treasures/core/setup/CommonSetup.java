@@ -1,13 +1,32 @@
+/*
+ * This file is part of  Magic Treasures.
+ * Copyright (c) 2024 Mark Gottschling (gottsch)
+ *
+ * Magic Treasures is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU Lesser General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *
+ * Magic Treasures is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU Lesser General Public License for more details.
+ *
+ * You should have received a copy of the GNU Lesser General Public License
+ * along with Magic Treasures.  If not, see <http://www.gnu.org/licenses/lgpl>.
+ */
 package mod.gottsch.fabric.magic_treasures.core.setup;
 
 import mod.gottsch.fabric.magic_treasures.core.api.MagicTreasuresApi;
 import mod.gottsch.fabric.magic_treasures.core.integration.MagicTreasuresIntegrations;
 import mod.gottsch.fabric.magic_treasures.core.item.MagicTreasuresItems;
+import mod.gottsch.fabric.magic_treasures.core.item.component.*;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryType;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
-import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTiers;
+import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryGemstoneTiers;
 import mod.gottsch.fabric.magic_treasures.core.rarity.MagicTreasuresRarity;
+import mod.gottsch.fabric.magic_treasures.core.spell.MagicTreasuresSpells;
 import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
 import mod.gottsch.fabric.magic_treasures.core.util.ModUtil;
 import net.minecraft.item.Items;
@@ -42,32 +61,36 @@ public class CommonSetup {
         MagicTreasuresApi.registerJewerlySizeTierTag(JewelrySizeTier.GREAT, MagicTreasuresTags.Items.GREAT);
         MagicTreasuresApi.registerJewerlySizeTierTag(JewelrySizeTier.LORDS, MagicTreasuresTags.Items.LORDS);
 
+        // TODO move this to MagicTreasuresItems
+        // TODO register all known (Magic Treasures mod) gemstones
+        // TODO the loading of additional stones (external mods) happen in the TagLoad event
+
         // register jewelry stone tags
-        MagicTreasuresApi.registerJewerlyStoneTag(ModUtil.getName(MagicTreasuresItems.TOPAZ), MagicTreasuresTags.Items.TOPAZ);
-        MagicTreasuresApi.registerJewerlyStoneTag(ModUtil.getName(MagicTreasuresItems.ONYX), MagicTreasuresTags.Items.ONYX);
-        MagicTreasuresApi.registerJewerlyStoneTag(ModUtil.getName(MagicTreasuresItems.JADEITE), MagicTreasuresTags.Items.JADEITE);
-        MagicTreasuresApi.registerJewerlyStoneTag(ModUtil.getName(Items.DIAMOND), MagicTreasuresTags.Items.DIAMOND);
-        MagicTreasuresApi.registerJewerlyStoneTag(ModUtil.getName(MagicTreasuresItems.RUBY), MagicTreasuresTags.Items.RUBY);
-        MagicTreasuresApi.registerJewerlyStoneTag(ModUtil.getName(MagicTreasuresItems.SAPPHIRE), MagicTreasuresTags.Items.SAPPHIRE);
-        MagicTreasuresApi.registerJewerlyStoneTag(ModUtil.getName(MagicTreasuresItems.WHITE_PEARL), MagicTreasuresTags.Items.WHITE_PEARL);
-        MagicTreasuresApi.registerJewerlyStoneTag(ModUtil.getName(MagicTreasuresItems.BLACK_PEARL), MagicTreasuresTags.Items.BLACK_PEARL);
+        MagicTreasuresApi.registerJewerlyGemstoneTag(ModUtil.getName(MagicTreasuresItems.TOPAZ), MagicTreasuresTags.Items.TOPAZ);
+        MagicTreasuresApi.registerJewerlyGemstoneTag(ModUtil.getName(MagicTreasuresItems.ONYX), MagicTreasuresTags.Items.ONYX);
+        MagicTreasuresApi.registerJewerlyGemstoneTag(ModUtil.getName(MagicTreasuresItems.JADEITE), MagicTreasuresTags.Items.JADEITE);
+        MagicTreasuresApi.registerJewerlyGemstoneTag(ModUtil.getName(Items.DIAMOND), MagicTreasuresTags.Items.DIAMOND);
+        MagicTreasuresApi.registerJewerlyGemstoneTag(ModUtil.getName(MagicTreasuresItems.RUBY), MagicTreasuresTags.Items.RUBY);
+        MagicTreasuresApi.registerJewerlyGemstoneTag(ModUtil.getName(MagicTreasuresItems.SAPPHIRE), MagicTreasuresTags.Items.SAPPHIRE);
+        MagicTreasuresApi.registerJewerlyGemstoneTag(ModUtil.getName(MagicTreasuresItems.WHITE_PEARL), MagicTreasuresTags.Items.WHITE_PEARL);
+        MagicTreasuresApi.registerJewerlyGemstoneTag(ModUtil.getName(MagicTreasuresItems.BLACK_PEARL), MagicTreasuresTags.Items.BLACK_PEARL);
 
         // register jewelry stone tiers
-        MagicTreasuresApi.registerJewelryStoneTier(JewelryStoneTiers.TIER1);
-        MagicTreasuresApi.registerJewelryStoneTier(JewelryStoneTiers.TIER2);
-        MagicTreasuresApi.registerJewelryStoneTier(JewelryStoneTiers.TIER3);
-        MagicTreasuresApi.registerJewelryStoneTier(JewelryStoneTiers.TIER4);
-        MagicTreasuresApi.registerJewelryStoneTier(JewelryStoneTiers.TIER5);
-        MagicTreasuresApi.registerJewelryStoneTier(JewelryStoneTiers.TIER6);
+        MagicTreasuresApi.registerJewelryStoneTier(JewelryGemstoneTiers.TIER1);
+        MagicTreasuresApi.registerJewelryStoneTier(JewelryGemstoneTiers.TIER2);
+        MagicTreasuresApi.registerJewelryStoneTier(JewelryGemstoneTiers.TIER3);
+        MagicTreasuresApi.registerJewelryStoneTier(JewelryGemstoneTiers.TIER4);
+        MagicTreasuresApi.registerJewelryStoneTier(JewelryGemstoneTiers.TIER5);
+        MagicTreasuresApi.registerJewelryStoneTier(JewelryGemstoneTiers.TIER6);
 //        MagicTreasuresApi.registerJewelryStoneTier(JewelryStoneTiers.SKELETONS_HEART);
 
         // register stone tier tags
-        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryStoneTiers.TIER1, MagicTreasuresTags.Items.STONE_TIER1);
-        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryStoneTiers.TIER2, MagicTreasuresTags.Items.STONE_TIER2);
-        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryStoneTiers.TIER3, MagicTreasuresTags.Items.STONE_TIER3);
-        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryStoneTiers.TIER4, MagicTreasuresTags.Items.STONE_TIER4);
-        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryStoneTiers.TIER5, MagicTreasuresTags.Items.STONE_TIER5);
-        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryStoneTiers.TIER6, MagicTreasuresTags.Items.STONE_TIER6);
+        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryGemstoneTiers.TIER1, MagicTreasuresTags.Items.STONE_TIER1);
+        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryGemstoneTiers.TIER2, MagicTreasuresTags.Items.STONE_TIER2);
+        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryGemstoneTiers.TIER3, MagicTreasuresTags.Items.STONE_TIER3);
+        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryGemstoneTiers.TIER4, MagicTreasuresTags.Items.STONE_TIER4);
+        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryGemstoneTiers.TIER5, MagicTreasuresTags.Items.STONE_TIER5);
+        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryGemstoneTiers.TIER6, MagicTreasuresTags.Items.STONE_TIER6);
 //        MagicTreasuresApi.registerJewerlyStoneTierTag(JewelryStoneTiers.SKELETONS_HEART, MagicTreasuresTags.Items.STONE_TIER_SKELETONS_HEART);
 
         // register stone rarity tags
@@ -119,4 +142,19 @@ public class CommonSetup {
         MagicTreasuresIntegrations.registerTrinketsIntegration();
     }
 
+    public static void registerJewelryCustomComponentsBuilders() {
+        MagicTreasuresApi.registerJewelryCustomComponentBuilder(
+                MagicTreasuresItems.SILBROS_RING_OF_VITALITY,
+                new JewelryComponents.Builder(JewelryType.RING, JewelryMaterials.WOOD)
+                        .with($ -> {
+                            $.gemstone = ModUtil.getName(Items.BEDROCK);
+                            $.maxLevelComponent = new MaxLevelComponent(2);
+                            $.repairsComponent = new RepairsComponent(1);
+                            $.manaComponent = new ManaComponent(80);
+                            $.rechargesComponent = new RechargesComponent(0);
+                            $.spellsComponent = new SpellsComponent(MagicTreasuresSpells.DEFAULT_HEALING);
+                            $.rarity = MagicTreasuresRarity.COMMON;
+                        })
+        );
+    }
 }

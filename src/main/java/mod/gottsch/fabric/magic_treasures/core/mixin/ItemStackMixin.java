@@ -45,44 +45,16 @@ public class ItemStackMixin {
         JewelryRegistry.getComponentsBuilder(item.asItem()).ifPresentOrElse(
                 builder -> {
                     JewelryComponents components = builder.build();
-        // TODO first lookup the custom components in the JewelryRegistry
-//        JewelryRegistry.getComponents(item.asItem()).ifPresentOrElse(
-//                pair -> {
-//                    JewelryComponents components = pair.getRight();
-                    // TODO can you call another method that only exists in this mixin class?
                     updateComponents(((ItemStack)(Object)this), components);
-
-//                    ((ItemStack)(Object)this).set(MagicTreasuresComponents.JEWELRY_ATTRIBS, components.getAttribs());
-//                    ((ItemStack)(Object)this).set(MagicTreasuresComponents.MAX_LEVEL, components.getMaxLevel());
-//                    ((ItemStack)(Object)this).set(MagicTreasuresComponents.USES, components.getUses());
-//                    ((ItemStack)(Object)this).set(MagicTreasuresComponents.REPAIRS, components.getRepairs());
-//                    ((ItemStack)(Object)this).set(MagicTreasuresComponents.MANA, components.getMana());
-//                    ((ItemStack)(Object)this).set(MagicTreasuresComponents.RECHARGES, components.getRecharges());
-//                    ((ItemStack)(Object)this).set(MagicTreasuresComponents.SPELL_FACTORS, components.getSpellFactors());
-//                    ((ItemStack)(Object)this).set(MagicTreasuresComponents.SPELLS, components.getSpells());
                 },
+                // TODO this will be going away
                 () -> {
                     JewelryRegistry.getAttribs(item.asItem()).ifPresent(jewelryAttribsPair -> {
-//            List<Pair<ComponentType<?>, Object>> jewelryComponents = new JewelryComponentBuilder(MagicTreasures.MOD_ID)
                         JewelryComponents components = new JewelryComponents.Builder(jewelryAttribsPair.getRight().getType(), jewelryAttribsPair.getRight().getMaterial(), jewelryAttribsPair.getRight().getSizeTier())
                                 .with($ -> {
                                     $.gemstone = jewelryAttribsPair.getRight().getStone();
                                 }).build();
-//            jewelryComponents.forEach(jc -> {
-//                (((ItemStack)(Object)this).set(jc.getLeft().cl, jc.getRight());
-//                Item.Settings ukjhjh
-//            });
-
-                        // TODO this is an explicit way of doing this..... research having a map of component<T>
-//                        ((ItemStack)(Object)this).set(MagicTreasuresComponents.JEWELRY_ATTRIBS, components.getAttribs());
-//                        ((ItemStack)(Object)this).set(MagicTreasuresComponents.MAX_LEVEL, components.getMaxLevel());
-//                        ((ItemStack)(Object)this).set(MagicTreasuresComponents.USES, components.getUses());
-//                        ((ItemStack)(Object)this).set(MagicTreasuresComponents.REPAIRS, components.getRepairs());
-//                        ((ItemStack)(Object)this).set(MagicTreasuresComponents.MANA, components.getMana());
-//                        ((ItemStack)(Object)this).set(MagicTreasuresComponents.RECHARGES, components.getRecharges());
-//                        ((ItemStack)(Object)this).set(MagicTreasuresComponents.SPELL_FACTORS, components.getSpellFactors());
-//                        ((ItemStack)(Object)this).set(MagicTreasuresComponents.SPELLS, components.getSpells());
-                        updateComponents(((ItemStack)(Object)this), components);
+                         updateComponents(((ItemStack)(Object)this), components);
 
                     });
                 }
@@ -99,5 +71,6 @@ public class ItemStackMixin {
         stack.set(MagicTreasuresComponents.RECHARGES, components.getRecharges());
         stack.set(MagicTreasuresComponents.SPELL_FACTORS, components.getSpellFactors());
         stack.set(MagicTreasuresComponents.SPELLS, components.getSpells());
+        stack.set(MagicTreasuresComponents.RARITY, components.getRarity());
     }
 }

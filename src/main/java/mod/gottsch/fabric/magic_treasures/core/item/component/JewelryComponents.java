@@ -17,12 +17,14 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.item.component;
 
+import mod.gottsch.fabric.gottschcore.enums.IRarity;
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
 import mod.gottsch.fabric.magic_treasures.core.item.MagicTreasuresItems;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
+import mod.gottsch.fabric.magic_treasures.core.rarity.MagicTreasuresRarity;
 import mod.gottsch.fabric.magic_treasures.core.util.ModUtil;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.Items;
@@ -44,12 +46,14 @@ public class JewelryComponents {
     private RechargesComponent recharges;
     private SpellFactorsComponent spellFactors;
     private SpellsComponent spells;
+    private String rarity;
 
     public static class Builder {
         public IJewelryType type;
         public IJewelrySizeTier sizeTier;
         public JewelryMaterial material;
         public Identifier gemstone;
+        public IRarity rarity;
 
         public JewelryAttribsComponent attribsComponent;
         public MaxLevelComponent maxLevelComponent;
@@ -152,7 +156,13 @@ public class JewelryComponents {
                 components.setSpells(new SpellsComponent((List<Identifier>)null));
             else
                 components.setSpells(spellsComponent);
-
+            // rarity
+            if (rarity == null) {
+//                components.setRarity(MagicTreasuresRarity.COMMON.getName());
+                // TODO should the rarity calculation go here instead of ModItemTagProvider?
+            } else {
+                components.setRarity(this.rarity.getName());
+            }
             // naming and affixers
 
             return components;
@@ -222,5 +232,12 @@ public class JewelryComponents {
 
     public void setSpells(SpellsComponent spells) {
         this.spells = spells;
+    }
+
+    public String getRarity() {
+        return rarity;
+    }
+    public void setRarity(String rarity) {
+        this.rarity = rarity;
     }
 }

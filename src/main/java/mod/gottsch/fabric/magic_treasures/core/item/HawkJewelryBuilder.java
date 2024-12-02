@@ -81,15 +81,15 @@ public class HawkJewelryBuilder extends JewelryBuilder {
     }
 
     @Override
-    public JewelryComponents.Builder createComponentsBuilder(JewelryType type, JewelryMaterial material, JewelrySizeTier size, Identifier stone) {
+    public JewelryComponents.Builder createComponentsBuilder(JewelryType type, JewelryMaterial material, JewelrySizeTier size, Identifier gemstone) {
         JewelryComponents.Builder builder = new JewelryComponents.Builder(type, material, size)
                 .with($ -> {
-                    $.gemstone = stone;
+                    $.gemstone = gemstone;
                     $.maxLevelComponent = this.maxLevel <= 0 ? new MaxLevelComponent(material.getMaxLevel() + 1) : new MaxLevelComponent(this.maxLevel);
                     $.usesComponent = this.maxUses <= 0 ? null : new UsesComponent(this.maxUses);
                     $.repairsComponent = this.maxRepairs <=0 ? null : new RepairsComponent(this.maxRepairs);
                     $.infinite = this.infinite;
-                    $.manaComponent = this.maxMana <= 0 ? new ManaComponent.Builder(material, size, stone)
+                    $.manaComponent = this.maxMana <= 0 ? new ManaComponent.Builder(material, size, gemstone)
                             .with($$ -> {
                                 $$.maxMana = material.getUses() * Math.max(1, material.getRepairs() + size.getRepairs()) * Math.max(1, size.getUsesMultiplier());
                             }).build() : new ManaComponent(this.maxMana);
