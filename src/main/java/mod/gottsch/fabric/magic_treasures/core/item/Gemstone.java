@@ -1,6 +1,6 @@
 package mod.gottsch.fabric.magic_treasures.core.item;
 
-import mod.gottsch.fabric.magic_treasures.core.registry.StoneRegistry;
+import mod.gottsch.fabric.magic_treasures.core.registry.GemstoneRegistry;
 import mod.gottsch.fabric.magic_treasures.core.util.LangUtil;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
@@ -8,9 +8,7 @@ import net.minecraft.item.tooltip.TooltipType;
 import net.minecraft.text.MutableText;
 import net.minecraft.text.Text;
 import net.minecraft.util.Formatting;
-import net.minecraft.world.World;
 import org.apache.commons.lang3.text.WordUtils;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
 
@@ -45,11 +43,11 @@ public class Gemstone extends Item {
         // TODO all this needs to be added to TooltipEvent
         LangUtil.appendAdvancedHoverText(tooltip, tt -> {
 
-            StoneRegistry.getStoneTier(itemStack.getItem()).ifPresent(tier -> {
+            GemstoneRegistry.getStoneTier(itemStack.getItem()).ifPresent(tier -> {
 //                tt.add(Text.translatable(LangUtil.INDENT2).append(Text.translatable(LangUtil.tooltip("divider")).formatted(Formatting.GRAY)));
 //                tt.add(Text.translatable(LangUtil.NEWLINE));
 
-                StoneRegistry.getRarity(itemStack.getItem()).ifPresent(r -> {
+                GemstoneRegistry.getRarity(itemStack.getItem()).ifPresent(r -> {
                     tt.add(Text.translatable(LangUtil.INDENT2).append(Text.translatable(LangUtil.tooltip("gemstone.rarity"), Formatting.GOLD + WordUtils.capitalizeFully(r.getName()))));
                 });
 //                tt.add(Text.translatable(LangUtil.INDENT2).append(Text.translatable(LangUtil.tooltip("gemstone.tier"), Formatting.GOLD + WordUtils.capitalizeFully(tier.getName().getPath()))));

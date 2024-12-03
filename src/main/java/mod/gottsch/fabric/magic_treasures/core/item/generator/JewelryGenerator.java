@@ -24,7 +24,7 @@ import mod.gottsch.fabric.magic_treasures.core.item.component.*;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTier;
 import mod.gottsch.fabric.magic_treasures.core.registry.JewelryRegistry;
-import mod.gottsch.fabric.magic_treasures.core.registry.StoneRegistry;
+import mod.gottsch.fabric.magic_treasures.core.registry.GemstoneRegistry;
 import mod.gottsch.fabric.magic_treasures.core.spell.ISpell;
 import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
 import mod.gottsch.fabric.magic_treasures.core.util.ModUtil;
@@ -56,21 +56,21 @@ public class JewelryGenerator {
         return addStone(jewelry, stone, STANDARD_NAMER);
     }
 
-    public ItemStack addStone(ItemStack jewelry, ItemStack stone, Namer namer) {
+    public ItemStack addStone(ItemStack jewelry, ItemStack gemstone, Namer namer) {
         Jewelry jewelryItem = (Jewelry)jewelry.getItem();
 
         // ensure a valid stone stack
-        if (stone == null || stone.isEmpty() || !jewelryItem.acceptsAffixing(stone)) {
+        if (gemstone == null || gemstone.isEmpty() || !jewelryItem.acceptsAffixing(gemstone)) {
             return ItemStack.EMPTY;
         }
 
-        Optional<JewelryStoneTier> stoneTier = StoneRegistry.getStoneTier(stone.getItem());
+        Optional<JewelryStoneTier> stoneTier = GemstoneRegistry.getStoneTier(gemstone.getItem());
         if (stoneTier.isPresent() && stoneTier.get().canAffix(jewelry)) {
             int gemMana = 0;
             int gemRecharges = 0;
-            Identifier location = ModUtil.asLocation(namer.name(jewelry, stone));
+            Identifier location = ModUtil.asLocation(namer.name(jewelry, gemstone));
 
-            // duplicate (create new) the jewelry itemstack
+            // get destination stack based on new name
             ItemStack destJewelry = JewelryRegistry.get(location).map(ItemStack::new).orElseGet(() -> new ItemStack(jewelry.getItem()));
             // NOTE that destJewelry at this point is created with the default values of the jewelry + stone version.
             // therefor, the max values don't need to be changed but the current values do.
@@ -86,22 +86,24 @@ public class JewelryGenerator {
              * calculate mana derived from the gem
              * NOTE only applying the sizeTier multiplier to the gem as that is the only thing changing.
              */
-            IJewelrySizeTier destSizeTier = ComponentHelper.sizeTier(destJewelry).orElse(JewelrySizeTier.REGULAR);
-            gemMana = stoneTier.map(JewelryStoneTier::getMana).orElseGet(() -> 0);
-            gemMana = Math.round(gemMana * destSizeTier.getManaMultiplier());
-            // TODO get min of maxMana and current+gemMana
-            gemMana = (int) Math.min(ComponentHelper.maxManaValue(destJewelry).get(), ComponentHelper.manaValueOrDefault(destJewelry, 0) + gemMana);
 
-            // TODO could use ManaComponent.Builder here instead. it will calculate the mana like above.
-            // update mana
-            ComponentHelper.updateMana(destJewelry, gemMana);
+//            IJewelrySizeTier destSizeTier = ComponentHelper.sizeTier(destJewelry).orElse(JewelrySizeTier.REGULAR);
+//            gemMana = stoneTier.map(JewelryStoneTier::getMana).orElseGet(() -> 0);
+//            gemMana = Math.round(gemMana * destSizeTier.getManaMultiplier());
+//            // TODO get min of maxMana and current+gemMana
+//            gemMana = (int) Math.min(ComponentHelper.maxManaValue(destJewelry).get(), ComponentHelper.manaValueOrDefault(destJewelry, 0) + gemMana);
+            // mana = Math.min(newMax, oldMana + diff(newMax-oldMax)
+            double newMana = Math.min(ComponentHelper.maxManaValue(destJewelry).get(), ComponentHelper.manaValueOrDefault(jewelry, 0) + (ComponentHelper.maxManaValue(destJewelry).get() - ComponentHelper.maxManaValue(jewelry).get()));
+           // update mana
+            ComponentHelper.updateMana(destJewelry, newMana);
 //        ComponentHelper.incrementMana(destJewelry, gemMana);//
 
             // update recharges
-            gemRecharges = stoneTier.map(JewelryStoneTier::getRecharges).orElseGet(() -> 0);
-            gemRecharges = Math.min(ComponentHelper.maxRechargesValue(destJewelry).get(), ComponentHelper.rechargesValueOrDefault(destJewelry, 0) + gemRecharges);
+//            gemRecharges = stoneTier.map(JewelryStoneTier::getRecharges).orElseGet(() -> 0);
+//            gemRecharges = Math.min(ComponentHelper.maxRechargesValue(destJewelry).get(), ComponentHelper.rechargesValueOrDefault(destJewelry, 0) + gemRecharges);
 //        ComponentHelper.incrementRecharges(destJewelry, gemRecharges);
-            ComponentHelper.updateRecharges(destJewelry, gemRecharges);
+            int newRecharges = Math.min(ComponentHelper.maxRechargesValue(destJewelry).get(), ComponentHelper.rechargesValueOrDefault(jewelry, 0) + (ComponentHelper.maxRechargesValue(destJewelry).get() - ComponentHelper.maxRechargesValue(jewelry).get()));
+            ComponentHelper.updateRecharges(destJewelry, newRecharges);
 
             // update repairs
             ComponentHelper.copyRepairsComponent(jewelry, destJewelry);
@@ -135,17 +137,17 @@ public class JewelryGenerator {
         }
 
         // get the stone item from the sourceHandler
-        Item stone = ComponentHelper.gemstoneItem(jewelry).orElse(Items.AIR);
+        Item gemstone = ComponentHelper.gemstoneItem(jewelry).orElse(Items.AIR);
 
         int mana = 0;
         int recharges = 0;
-        if (stone != null && stone != Items.AIR) {
-            Optional<JewelryStoneTier> stoneTier = StoneRegistry.getStoneTier(stone);
+        if (gemstone != null && gemstone != Items.AIR) {
+            Optional<JewelryStoneTier> stoneTier = GemstoneRegistry.getStoneTier(gemstone);
 
-            // remove the stone
+            // remove the stone (probably moot)
             ComponentHelper.updateGemstone(destJewelry, ModUtil.getName(Items.AIR));
 
-            if (stoneTier.isPresent()) {
+//            if (stoneTier.isPresent()) {
                 // get stone mana
 //                mana = stoneTier.map(JewelryStoneTier::getMana).orElseGet(() -> 0);
 //                mana = Math.round(mana * destHandler.getJewelrySizeTier().getManaMultiplier());
@@ -156,15 +158,16 @@ public class JewelryGenerator {
 
                 // get stone recharges
 //                recharges = stoneTier.map(JewelryStoneTier::getRecharges).orElseGet(() -> 0);
-            }
+//            }
         }
 
         // NOTE at this point, destHandler contains the correct max values (it is the item w/o the gem)
         // remove mana
 ////        destHandler.setMaxMana(sourceHandler.getMaxMana() - mana);
 //        destHandler.setMana(Math.min(sourceHandler.getMana(), destHandler.getMaxMana()));
-        ComponentHelper.updateMana(destJewelry,
-                Math.min(ComponentHelper.manaValue(jewelry).orElse(0D), ComponentHelper.maxManaValue(destJewelry).orElse(0D)));
+        double newMana = Math.min(ComponentHelper.maxManaValue(destJewelry).get(), ComponentHelper.manaValueOrDefault(jewelry, 0) );
+        ComponentHelper.updateMana(destJewelry, newMana);
+//                Math.min(ComponentHelper.manaValue(jewelry).orElse(0D), ComponentHelper.maxManaValue(destJewelry).orElse(0D)));
 
         // remove recharges
 //        destHandler.setMaxRecharges(sourceHandler.getMaxRecharges() - recharges);
@@ -263,35 +266,33 @@ public class JewelryGenerator {
 //        destHandler.setUses(handler.getUses());
 //    }
 //
-//    public Optional<ItemStack> recharge(ItemStack jewelry) {
-//        // create a new stack based on the jewelry
-//        ItemStack destStack = new ItemStack(jewelry.getItem());
-//        // copy values from jewelry to destStack
-//        copyStack(jewelry, destStack);
-//
-//        IJewelryHandler handler = destStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-//        if (handler.getRecharges() > 0) {
-//            handler.setMana(handler.getMaxMana());
-//            handler.setRecharges(handler.getRecharges() - 1);
-//            return Optional.of(destStack);
-//        }
-//        return Optional.empty();
-//    }
-//
-//    public Optional<ItemStack> repair(ItemStack jewelry) {
-//        // create a new stack based on the jewelry
-//        ItemStack destStack = new ItemStack(jewelry.getItem());
-//        // copy values from jewelry to destStack
-//        copyStack(jewelry, destStack);
-//
-//        IJewelryHandler handler = destStack.getCapability(MagicTreasuresCapabilities.JEWELRY_CAPABILITY).orElseThrow(IllegalStateException::new);
-//        if (handler.getRepairs() > 0) {
-//            handler.setUses(handler.getMaxUses());
-//            handler.setRepairs(Math.max(0, handler.getRepairs() - 1));
-//            return Optional.of(destStack);
-//        }
-//        return Optional.empty();
-//    }
+    public Optional<ItemStack> recharge(ItemStack jewelry) {
+        // create a new stack based on the jewelry
+        ItemStack destStack = new ItemStack(jewelry.getItem());
+        // copy values from jewelry to destStack
+        copyStack(jewelry, destStack);
+
+        if (ComponentHelper.rechargesValueOrDefault(destStack, 0) > 0) {
+            ComponentHelper.incrementRecharges(destStack, -1);
+            ComponentHelper.updateMana(destStack, ComponentHelper.maxManaValue(destStack).orElse(0D));
+            return Optional.of(destStack);
+        }
+        return Optional.empty();
+    }
+
+    public Optional<ItemStack> repair(ItemStack jewelry) {
+        // create a new stack based on the jewelry
+        ItemStack destStack = new ItemStack(jewelry.getItem());
+        // copy values from jewelry to destStack
+        copyStack(jewelry, destStack);
+
+        if (ComponentHelper.repairsValue(destStack).orElse(0) > 0) {
+            ComponentHelper.incrementRepairs(destStack, -1);
+            ComponentHelper.updateUses(destStack, ComponentHelper.maxUsesValue(destStack).orElse(0));
+            return Optional.of(destStack);
+        }
+        return Optional.empty();
+    }
 
     public static class Namer {
         public String name(ItemStack jewelry, ItemStack stone) {

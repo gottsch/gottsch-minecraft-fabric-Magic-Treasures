@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "magictreasures:item/jewelry",
   "textures": {
     "layer0": "magictreasures:item/jewelry/silbros_ring_of_vitality"
   }

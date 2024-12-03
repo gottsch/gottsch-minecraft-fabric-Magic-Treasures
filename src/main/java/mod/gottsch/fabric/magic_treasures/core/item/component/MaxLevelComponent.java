@@ -22,12 +22,7 @@ import com.mojang.serialization.codecs.RecordCodecBuilder;
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
-import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTier;
-import mod.gottsch.fabric.magic_treasures.core.registry.StoneRegistry;
-import net.minecraft.item.Item;
-import net.minecraft.item.Items;
 
-import java.util.Optional;
 import java.util.function.Consumer;
 
 /**

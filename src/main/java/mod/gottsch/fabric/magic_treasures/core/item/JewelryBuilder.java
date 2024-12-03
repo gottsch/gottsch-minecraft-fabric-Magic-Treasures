@@ -217,10 +217,10 @@ public class JewelryBuilder {
                     .setLoreKey(JewelryBuilder.this.loreKey);
     }
 
-    public JewelryComponents.Builder createComponentsBuilder(JewelryType type, JewelryMaterial material, JewelrySizeTier size, Identifier stone) {
+    public JewelryComponents.Builder createComponentsBuilder(JewelryType type, JewelryMaterial material, JewelrySizeTier size, Identifier gemstone) {
         JewelryComponents.Builder builder = new JewelryComponents.Builder(type, material, size)
                 .with($ -> {
-                    $.gemstone = stone;
+                    $.gemstone = gemstone;
                     $.maxLevelComponent = this.maxLevel <= 0 ? null : new MaxLevelComponent(this.maxLevel);
                     $.usesComponent = this.maxUses <= 0 ? null : new UsesComponent(this.maxUses);
                     $.repairsComponent = this.maxRepairs <=0 ? null : new RepairsComponent(this.maxRepairs);

@@ -20,15 +20,8 @@ package mod.gottsch.fabric.magic_treasures.core.item;
 import mod.gottsch.fabric.magic_treasures.core.item.component.*;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
-import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTier;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryType;
-import mod.gottsch.fabric.magic_treasures.core.registry.JewelryStoneTierRegistry;
-import mod.gottsch.fabric.magic_treasures.core.registry.StoneRegistry;
-import net.minecraft.item.Item;
-import net.minecraft.registry.Registries;
 import net.minecraft.util.Identifier;
-
-import java.util.List;
 
 /**
  * Created by Mark Gottschling on 11/21/2024
@@ -40,19 +33,19 @@ public class CastleJewelryBuilder extends JewelryBuilder {
     }
 
     @Override
-    public JewelryComponents.Builder createComponentsBuilder(JewelryType type, JewelryMaterial material, JewelrySizeTier size, Identifier stone) {
+    public JewelryComponents.Builder createComponentsBuilder(JewelryType type, JewelryMaterial material, JewelrySizeTier size, Identifier gemstone) {
         JewelryComponents.Builder builder = new JewelryComponents.Builder(type, material, size)
                 .with($ -> {
-                    $.gemstone = stone;
+                    $.gemstone = gemstone;
                     $.maxLevelComponent = this.maxLevel <= 0 ? new MaxLevelComponent(material.getMaxLevel() + 1) : new MaxLevelComponent(this.maxLevel);
                     $.usesComponent = this.maxUses <= 0 ? null : new UsesComponent(this.maxUses);
                     $.repairsComponent = this.maxRepairs < 0 ? null : new RepairsComponent(this.maxRepairs);
                     $.infinite = this.infinite;
-                    $.manaComponentBuilder = this.maxMana <= 0 ? new CastleManaComponentBuilder(material, size, stone)
+                    $.manaComponentBuilder = this.maxMana <= 0 ? new CastleManaComponentBuilder(material, size, gemstone)
                             .with($$ -> {
                                 $$.maxMana = material.getMana() * 2.5;
                             })
-                            : new CastleManaComponentBuilder(material, size, stone)
+                            : new CastleManaComponentBuilder(material, size, gemstone)
                             .with($$ -> {
                                 $$.maxMana = this.maxMana;
                             });

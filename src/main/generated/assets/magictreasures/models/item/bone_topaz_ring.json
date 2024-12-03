@@ -1,5 +1,5 @@
 {
-  "parent": "minecraft:item/generated",
+  "parent": "magictreasures:item/jewelry",
   "textures": {
     "layer0": "magictreasures:item/jewelry/bone_topaz_ring"
   }

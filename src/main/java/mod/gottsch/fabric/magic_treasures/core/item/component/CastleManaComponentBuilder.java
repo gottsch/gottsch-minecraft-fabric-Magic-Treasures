@@ -20,13 +20,12 @@ package mod.gottsch.fabric.magic_treasures.core.item.component;
 import mod.gottsch.fabric.magic_treasures.core.item.IJewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTier;
-import mod.gottsch.fabric.magic_treasures.core.registry.StoneRegistry;
+import mod.gottsch.fabric.magic_treasures.core.registry.GemstoneRegistry;
 import net.minecraft.item.Item;
 import net.minecraft.item.Items;
 import net.minecraft.util.Identifier;
 
 import java.util.Optional;
-import java.util.function.Consumer;
 
 /**
  * Created by Mark Gottschling on 11/29/2024
@@ -47,12 +46,12 @@ public class CastleManaComponentBuilder extends ManaComponent.Builder {
 
     public ManaComponent build() {
         // get the stone and stone tier
-        Item stone = StoneRegistry.get(this.stone).orElse(Items.AIR);
+        Item stone = GemstoneRegistry.get(this.stone).orElse(Items.AIR);
         // determine the tier
-        Optional<JewelryStoneTier> stoneTier = StoneRegistry.getStoneTier(stone);
+        Optional<JewelryStoneTier> stoneTier = GemstoneRegistry.getStoneTier(stone);
 
-        int additionalMana = stoneTier.map(tier -> (int)(tier.getMana() * sizeTier.getManaMultiplier())).orElseGet(() -> 0);
-        this.maxMana = Math.round(this.maxMana + additionalMana);
+        double additionalMana = stoneTier.map(tier -> (tier.getMana() * sizeTier.getManaMultiplier())).orElseGet(() -> 0F);
+        double maxMana = Math.round(this.maxMana + additionalMana);
 
         return new ManaComponent(maxMana);
     }

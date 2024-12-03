@@ -90,6 +90,12 @@ public class MagicTreasuresComponents {
             ComponentType.<RechargesComponent>builder().codec(RechargesComponent.CODEC).build()
     );
 
+    public static final ComponentType<String> RARITY = Registry.register(
+            Registries.DATA_COMPONENT_TYPE,
+            Identifier.of(MagicTreasures.MOD_ID, "rarity"),
+            ComponentType.<String>builder().codec(Codec.STRING).build()
+    );
+
     // spell-specific components
     public static final ComponentType<Long> COOLDOWN = Registry.register(
             Registries.DATA_COMPONENT_TYPE,

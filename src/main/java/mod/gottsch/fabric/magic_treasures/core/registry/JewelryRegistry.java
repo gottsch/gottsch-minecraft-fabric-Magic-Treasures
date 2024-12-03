@@ -21,22 +21,12 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 import mod.gottsch.fabric.gottschcore.enums.IRarity;
-import mod.gottsch.fabric.magic_treasures.core.api.MagicTreasuresApi;
-import mod.gottsch.fabric.magic_treasures.core.item.IJewelrySizeTier;
-import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
-import mod.gottsch.fabric.magic_treasures.core.item.Jewelry;
-import mod.gottsch.fabric.magic_treasures.core.item.component.ComponentHelper;
-import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryAttribsComponent;
 import mod.gottsch.fabric.magic_treasures.core.item.component.JewelryComponents;
-import mod.gottsch.fabric.magic_treasures.core.item.component.MagicTreasuresComponents;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryAttribs;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
-import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTier;
-import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTiers;
 import mod.gottsch.fabric.magic_treasures.core.registry.support.JewelryRegistryKey;
 import mod.gottsch.fabric.magic_treasures.core.util.ModUtil;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
 import net.minecraft.util.Identifier;
 import net.minecraft.util.Pair;
 
@@ -51,10 +41,11 @@ import java.util.Map.Entry;
 public class JewelryRegistry {
 	private static final Map<Identifier, JewelryComponents.Builder> COMPONENT_BUILDER_MAP = Maps.newHashMap();
 	private static final Map<Identifier, Item> NAME_MAP = Maps.newHashMap();
+	@Deprecated
 	private static final Map<Identifier, Pair<Item, JewelryAttribs>> NAME_ATTRIBS_MAP = Maps.newHashMap();
 	@Deprecated
 	// no longer needed - use COMPONENT_BUILDER_MAP instead
-	private static final Map<Identifier, Pair<Item, JewelryComponents>> NAME_COMPONENTS_MAP = Maps.newHashMap();
+//	private static final Map<Identifier, Pair<Item, JewelryComponents>> NAME_COMPONENTS_MAP = Maps.newHashMap();
 
 
 	// NOT used
@@ -88,6 +79,7 @@ public class JewelryRegistry {
 	 * @param item
 	 * @param attribs
 	 */
+	@Deprecated
 	public static void register(Item item, JewelryAttribs attribs) {
 		NAME_ATTRIBS_MAP.put(ModUtil.getName(item), new Pair<>(item, attribs));
 		register(item);
@@ -98,26 +90,26 @@ public class JewelryRegistry {
 		NAME_ATTRIBS_MAP.put(name, new Pair<>(item, attribs));
 	}
 
-	/**
-	 *
-	 * @param item
-	 * @param components
-	 */
-	@Deprecated
-	public static void register(Item item, JewelryComponents components) {
-		NAME_COMPONENTS_MAP.put(ModUtil.getName(item), new Pair<>(item, components));
-	}
-
-	public static Optional<Pair<Item, JewelryComponents>> getComponents(Item item) {
-		return getComponents((ModUtil.getName(item)));
-	}
-
-	public static Optional<Pair<Item, JewelryComponents>> getComponents(Identifier id) {
-		if (NAME_COMPONENTS_MAP.containsKey(id)) {
-			return Optional.of(NAME_COMPONENTS_MAP.get(id));
-		}
-		return Optional.empty();
-	}
+//	/**
+//	 *
+//	 * @param item
+//	 * @param components
+//	 */
+//	@Deprecated
+//	public static void register(Item item, JewelryComponents components) {
+//		NAME_COMPONENTS_MAP.put(ModUtil.getName(item), new Pair<>(item, components));
+//	}
+//
+//	public static Optional<Pair<Item, JewelryComponents>> getComponents(Item item) {
+//		return getComponents((ModUtil.getName(item)));
+//	}
+//
+//	public static Optional<Pair<Item, JewelryComponents>> getComponents(Identifier id) {
+//		if (NAME_COMPONENTS_MAP.containsKey(id)) {
+//			return Optional.of(NAME_COMPONENTS_MAP.get(id));
+//		}
+//		return Optional.empty();
+//	}
 
 	public static Optional<Pair<Item, JewelryAttribs>> getAttribs(Item item) {
 		return getAttribs(ModUtil.getName(item));
@@ -219,7 +211,6 @@ public class JewelryRegistry {
 		return RARITY_MAP.put(rarity, item);
 	}
 
-	@Deprecated
 	public static boolean contains(Identifier name) {
 		return NAME_MAP.containsKey(name);
 	}

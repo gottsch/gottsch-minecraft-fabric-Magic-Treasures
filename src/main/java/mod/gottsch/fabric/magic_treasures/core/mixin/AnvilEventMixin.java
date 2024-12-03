@@ -75,10 +75,11 @@ public abstract class AnvilEventMixin extends ForgingScreenHandler {
                     this.sendContentUpdates();
                 });
                 ci.cancel();
-                // add a stone to jewelry
+            /*
+             * add a stone to jewelry
+             */
             } else if (jewelryStack.contains(MagicTreasuresComponents.JEWELRY_ATTRIBS)
                     && rightStack.isIn(MagicTreasuresTags.Items.STONES)) {
-//                JewelryAttribsComponent attribs = ComponentHelper.attribs(jewelryStack).orElseThrow(IllegalStateException::new);
                 if (!ComponentHelper.hasGemstone(jewelryStack)) {
 //                if (!attribs.hasGemstone()) {
                     /*
@@ -94,8 +95,8 @@ public abstract class AnvilEventMixin extends ForgingScreenHandler {
                     ItemStack resultStack = generator.addStone(jewelryStack, rightStack);
                     this.output.setStack(0, resultStack);
                     this.sendContentUpdates();
-                    ci.cancel();
                 }
+                ci.cancel();
             }
             // remove a stone from jewelry
             else if (ComponentHelper.hasGemstone(jewelryStack) && rightStack.isIn(MagicTreasuresTags.Items.STONE_REMOVAL_TOOLS)) {
@@ -104,15 +105,21 @@ public abstract class AnvilEventMixin extends ForgingScreenHandler {
                 if (resultStack.isPresent()) {
                     this.output.setStack(0, resultStack.get());
                     this.sendContentUpdates();
-                    ci.cancel();
                 }
+                ci.cancel();
             }
             // recharge jewelry
-//            else if (ComponentHelper.hasGemstone(jewelryStack) && handler.getRecharges() > 0
-//                    && rightStack.isIn(MagicTreasuresTags.Items.RECHARGERS)) {
-//                Optional<ItemStack> resultStack = generator.recharge(leftStack);
+            else if (ComponentHelper.rechargesValueOrDefault(jewelryStack, 0) > 0
+                    && rightStack.isIn(MagicTreasuresTags.Items.RECHARGERS)) {
+                Optional<ItemStack> resultStack = generator.recharge(jewelryStack);
 //                resultStack.ifPresent(resultOutStack::set);
-//            }
+                if (resultStack.isPresent()) {
+                    this.output.setStack(0, resultStack.get());
+                    this.sendContentUpdates();
+                }
+                ci.cancel();
+            }
+            // repair jewelry
         }
     }
 }

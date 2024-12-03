@@ -29,7 +29,6 @@ public class LangUtil {
 	public static void appendAdvancedHoverText(String modid, List<Text> tooltip, Consumer<List<Text>> consumer) {
 		if (!Screen.hasShiftDown()) {
 			tooltip.add(Text.literal(NEWLINE));
-			// TODO how do make this call to tooltip generic for any mod because it would require the modid
 			tooltip.add(Text.translatable(tooltip(modid, "hold_shift")).formatted(Formatting.GRAY));
 			tooltip.add(Text.literal(LangUtil.NEWLINE));
 		}
@@ -69,7 +68,7 @@ public class LangUtil {
 	}
 	
 	/**
-	 * TODO this is Magic Thing's extended methods
+	 * Magic Treasures extended methods
 	 */
 	public static void appendAdvancedHoverText(List<Text> tooltip, Consumer<List<Text>> consumer) {
 		LangUtil.appendAdvancedHoverText(MagicTreasures.MOD_ID, tooltip, consumer);

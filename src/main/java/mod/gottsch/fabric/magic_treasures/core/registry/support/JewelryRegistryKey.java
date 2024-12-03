@@ -22,7 +22,7 @@ import mod.gottsch.fabric.magic_treasures.core.item.IJewelryType;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterial;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTier;
-import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryStoneTiers;
+import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryGemstoneTiers;
 
 import java.util.Objects;
 
@@ -44,7 +44,7 @@ public class JewelryRegistryKey {
 	public JewelryRegistryKey(IJewelryType type, JewelryMaterial material) {
 		this.type = type;
 		this.material = material;
-		this.stone = JewelryStoneTiers.NONE;
+		this.stone = JewelryGemstoneTiers.NONE;
 		this.size = JewelrySizeTier.REGULAR;
 	}
 	

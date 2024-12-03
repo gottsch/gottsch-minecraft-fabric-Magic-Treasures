@@ -1,0 +1,20 @@
+{
+  "values": [
+    {
+      "id": "#magictreasures:jewelry/category/type/rings",
+      "required": false
+    },
+    {
+      "id": "#magictreasures:jewelry/category/type/necklaces",
+      "required": false
+    },
+    {
+      "id": "#magictreasures:jewelry/category/type/bracelets",
+      "required": false
+    },
+    {
+      "id": "#magictreasures:jewelry/category/type/pockets",
+      "required": false
+    }
+  ]
+}

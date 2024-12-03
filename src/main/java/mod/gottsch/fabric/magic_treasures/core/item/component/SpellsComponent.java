@@ -36,12 +36,6 @@ public record SpellsComponent(List<Identifier> spellNames) {
             Identifier.CODEC.listOf().fieldOf("spellNames").forGetter(SpellsComponent::spellNames)
     ).apply(instance, SpellsComponent::new));
 
-//    public SpellsComponent(List<Identifier> spellNames) {
-//        if (spellNames == null) {
-//            this.spellNames = new ArrayList<>();
-//        }
-//    }
-
     public SpellsComponent(Identifier... spellNames) {
         this(Arrays.asList(spellNames));
     }

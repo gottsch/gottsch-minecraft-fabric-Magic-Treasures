@@ -20,5 +20,6 @@ package mod.gottsch.fabric.magic_treasures.core.item.component;
 /**
  * Created by Mark Gottschling on 11/20/2024
  */
+@Deprecated
 public record CooldownComponent() {
 }
