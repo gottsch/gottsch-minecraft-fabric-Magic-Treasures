@@ -38,6 +38,10 @@ public class ModLangProvider extends FabricLanguageProvider {
         translationBuilder.add(MagicTreasuresBlocks.DEEPSLATE_SAPPHIRE_ORE, "Deepslate Sapphire Ore");
         translationBuilder.add(MagicTreasuresBlocks.DEEPSLATE_SILVER_ORE, "Deepslate Silver Ore");
 
+        // metals
+        translationBuilder.add(MagicTreasuresItems.SILVER_INGOT, "Silver Ingot");
+        translationBuilder.add(MagicTreasuresItems.RAW_SILVER, "Raw Silver");
+
         // gems
         translationBuilder.add(MagicTreasuresItems.TOPAZ, "Topaz");
         translationBuilder.add(MagicTreasuresItems.ONYX, "Onyx");
@@ -85,6 +89,14 @@ public class ModLangProvider extends FabricLanguageProvider {
                 translationBuilder.add(o, WordUtils.capitalizeFully("Scroll of " + ((SpellScroll) o).getSpell().getName().getPath().replace("_", " ")));
             }
         });
+
+        // recharge scroll
+        translationBuilder.add(MagicTreasuresItems.RECHARGE_SCROLL, "Recharge Scroll");
+
+        // recipe scrolls
+        translationBuilder.add(MagicTreasuresItems.RING_RECIPE, "Ring Recipe");
+        translationBuilder.add(MagicTreasuresItems.NECKLACE_RECIPE, "Necklace Recipe");
+        translationBuilder.add(MagicTreasuresItems.BRACELET_RECIPE, "Bracelet Recipe");
 
         /*
          *  Util.tooltips

@@ -15,6 +15,12 @@ public class MagicTreasuresTags {
 
     public static class Items {
 
+        // ingots
+        public static final TagKey<Item> INGOTS_SILVER = createTag("c", "ingots/silver");
+        // raw materials
+        public static final TagKey<Item> RAW_SILVER = createTag("c", "raw_materials/silver");
+        public static final TagKey<Item> BONES = createTag("c", "raw_materials/bones");
+
         // gemstones
         public static final TagKey<Item> STONES = createTag(MagicTreasures.MOD_ID, "jewelry/gemstone/all_gemstones");
         public static final TagKey<Item> RECHARGERS = createTag(MagicTreasures.MOD_ID, "jewelry/gemstone/rechargers");

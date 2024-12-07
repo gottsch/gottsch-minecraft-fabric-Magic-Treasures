@@ -14,7 +14,7 @@ public class MagicTreasuresDataGenerator implements DataGeneratorEntrypoint {
 		// TODO loot table provider is messing things up - ie does not gen, everything is erased
 //		pack.addProvider(ModLootTableProvider::new);
 		pack.addProvider(ModModelProvider::new);
-//		pack.addProvider(ModRecipeProvider::new);
+		pack.addProvider(ModRecipes::new);
 		pack.addProvider(ModLangProvider::new);
 	}
 }

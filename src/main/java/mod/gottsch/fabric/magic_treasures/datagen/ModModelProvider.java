@@ -135,6 +135,15 @@ public class ModModelProvider extends FabricModelProvider {
                                 default -> "item/black_spell_scroll";
                             }), itemModelGenerator.writer);
         });
+
+        singleTexture(MagicTreasuresItems.RECHARGE_SCROLL, Models.GENERATED,
+                modLoc("item/recharge_scroll"), itemModelGenerator.writer);
+
+        // recipes
+        singleTexture(MagicTreasuresItems.RING_RECIPE, Models.GENERATED, modLoc("item/ring_recipe_scroll"), itemModelGenerator.writer);
+        singleTexture(MagicTreasuresItems.NECKLACE_RECIPE, Models.GENERATED, modLoc("item/necklace_recipe_scroll"), itemModelGenerator.writer);
+        singleTexture(MagicTreasuresItems.BRACELET_RECIPE, Models.GENERATED, modLoc("item/bracelet_recipe_scroll"), itemModelGenerator.writer);
+
     }
 
     public void gem(Item item, BiConsumer<Identifier, Supplier<JsonElement>> writer) {

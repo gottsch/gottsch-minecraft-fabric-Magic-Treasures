@@ -26,6 +26,8 @@ public class ModItemGroups {
                         entries.add(MagicTreasuresItems.SAPPHIRE);
                         entries.add(MagicTreasuresItems.WHITE_PEARL);
                         entries.add(MagicTreasuresItems.BLACK_PEARL);
+
+                        entries.add(MagicTreasuresItems.SILVER_INGOT);
                         entries.add(MagicTreasuresItems.RAW_SILVER);
 
                         entries.add(MagicTreasuresBlocks.TOPAZ_ORE);
@@ -49,6 +51,11 @@ public class ModItemGroups {
 
                         // recharge scroll
                         entries.add(MagicTreasuresItems.RECHARGE_SCROLL);
+
+                        // recipe scrolls
+                        entries.add(MagicTreasuresItems.RING_RECIPE);
+                        entries.add(MagicTreasuresItems.NECKLACE_RECIPE);
+                        entries.add(MagicTreasuresItems.BRACELET_RECIPE);
 
                     }).build());
 
