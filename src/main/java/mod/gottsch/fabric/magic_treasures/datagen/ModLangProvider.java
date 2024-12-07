@@ -282,8 +282,17 @@ public class ModLangProvider extends FabricLanguageProvider {
 
         // scrolls
         translationBuilder.add(LangUtil.tooltip("spell_scroll.usage"), "Place on an anvil with Magic Treasures jewelry to combine.");
-
         translationBuilder.add(LangUtil.tooltip("jewelry_recipe_scroll.usage"), "Combine with 4 ingots of respective material on crafting table to craft jewelry item.");
+
+        /*
+         * modmenu integration
+         */
+        translationBuilder.add("text.config.magictreasures.title", "Magic Treasures");
+        translationBuilder.add("text.config.magictreasures.section.lootProperties", "Loot Properties");
+        translationBuilder.add("text.config.magictreasures.option.loot.enableVanillaLootModifiers", "Enable Vanilla Loot Modifiers");
+        translationBuilder.add("text.config.magictreasures.option.loot.enableGeneralEntityLootModifiers", "Enable General Entity Loot Modifiers");
+        translationBuilder.add("text.config.magictreasures.option.loot.enableZombieEntityLootModifiers", "Enable Zombie Loot Modifiers");
+        translationBuilder.add("text.config.magictreasures.option.loot.enableSkeletonEntityLootModifiers", "Enable Skeleton Loot Modifiers");
 
     }
 

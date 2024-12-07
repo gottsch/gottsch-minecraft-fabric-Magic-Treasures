@@ -24,9 +24,20 @@ public class ModLootTableProvider extends FabricBlockLootTableProvider {
     @Override
     public void generate() {
         addDrop(MagicTreasuresBlocks.TOPAZ_ORE, oreDrops(MagicTreasuresBlocks.TOPAZ_ORE, MagicTreasuresItems.TOPAZ));
+        addDrop(MagicTreasuresBlocks.ONYX_ORE, oreDrops(MagicTreasuresBlocks.ONYX_ORE, MagicTreasuresItems.ONYX));
+        addDrop(MagicTreasuresBlocks.JADEITE_ORE, oreDrops(MagicTreasuresBlocks.JADEITE_ORE, MagicTreasuresItems.JADEITE));
+        addDrop(MagicTreasuresBlocks.RUBY_ORE, oreDrops(MagicTreasuresBlocks.RUBY_ORE, MagicTreasuresItems.RUBY));
+        addDrop(MagicTreasuresBlocks.SAPPHIRE_ORE, oreDrops(MagicTreasuresBlocks.SAPPHIRE_ORE, MagicTreasuresItems.SAPPHIRE));
+        addDrop(MagicTreasuresBlocks.SILVER_ORE, oreDrops(MagicTreasuresBlocks.SILVER_ORE, MagicTreasuresItems.RAW_SILVER));
 
 
         addDrop(MagicTreasuresBlocks.DEEPSLATE_TOPAZ_ORE, oreDrops(MagicTreasuresBlocks.DEEPSLATE_TOPAZ_ORE, MagicTreasuresItems.TOPAZ));
+        addDrop(MagicTreasuresBlocks.DEEPSLATE_ONYX_ORE, oreDrops(MagicTreasuresBlocks.DEEPSLATE_ONYX_ORE, MagicTreasuresItems.ONYX));
+        addDrop(MagicTreasuresBlocks.DEEPSLATE_JADEITE_ORE, oreDrops(MagicTreasuresBlocks.DEEPSLATE_JADEITE_ORE, MagicTreasuresItems.JADEITE));
+        addDrop(MagicTreasuresBlocks.DEEPSLATE_RUBY_ORE, oreDrops(MagicTreasuresBlocks.DEEPSLATE_RUBY_ORE, MagicTreasuresItems.RUBY));
+        addDrop(MagicTreasuresBlocks.DEEPSLATE_SAPPHIRE_ORE, oreDrops(MagicTreasuresBlocks.DEEPSLATE_SAPPHIRE_ORE, MagicTreasuresItems.SAPPHIRE));
+        addDrop(MagicTreasuresBlocks.DEEPSLATE_SILVER_ORE, oreDrops(MagicTreasuresBlocks.DEEPSLATE_SILVER_ORE, MagicTreasuresItems.RAW_SILVER));
+
     }
 
 //    public LootTable.Builder multipleOreDrops(Block drop, Item item, float minDrops, float maxDrops) {

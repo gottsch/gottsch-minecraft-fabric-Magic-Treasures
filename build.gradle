@@ -22,6 +22,10 @@ repositories {
 	mavenLocal()
 	maven { url 'https://maven.wispforest.io/releases/' }
 	maven {
+		name = "Ladysnake Mods"
+		url = 'https://maven.ladysnake.org/releases'
+	}
+	maven {
 		name = "CurseMaven"
 		url = "https://www.cursemaven.com"
 	}
@@ -44,10 +48,16 @@ dependencies {
 	include "io.wispforest:owo-sentinel:${project.owo_version}"
 	annotationProcessor modImplementation("io.wispforest:owo-lib:${project.owo_version}")
 
-	modImplementation "gottsch:gottschcore-fabric:1.21.1-2.3.0"
 
-//	modImplementation "curse.maven:modmenu-308702:4159524"
+	// required dependencies
+	modImplementation "gottsch:gottschcore-fabric:1.21.1-2.3.0"
+	modImplementation "curse.maven:trinkets-341284:5534317"
+	modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-base:${project.cca_version}"
+	modImplementation "org.ladysnake.cardinal-components-api:cardinal-components-entity:${project.cca_version}"
 //	modImplementation "maven.modrinth:modmenu:7.2.2"
+
+	// option dependencies
+	modImplementation "curse.maven:modmenu-308702:5810603"
 }
 
 processResources {

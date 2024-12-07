@@ -1,0 +1,25 @@
+{
+  "type": "minecraft:crafting_shapeless",
+  "category": "misc",
+  "ingredients": [
+    {
+      "item": "magictreasures:bracelet_recipe"
+    },
+    {
+      "tag": "c:raw_materials/bones"
+    },
+    {
+      "tag": "c:raw_materials/bones"
+    },
+    {
+      "tag": "c:raw_materials/bones"
+    },
+    {
+      "tag": "c:raw_materials/bones"
+    }
+  ],
+  "result": {
+    "count": 1,
+    "id": "magictreasures:bone_bracelet"
+  }
+}

@@ -26,9 +26,7 @@ import java.nio.file.FileSystem;
 import java.nio.file.FileSystems;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -70,6 +68,17 @@ public class ModUtil {
         return Registries.ITEM.getId(item);
 	}
 
+	public static List<Identifier> getNames(List<Item> items) {
+		List<Identifier> ids = new ArrayList<>();
+		items.forEach(item -> ids.add(getName(item)));
+		return ids;
+	}
+
+	public static List<Identifier> getNames(Item... items) {
+		List<Identifier> ids = new ArrayList<>();
+		Arrays.stream(items).forEach(item -> ids.add(getName(item)));
+		return ids;
+	}
 
 //	public static Identifier getName(Holder<Biome> biome) {
 //		return biome.unwrapKey().get().location();

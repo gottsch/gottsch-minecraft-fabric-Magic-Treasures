@@ -51,21 +51,18 @@ public class ModModelProvider extends FabricModelProvider {
         singleTexture(MagicTreasuresItems.MAGIC_TREASURES_TAB,
                 Models.GENERATED, modLoc("item/" + name(MagicTreasuresItems.MAGIC_TREASURES_TAB)), itemModelGenerator.writer);
 
-        gem(MagicTreasuresItems.TOPAZ, itemModelGenerator.writer);
-        gem(MagicTreasuresItems.ONYX, itemModelGenerator.writer);
-        gem(MagicTreasuresItems.JADEITE, itemModelGenerator.writer);
-        gem(MagicTreasuresItems.RUBY, itemModelGenerator.writer);
-        gem(MagicTreasuresItems.SAPPHIRE, itemModelGenerator.writer);
-        gem(MagicTreasuresItems.WHITE_PEARL, itemModelGenerator.writer);
-        gem(MagicTreasuresItems.BLACK_PEARL, itemModelGenerator.writer);
-//        singleTexture(MagicTreasuresItems.TOPAZ, Models.GENERATED, modLoc("item/gem/" + name(MagicTreasuresItems.TOPAZ)), itemModelGenerator.writer);
-//        singleTexture(MagicTreasuresItems.ONYX, Models.GENERATED, modLoc("item/gem/" + name(MagicTreasuresItems.ONYX)), itemModelGenerator.writer);
-//        singleTexture(MagicTreasuresItems.JADEITE, Models.GENERATED, modLoc("item/gem/" + name(MagicTreasuresItems.JADEITE)), itemModelGenerator.writer);
-//        singleTexture(MagicTreasuresItems.RUBY, Models.GENERATED, modLoc("item/gem/" + name(MagicTreasuresItems.RUBY)), itemModelGenerator.writer);
-//        singleTexture(MagicTreasuresItems.SAPPHIRE, Models.GENERATED, modLoc("item/gem/" + name(MagicTreasuresItems.SAPPHIRE)), itemModelGenerator.writer);
-//        singleTexture(MagicTreasuresItems.WHITE_PEARL, Models.GENERATED, modLoc("item/gem/" + name(MagicTreasuresItems.WHITE_PEARL)), itemModelGenerator.writer);
-//        singleTexture(MagicTreasuresItems.BLACK_PEARL, Models.GENERATED, modLoc("item/gem/" + name(MagicTreasuresItems.BLACK_PEARL)), itemModelGenerator.writer);
+        // metals
+        singleTexture(MagicTreasuresItems.SILVER_INGOT, Models.GENERATED, modLoc("item/" + name(MagicTreasuresItems.SILVER_INGOT)), itemModelGenerator.writer);
         singleTexture(MagicTreasuresItems.RAW_SILVER, Models.GENERATED, modLoc("item/" + name(MagicTreasuresItems.RAW_SILVER)), itemModelGenerator.writer);
+
+        // gemstones
+        gemstone(MagicTreasuresItems.TOPAZ, itemModelGenerator.writer);
+        gemstone(MagicTreasuresItems.ONYX, itemModelGenerator.writer);
+        gemstone(MagicTreasuresItems.JADEITE, itemModelGenerator.writer);
+        gemstone(MagicTreasuresItems.RUBY, itemModelGenerator.writer);
+        gemstone(MagicTreasuresItems.SAPPHIRE, itemModelGenerator.writer);
+        gemstone(MagicTreasuresItems.WHITE_PEARL, itemModelGenerator.writer);
+        gemstone(MagicTreasuresItems.BLACK_PEARL, itemModelGenerator.writer);
 
         // jewelry
         MagicTreasuresItems.STANDARD_JEWELRY.forEach(item -> {
@@ -146,7 +143,7 @@ public class ModModelProvider extends FabricModelProvider {
 
     }
 
-    public void gem(Item item, BiConsumer<Identifier, Supplier<JsonElement>> writer) {
+    public void gemstone(Item item, BiConsumer<Identifier, Supplier<JsonElement>> writer) {
         try {
             singleTexture(item, Models.GENERATED, modLoc("item/gem/" + name(item)), writer);
         } catch(Exception e) {

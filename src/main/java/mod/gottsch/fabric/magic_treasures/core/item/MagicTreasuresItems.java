@@ -88,30 +88,29 @@ public class MagicTreasuresItems {
      */
     // common/uncommon
     public static Item SILBROS_RING_OF_VITALITY = registerItem("silbros_ring_of_vitality",
-            new NamedJewelry(new Item.Settings()).setAcceptsAffixing(p -> { return false;})
+            new NamedJewelry(new Item.Settings())
+                    .setAcceptsAffixing(p -> { return false;})
                     .setLoreKey("jewelry.silbros_ring_of_vitality.lore")
     );
 
     public static Item STRONGMANS_BRACERS = registerItem("strongmans_bracers",
-            (Item) new NamedJewelry(new Item.Settings()
-            ).setAcceptsAffixing(p -> { return false;})
+            (Item) new NamedJewelry(new Item.Settings())
+                    .setAcceptsAffixing(p -> { return false;})
     );
 
     // common
     public static Item PEASANTS_FORTUNE = registerItem("peasants_fortune",
-            new NamedJewelry(new Item.Settings()
-            )
+            new NamedJewelry(new Item.Settings())
     );
 
     // uncommon
     public static Item AMULET_OF_DEFENCE = registerItem("amulet_of_defence",
-            new NamedJewelry(new Item.Settings()
-            )
+            new NamedJewelry(new Item.Settings())
     );
 
     public static Item MALDRITCHS_FIRST_AMULET = registerItem("maldritchs_first_amulet",
-            new NamedJewelry(new Item.Settings()
-            ).setLoreKey("jewelry.maldritchs_first_amulet.lore")
+            new NamedJewelry(new Item.Settings())
+                    .setLoreKey("jewelry.maldritchs_first_amulet.lore")
     );
 
     public static Item AQUA_RING = registerItem("aqua_ring",
@@ -150,7 +149,8 @@ public class MagicTreasuresItems {
 
     // rare / epic
     public static Item RING_OF_FORTITUDE = registerItem("ring_of_fortitude",
-            (Item) new NamedJewelry(new Item.Settings()).setBaseName("castle_ring")
+            (Item) new NamedJewelry(new Item.Settings())
+                    .setBaseName("castle_ring")
                     .setAcceptsAffixing(castleRingAffixer)
             //            if (!EnchantmentHelper.hasVanishingCurse(stack)) {
 //                stack.enchant(Enchantments.VANISHING_CURSE, 1);
@@ -159,7 +159,8 @@ public class MagicTreasuresItems {
 
     // epic / legendary
     public static Item RING_LIFE_DEATH = registerItem("ring_of_life_death",
-            (Item) new NamedJewelry(new Item.Settings()).setBaseName("twisted_ring")
+            (Item) new NamedJewelry(new Item.Settings())
+                    .setBaseName("twisted_ring")
                     .setAcceptsAffixing(p -> {return false;})
 //            if (!EnchantmentHelper.hasVanishingCurse(stack)) {
 //                stack.enchant(Enchantments.VANISHING_CURSE, 1);
@@ -175,186 +176,204 @@ public class MagicTreasuresItems {
 //            }
     );
 
+    // recharge scroll
+    public static Item RECHARGE_SCROLL = registerItem("recharge_scroll", new Item(new Item.Settings()));
+
+    // TODO move all this Jewelry Registration to CommonSetup
+    // TODO add MagicTreasuresApi.registerJewelryComponentsBuilder()
     // register custom jewelry component builders
     static {
-        JewelryRegistry.register(SILBROS_RING_OF_VITALITY,
-                new JewelryComponents.Builder(JewelryType.RING, JewelryMaterials.WOOD)
-                        .with($ -> {
-                            $.gemstone = ModUtil.getName(Items.BEDROCK);
-                            $.maxLevelComponent = new MaxLevelComponent(2);
-                            $.repairsComponent = new RepairsComponent(1);
-                            $.manaComponent = new ManaComponent(80);
-                            $.rechargesComponent = new RechargesComponent(0);
-                            $.spellsComponent = new SpellsComponent(MagicTreasuresSpells.DEFAULT_HEALING);
-                        }));
-        // strongmans bracers
-        JewelryRegistry.register(STRONGMANS_BRACERS,
-                new JewelryComponents.Builder(JewelryType.BRACELET, JewelryMaterials.WOOD)
-                        .with($ -> {
-                            $.gemstone = ModUtil.getName(Items.BEDROCK);
-                            $.usesComponent = new UsesComponent(100);
-                            $.maxLevelComponent = new MaxLevelComponent(2);
-                            $.manaComponent = new ManaComponent(50);
-                            $.rechargesComponent = new RechargesComponent(1);
-                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.QUICK_STRENGTH).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
-                        })
-        );
-        // peasants fortune
-        JewelryRegistry.register(MagicTreasuresItems.PEASANTS_FORTUNE,
-                new JewelryComponents.Builder(JewelryType.RING, JewelryMaterials.IRON, JewelrySizeTier.GREAT)
-                        .with($ -> {
-                            $.gemstone = ModUtil.getName(Items.BEDROCK);
-                            $.usesComponent = new UsesComponent(125);
-                            $.maxLevelComponent = new MaxLevelComponent(4);
-                            $.manaComponent = new ManaComponent(250);
-                            $.rechargesComponent = new RechargesComponent(1);
-                        })
-
-        );
-        // amulet of defence
-        JewelryRegistry.register(MagicTreasuresItems.AMULET_OF_DEFENCE,
-                new JewelryComponents.Builder(JewelryType.NECKLACE, JewelryMaterials.COPPER)
-                        .with($ -> {
-                            $.gemstone = ModUtil.getName(MagicTreasuresItems.TOPAZ);
-                            $.manaComponent = new ManaComponent(100);
-                            $.infinite = true;
-                            $.repairsComponent = new RepairsComponent(0);
-                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.MAGIC_RESISTANCE).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
-                        })
-        );
-        // maldritchs first amulet
-        JewelryRegistry.register(MagicTreasuresItems.MALDRITCHS_FIRST_AMULET,
-                new JewelryComponents.Builder(JewelryType.NECKLACE, JewelryMaterials.BONE)
-                        .with($ -> {
-                            $.gemstone = MagicTreasuresItems.ONYX.getRegistryEntry().registryKey().getValue();
-                            $.usesComponent = new UsesComponent(300);
-                            $.repairsComponent = new RepairsComponent(1);
-                            $.manaComponent = new ManaComponent(150);
-                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.HARM).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
-                            $.spellFactorsComponent = new SpellFactorsComponent.Builder(JewelryMaterials.BONE)
-                                    .with($$ -> {
-                                        $$.spellCostFactor = .95; // 0.1 points below regular bone
-                                    }).build();
-                        })
-        );
-        // aqua ring
-        JewelryRegistry.register(MagicTreasuresItems.AQUA_RING,
-                new JewelryComponents.Builder(JewelryType.RING, JewelryMaterials.SILVER)
-                        .with($ -> {
-                            $.gemstone = MagicTreasuresItems.TOPAZ.getRegistryEntry().registryKey().getValue();
-                            $.infinite = true;
-                            $.manaComponent = new ManaComponent(150);
-                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.WATER_BREATHING).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
-                        })
-        );
-        // journeymans bands
-        JewelryRegistry.register(MagicTreasuresItems.JOURNEYMANS_BANDS,
-                new JewelryComponents.Builder(JewelryType.BRACELET, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
-                        .with($ -> {
-                            $.gemstone = MagicTreasuresItems.JADEITE.getRegistryEntry().registryKey().getValue();
-                            $.infinite = true;
-                            $.manaComponent = new ManaComponent(100);
-                            $.rechargesComponent = new RechargesComponent(0);
-                            $.spellsComponent = new SpellsComponent(
-                                    SpellRegistry.get(MagicTreasuresSpells.SPEED).orElse(MagicTreasuresSpells.DEFAULT_HEALING),
-                                    SpellRegistry.get(MagicTreasuresSpells.NIGHT_VISION).orElse(MagicTreasuresSpells.DEFAULT_HEALING)
-                            );
-                        })
-
-        );
-        // medics token
-        JewelryRegistry.register(MagicTreasuresItems.MEDICS_TOKEN,
-                new JewelryComponents.Builder(JewelryType.NECKLACE, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
-                        .with($ -> {
-                            $.gemstone = MagicTreasuresItems.JADEITE.getRegistryEntry().registryKey().getValue();
-                            $.infinite = true;
-                            $.manaComponent = new ManaComponent(300);
-                            $.rechargesComponent = new RechargesComponent(1);
-                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.GREATER_HEALING).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
-                        })
-        );
-        // adephagias bounty
-        JewelryRegistry.register(MagicTreasuresItems.ADEPHAGIAS_BOUNTY,
-                new JewelryComponents.Builder(JewelryType.BRACELET, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
-                        .with($ -> {
-                            $.gemstone = MagicTreasuresItems.JADEITE.getRegistryEntry().registryKey().getValue();
-                            $.maxLevelComponent = new MaxLevelComponent(6);
-                            $.infinite = true;
-                            $.manaComponent = new ManaComponent(300);
-                            $.rechargesComponent = new RechargesComponent(1);
-                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.SATIETY).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
-                        })
-
-        );
-        // salandaars ward
-        JewelryRegistry.register(MagicTreasuresItems.SALANDAARS_WARD,
-                new JewelryComponents.Builder(JewelryType.NECKLACE, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
-                        .with($ -> {
-                            $.gemstone = MagicTreasuresItems.RUBY.getRegistryEntry().registryKey().getValue();
-                            $.maxLevelComponent = new MaxLevelComponent(7);
-                            $.manaComponent = new ManaComponent(350);
-                            $.rechargesComponent = new RechargesComponent(3);
-                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.MANA_TOWER_SHIELD).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
-                        })
-
-        );
-        // angles ring
-        JewelryRegistry.register(MagicTreasuresItems.ANGELS_RING,
-                new JewelryComponents.Builder(JewelryType.RING, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
-                        .with($ -> {
-                            $.gemstone = MagicTreasuresItems.WHITE_PEARL.getRegistryEntry().registryKey().getValue();
-                            $.maxLevelComponent = new MaxLevelComponent(8);
-                            $.manaComponent = new ManaComponent(400);
-                            $.rechargesComponent = new RechargesComponent(3);
-                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.REGENERATION).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
-                        })
-
-        );
-        // ring of fortitude
-        JewelryRegistry.register(MagicTreasuresItems.RING_OF_FORTITUDE,
-                new JewelryComponents.Builder(JewelryType.RING, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
-                        .with($ -> {
-                            $.gemstone = MagicTreasuresItems.SAPPHIRE.getRegistryEntry().registryKey().getValue();
-                            $.maxLevelComponent = new MaxLevelComponent(7);
-                            $.manaComponent = new ManaComponent(350);
-                            $.rechargesComponent = new RechargesComponent(3);
-                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.SHADOW_ARMOR).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
-                        })
-
-        );
-        // ring of life and death
-        JewelryRegistry.register(MagicTreasuresItems.RING_LIFE_DEATH,
-                new JewelryComponents.Builder(JewelryType.RING, JewelryMaterials.BLOOD, JewelrySizeTier.LORDS)
-                        .with($ -> {
-                            $.gemstone = MagicTreasuresItems.RUBY.getRegistryEntry().registryKey().getValue();
-                            $.maxLevelComponent = new MaxLevelComponent(9);
-                            $.repairsComponent = new RepairsComponent(0);
-                            $.manaComponent = new ManaComponent(1000);
-                            $.rechargesComponent = new RechargesComponent(0);
-                            $.spellsComponent = new SpellsComponent(
-                                    SpellRegistry.get(MagicTreasuresSpells.CHEAT_DEATH).orElse(MagicTreasuresSpells.DEFAULT_HEALING),
-                                    SpellRegistry.get(MagicTreasuresSpells.GREATER_DRAIN).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
-                        })
-
-        );
-        // eye of the phoenix
-        JewelryRegistry.register(MagicTreasuresItems.EYE_OF_THE_PHOENIX,
-                new JewelryComponents.Builder(JewelryType.NECKLACE, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
-                        .with($ -> {
-                            $.gemstone = MagicTreasuresItems.BLACK_PEARL.getRegistryEntry().registryKey().getValue();
-                            $.maxLevelComponent = new MaxLevelComponent(7);
-//                        $.repairsComponent = new RepairsComponent(3);
-                            $.infinite = true;
-                            $.manaComponent = new ManaComponent(300);
-                            $.rechargesComponent = new RechargesComponent(3);
-                            $.spellsComponent = new SpellsComponent(
-                                    SpellRegistry.get(MagicTreasuresSpells.BLESSING_OF_THE_PHOENIX).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
-                        })
-
-        );
+//        JewelryRegistry.register(SILBROS_RING_OF_VITALITY,
+//                new JewelryComponents.Builder(JewelryType.RING, JewelryMaterials.WOOD)
+//                        .with($ -> {
+//                            $.gemstone = ModUtil.getName(Items.BEDROCK);
+//                            $.maxLevelComponent = new MaxLevelComponent(2);
+//                            $.repairsComponent = new RepairsComponent(1);
+//                            $.manaComponent = new ManaComponent(80);
+//                            $.rechargesComponent = new RechargesComponent(0);
+//                            $.spellsComponent = new SpellsComponent(MagicTreasuresSpells.DEFAULT_HEALING);
+//                            $.rarity = MagicTreasuresRarity.COMMON;
+//                        }));
+//        // strongmans bracers
+//        JewelryRegistry.register(STRONGMANS_BRACERS,
+//                new JewelryComponents.Builder(JewelryType.BRACELET, JewelryMaterials.WOOD)
+//                        .with($ -> {
+//                            $.gemstone = ModUtil.getName(Items.BEDROCK);
+//                            $.usesComponent = new UsesComponent(100);
+//                            $.maxLevelComponent = new MaxLevelComponent(2);
+//                            $.manaComponent = new ManaComponent(50);
+//                            $.rechargesComponent = new RechargesComponent(1);
+//                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.QUICK_STRENGTH).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
+//                        })
+//        );
+//        // peasants fortune
+//        JewelryRegistry.register(MagicTreasuresItems.PEASANTS_FORTUNE,
+//                new JewelryComponents.Builder(JewelryType.RING, JewelryMaterials.IRON, JewelrySizeTier.GREAT)
+//                        .with($ -> {
+//                            $.gemstone = ModUtil.getName(Items.BEDROCK);
+//                            $.usesComponent = new UsesComponent(125);
+//                            $.maxLevelComponent = new MaxLevelComponent(4);
+//                            $.manaComponent = new ManaComponent(250);
+//                            $.rechargesComponent = new RechargesComponent(1);
+//                            $.rarity = MagicTreasuresRarity.COMMON;
+//                        })
+//
+//        );
+//        // amulet of defence
+//        JewelryRegistry.register(MagicTreasuresItems.AMULET_OF_DEFENCE,
+//                new JewelryComponents.Builder(JewelryType.NECKLACE, JewelryMaterials.COPPER)
+//                        .with($ -> {
+//                            $.gemstone = ModUtil.getName(MagicTreasuresItems.TOPAZ);
+//                            $.manaComponent = new ManaComponent(100);
+//                            $.infinite = true;
+//                            $.repairsComponent = new RepairsComponent(0);
+//                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.MAGIC_RESISTANCE).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
+//                            $.rarity = MagicTreasuresRarity.UNCOMMON;
+//                        })
+//        );
+//        // maldritchs first amulet
+//        JewelryRegistry.register(MagicTreasuresItems.MALDRITCHS_FIRST_AMULET,
+//                new JewelryComponents.Builder(JewelryType.NECKLACE, JewelryMaterials.BONE)
+//                        .with($ -> {
+//                            $.gemstone = MagicTreasuresItems.ONYX.getRegistryEntry().registryKey().getValue();
+//                            $.usesComponent = new UsesComponent(300);
+//                            $.repairsComponent = new RepairsComponent(1);
+//                            $.manaComponent = new ManaComponent(150);
+//                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.HARM).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
+//                            $.spellFactorsComponent = new SpellFactorsComponent.Builder(JewelryMaterials.BONE)
+//                                    .with($$ -> {
+//                                        $$.spellCostFactor = .95; // 0.1 points below regular bone
+//                                    }).build();
+//                            $.rarity = MagicTreasuresRarity.UNCOMMON;
+//                        })
+//        );
+//        // aqua ring
+//        JewelryRegistry.register(MagicTreasuresItems.AQUA_RING,
+//                new JewelryComponents.Builder(JewelryType.RING, JewelryMaterials.SILVER)
+//                        .with($ -> {
+//                            $.gemstone = MagicTreasuresItems.TOPAZ.getRegistryEntry().registryKey().getValue();
+//                            $.infinite = true;
+//                            $.manaComponent = new ManaComponent(150);
+//                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.WATER_BREATHING).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
+//                            $.rarity = MagicTreasuresRarity.UNCOMMON;
+//                        })
+//        );
+//        // journeymans bands
+//        JewelryRegistry.register(MagicTreasuresItems.JOURNEYMANS_BANDS,
+//                new JewelryComponents.Builder(JewelryType.BRACELET, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
+//                        .with($ -> {
+//                            $.gemstone = MagicTreasuresItems.JADEITE.getRegistryEntry().registryKey().getValue();
+//                            $.infinite = true;
+//                            $.manaComponent = new ManaComponent(100);
+//                            $.rechargesComponent = new RechargesComponent(0);
+//                            $.spellsComponent = new SpellsComponent(
+//                                    SpellRegistry.get(MagicTreasuresSpells.SPEED).orElse(MagicTreasuresSpells.DEFAULT_HEALING),
+//                                    SpellRegistry.get(MagicTreasuresSpells.NIGHT_VISION).orElse(MagicTreasuresSpells.DEFAULT_HEALING)
+//                            );
+//                            $.rarity = MagicTreasuresRarity.SCARCE;
+//                        })
+//
+//        );
+//        // medics token
+//        JewelryRegistry.register(MagicTreasuresItems.MEDICS_TOKEN,
+//                new JewelryComponents.Builder(JewelryType.NECKLACE, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
+//                        .with($ -> {
+//                            $.gemstone = MagicTreasuresItems.JADEITE.getRegistryEntry().registryKey().getValue();
+//                            $.infinite = true;
+//                            $.manaComponent = new ManaComponent(300);
+//                            $.rechargesComponent = new RechargesComponent(1);
+//                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.GREATER_HEALING).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
+//                            $.rarity = MagicTreasuresRarity.SCARCE;
+//                        })
+//        );
+//        // adephagias bounty
+//        JewelryRegistry.register(MagicTreasuresItems.ADEPHAGIAS_BOUNTY,
+//                new JewelryComponents.Builder(JewelryType.BRACELET, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
+//                        .with($ -> {
+//                            $.gemstone = MagicTreasuresItems.JADEITE.getRegistryEntry().registryKey().getValue();
+//                            $.maxLevelComponent = new MaxLevelComponent(6);
+//                            $.infinite = true;
+//                            $.manaComponent = new ManaComponent(300);
+//                            $.rechargesComponent = new RechargesComponent(1);
+//                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.SATIETY).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
+//                            $.rarity = MagicTreasuresRarity.SCARCE;
+//                        })
+//
+//        );
+//        // salandaars ward
+//        JewelryRegistry.register(MagicTreasuresItems.SALANDAARS_WARD,
+//                new JewelryComponents.Builder(JewelryType.NECKLACE, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
+//                        .with($ -> {
+//                            $.gemstone = MagicTreasuresItems.RUBY.getRegistryEntry().registryKey().getValue();
+//                            $.maxLevelComponent = new MaxLevelComponent(7);
+//                            $.manaComponent = new ManaComponent(350);
+//                            $.rechargesComponent = new RechargesComponent(3);
+//                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.MANA_TOWER_SHIELD).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
+//                            $.rarity = MagicTreasuresRarity.RARE;
+//                        })
+//
+//        );
+//        // angles ring
+//        JewelryRegistry.register(MagicTreasuresItems.ANGELS_RING,
+//                new JewelryComponents.Builder(JewelryType.RING, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
+//                        .with($ -> {
+//                            $.gemstone = MagicTreasuresItems.WHITE_PEARL.getRegistryEntry().registryKey().getValue();
+//                            $.maxLevelComponent = new MaxLevelComponent(8);
+//                            $.manaComponent = new ManaComponent(400);
+//                            $.rechargesComponent = new RechargesComponent(3);
+//                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.REGENERATION).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
+//                            $.rarity = MagicTreasuresRarity.RARE;
+//                        })
+//
+//        );
+//        // ring of fortitude
+//        JewelryRegistry.register(MagicTreasuresItems.RING_OF_FORTITUDE,
+//                new JewelryComponents.Builder(JewelryType.RING, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
+//                        .with($ -> {
+//                            $.gemstone = MagicTreasuresItems.SAPPHIRE.getRegistryEntry().registryKey().getValue();
+//                            $.maxLevelComponent = new MaxLevelComponent(7);
+//                            $.manaComponent = new ManaComponent(350);
+//                            $.rechargesComponent = new RechargesComponent(3);
+//                            $.spellsComponent = new SpellsComponent(SpellRegistry.get(MagicTreasuresSpells.SHADOW_ARMOR).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
+//                            $.rarity = MagicTreasuresRarity.RARE;
+//                        })
+//
+//        );
+//        // ring of life and death
+//        JewelryRegistry.register(MagicTreasuresItems.RING_LIFE_DEATH,
+//                new JewelryComponents.Builder(JewelryType.RING, JewelryMaterials.BLOOD, JewelrySizeTier.LORDS)
+//                        .with($ -> {
+//                            $.gemstone = MagicTreasuresItems.RUBY.getRegistryEntry().registryKey().getValue();
+//                            $.maxLevelComponent = new MaxLevelComponent(9);
+//                            $.repairsComponent = new RepairsComponent(0);
+//                            $.manaComponent = new ManaComponent(1000);
+//                            $.rechargesComponent = new RechargesComponent(0);
+//                            $.spellsComponent = new SpellsComponent(
+//                                    SpellRegistry.get(MagicTreasuresSpells.CHEAT_DEATH).orElse(MagicTreasuresSpells.DEFAULT_HEALING),
+//                                    SpellRegistry.get(MagicTreasuresSpells.GREATER_DRAIN).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
+//                            $.rarity = MagicTreasuresRarity.MYTHICAL;
+//                        })
+//        );
+//        // eye of the phoenix
+//        JewelryRegistry.register(MagicTreasuresItems.EYE_OF_THE_PHOENIX,
+//                new JewelryComponents.Builder(JewelryType.NECKLACE, JewelryMaterials.GOLD, JewelrySizeTier.GREAT)
+//                        .with($ -> {
+//                            $.gemstone = MagicTreasuresItems.BLACK_PEARL.getRegistryEntry().registryKey().getValue();
+//                            $.maxLevelComponent = new MaxLevelComponent(7);
+////                        $.repairsComponent = new RepairsComponent(3);
+//                            $.infinite = true;
+//                            $.manaComponent = new ManaComponent(300);
+//                            $.rechargesComponent = new RechargesComponent(3);
+//                            $.spellsComponent = new SpellsComponent(
+//                                    SpellRegistry.get(MagicTreasuresSpells.BLESSING_OF_THE_PHOENIX).orElse(MagicTreasuresSpells.DEFAULT_HEALING));
+//                            $.rarity = MagicTreasuresRarity.LEGENDARY;
+//                        })
+//
+//        );
     }
 
     static {
+        // NOTE list for datagen purposes
         CUSTOM_JEWELRY.add(SILBROS_RING_OF_VITALITY);
         CUSTOM_JEWELRY.add(STRONGMANS_BRACERS);
         CUSTOM_JEWELRY.add(PEASANTS_FORTUNE);
@@ -373,10 +392,10 @@ public class MagicTreasuresItems {
         ALL_JEWELRY.addAll(CUSTOM_JEWELRY);
 
         // standard jewelry
-        List<Triple<String, Jewelry, JewelryAttribs>> standardJewelryList = new ArrayList<>();
+        List<Triple<String, Jewelry, JewelryComponents.Builder>> standardJewelryList = new ArrayList<>();
         JewelryBuilder builder = new JewelryBuilder(MagicTreasures.MOD_ID);
-        standardJewelryList = builder.useBaseDefaults().build();
-        standardJewelryList.addAll(builder.useStoneDefaults().build());
+        standardJewelryList = builder.useBaseDefaults().buildComponentsBuilders();
+        standardJewelryList.addAll(builder.useStoneDefaults().buildComponentsBuilders());
 
         // wood jewelry (only regular size)
         JewelryBuilder woodBuilder = new JewelryBuilder(MagicTreasures.MOD_ID);
@@ -384,9 +403,10 @@ public class MagicTreasuresItems {
                 .materials(JewelryMaterials.WOOD)
                 .sizes(JewelrySizeTier.REGULAR)
                 .types(JewelryType.RING, JewelryType.BRACELET, JewelryType.NECKLACE)
-                .build()
+                .buildComponentsBuilders()
         );
-        standardJewelryList.addAll(woodBuilder.useStoneDefaults().build());
+        standardJewelryList.addAll(woodBuilder.useStoneDefaults().buildComponentsBuilders());
+        // TODO have Custom Wood that are in larger sizes like Silbro's Strong Ring, etc.
 
         // lord's rings and necklaces
         JewelryBuilder lordsNecklacesBuilder = new JewelryBuilder(MagicTreasures.MOD_ID);
@@ -399,9 +419,9 @@ public class MagicTreasuresItems {
                         JewelryMaterials.BONE)
                 .sizes(JewelrySizeTier.LORDS)
                 .types(JewelryType.RING, JewelryType.NECKLACE)
-                .build()
+                .buildComponentsBuilders()
         );
-        standardJewelryList.addAll(lordsNecklacesBuilder.useStoneDefaults().build());
+        standardJewelryList.addAll(lordsNecklacesBuilder.useStoneDefaults().buildComponentsBuilders());
 
         // TODO create a custom castle ring builder like the hawks builder
         // castle rings
@@ -488,9 +508,9 @@ public class MagicTreasuresItems {
         );
 
         // register all the standard jewelry (uses attribs)
-        standardJewelryList.forEach(pair -> {
-            Item item = registerItem(pair.getLeft(), pair.getMiddle());
-            JewelryRegistry.register(item, pair.getRight());
+        standardJewelryList.forEach(triple -> {
+            Item item = registerItem(triple.getLeft(), triple.getMiddle());
+            JewelryRegistry.register(item, triple.getRight());
             STANDARD_JEWELRY.add(item);
             MagicTreasures.LOGGER.debug("adding item -> {} to standard registry", item.getRegistryEntry().registryKey().getValue());
             ALL_JEWELRY.add(item);

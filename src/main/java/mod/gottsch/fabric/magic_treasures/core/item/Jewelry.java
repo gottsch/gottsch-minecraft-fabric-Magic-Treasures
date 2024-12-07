@@ -17,6 +17,7 @@
  */
 package mod.gottsch.fabric.magic_treasures.core.item;
 
+import dev.emi.trinkets.api.TrinketItem;
 import mod.gottsch.fabric.magic_treasures.core.item.component.*;
 import mod.gottsch.fabric.magic_treasures.core.spell.ISpell;
 import mod.gottsch.fabric.magic_treasures.core.spell.SpellRegistry;
@@ -39,7 +40,7 @@ import java.util.function.Predicate;
 /**
  * Created by Mark Gottschling on 5/29/2023
  */
-public class Jewelry extends Item implements IJewelry{
+public class Jewelry extends TrinketItem implements IJewelry {
     // TODO if Jewelry is truely to be data-driven ie any item from any mod
     // can be registered as a Jewelry item, then these properties need to be components
     // as well and there isn't any custom methods to Jewelry.

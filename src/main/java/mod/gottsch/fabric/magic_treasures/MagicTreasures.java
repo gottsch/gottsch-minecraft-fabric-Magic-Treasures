@@ -41,13 +41,13 @@ public class MagicTreasures implements ModInitializer {
 	public static final MyConfig CONFIG = MyConfig.createAndLoad();
 
 	public MagicTreasures() {
+		// force load of static blocks
+		MagicTreasuresSpells.init();
 	}
 
 	@Override
 	public void onInitialize() {
 		CommonSetup.init();
-		// force load of static blocks
-		MagicTreasuresSpells.init();
 		Registration.register();
 		// NOTE comes after Item registration
 		CommonSetup.registerJewelryCustomComponentsBuilders();
