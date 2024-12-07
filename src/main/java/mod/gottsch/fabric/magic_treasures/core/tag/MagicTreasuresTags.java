@@ -10,7 +10,7 @@ import net.minecraft.util.Identifier;
  * Created by Mark Gottschling on Nov 14, 2024
  */
 public class MagicTreasuresTags {
-    private static final String CURIOS_MODID = "curios";
+    private static final String TRINKETS_MOD_ID = "trinkets";
     private static final String FORGE_MODID = "forge";
 
     public static class Items {
@@ -91,6 +91,12 @@ public class MagicTreasuresTags {
 
         // spell scrolls
         public static final TagKey<Item> SPELL_SCROLLS = createTag(MagicTreasures.MOD_ID, "scrolls/spells");
+
+        // trinkets integration
+        public static final TagKey<Item> TRINKETS_NECKLACE = createTag(TRINKETS_MOD_ID, "chest/necklace");
+        public static final TagKey<Item> TRINKETS_RING = createTag(TRINKETS_MOD_ID, "hand/ring");
+        public static final TagKey<Item> TRINKETS_BRACELET = createTag(TRINKETS_MOD_ID, "hand/bracelet");
+        public static final TagKey<Item> TRINKETS_BELT = createTag(TRINKETS_MOD_ID, "legs/belt");
 
         /**
          *
