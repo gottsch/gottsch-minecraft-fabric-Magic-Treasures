@@ -30,10 +30,7 @@ import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryMaterials;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelrySizeTier;
 import mod.gottsch.fabric.magic_treasures.core.jewelry.JewelryType;
 import mod.gottsch.fabric.magic_treasures.core.rarity.MagicTreasuresRarity;
-import mod.gottsch.fabric.magic_treasures.core.registry.JewelryRegistry;
-import mod.gottsch.fabric.magic_treasures.core.registry.StoneRegistry;
 import mod.gottsch.fabric.magic_treasures.core.tag.MagicTreasuresTags;
-import mod.gottsch.fabric.magic_treasures.core.util.ModUtil;
 import net.fabricmc.fabric.api.datagen.v1.FabricDataOutput;
 import net.fabricmc.fabric.api.datagen.v1.provider.FabricTagProvider;
 import net.minecraft.item.Item;
@@ -45,7 +42,6 @@ import net.minecraft.registry.tag.TagKey;
 import net.minecraft.util.Identifier;
 
 import java.util.Map;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 /**
@@ -124,8 +120,12 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
         MATERIAL_RARITY_MAP.put(JewelryMaterials.SILVER, MagicTreasuresRarity.SCARCE);
         MATERIAL_RARITY_MAP.put(JewelryMaterials.GOLD, MagicTreasuresRarity.RARE);
         MATERIAL_RARITY_MAP.put(JewelryMaterials.BONE, MagicTreasuresRarity.SCARCE);
+        MATERIAL_RARITY_MAP.put(JewelryMaterials.BLOOD, MagicTreasuresRarity.EPIC);
+        MATERIAL_RARITY_MAP.put(JewelryMaterials.SHADOW, MagicTreasuresRarity.LEGENDARY);
+        MATERIAL_RARITY_MAP.put(JewelryMaterials.ATIUM, MagicTreasuresRarity.MYTHICAL);
 
         try {
+            // TODO run through the GemstoneRegistry as it should now be populated on Item registration.
             getOrCreateTagBuilder(MagicTreasuresTags.Items.STONES)
                     .add(MagicTreasuresItems.TOPAZ)
                     .add(MagicTreasuresItems.ONYX)
@@ -169,196 +169,41 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
             getOrCreateTagBuilder(MagicTreasuresTags.Items.STONE_REMOVAL_TOOLS)
                     .add(Items.SHEARS, Items.STONE_AXE, Items.IRON_AXE, Items.DIAMOND_AXE, Items.NETHERITE_AXE);
 
-            // TODO all this is moot as I can register the attribs on Item creation.
-            // standard jewelry
+
             /*
-             *  categorize jewelry into the different tags all items.
-             *  if item has Jewelry capability, then categorize it into the different tags
+             *  categorize jewelry into the different tags.
              */
-            /*
-            MagicTreasuresItems.STANDARD_JEWELRY.forEach(registryItem -> {
-                // TODO parse the name to get the attribs
-                IJewelryType type = null;
-                IJewelrySizeTier sizeTier = null;
-                JewelryMaterial material = null;
-                Item stone = Items.AIR;
-
-                // TODO instead of explicility looking for certain names, check if it has a baseName
-                // then you know the last 2 tokens are both part of the name (well, tokenize the basename to determine the length)
-                if (ModUtil.getName(registryItem).getPath().contains("castle")) {
-                    String[] tokens = registryItem.getRegistryEntry().registryKey().getValue().getPath().split("_");
-                    // special name and shouldn't be handled here
-
-                    type = JewelryType.RING;
-                    sizeTier = JewelrySizeTier.REGULAR;
-                    if (tokens.length == 3) {
-                        material = JewelryMaterialRegistry.get(ModUtil.asLocation(tokens[0])).orElse(null);
-                        if (material == null) return;
-                    }
-                    else if (tokens.length == 4) {
-                        material = JewelryMaterialRegistry.get(ModUtil.asLocation(tokens[0])).orElse(null);
-                        if (material == null) return;
-                        stone = Registries.ITEM.get(ModUtil.asLocation(tokens[1]));
-                        if (stone == null || stone == Items.AIR) return;
-                    }
-                    else return;
-
-                } else {
-                    String[] tokens = registryItem.getRegistryEntry().registryKey().getValue().getPath().split("_");
-                    // special name and shouldn't be handled here
-
-                    if (tokens.length == 1) return;
-                    else if (tokens.length == 2) {
-                        // simple jewelry
-                        sizeTier = JewelrySizeTier.REGULAR;
-                        material = JewelryMaterialRegistry.get(ModUtil.asLocation(tokens[0])).orElse(null);
-                        if (material == null) return;
-                        type = MagicTreasuresApi.getJewelryType(tokens[1]).orElse(null);
-                        if (type == null) return;
-                    } else if (tokens.length == 3) {
-                        Optional<IJewelrySizeTier> optionalSize = MagicTreasuresApi.getJewelrySize(tokens[0]);
-                        if (optionalSize.isPresent()) {
-                            sizeTier = optionalSize.get();
-                            material = MagicTreasuresApi.getJewelryMaterial(ModUtil.asLocation(tokens[1])).orElse(null);
-                            if (material == null) return;
-                            type = MagicTreasuresApi.getJewelryType(tokens[2]).orElse(null);
-                            if (type == null) return;
-                        } else {
-                            sizeTier = JewelrySizeTier.REGULAR;
-                            material = MagicTreasuresApi.getJewelryMaterial(ModUtil.asLocation(tokens[0])).orElse(null);
-                            if (material == null) return;
-                            // TODO can't use the StoneRegistry - it is loaded by tags and we are creating the tags.
-                            stone = Registries.ITEM.get(ModUtil.asLocation(tokens[1]));
-                            if (stone == null || stone == Items.AIR) return;
-                            type = MagicTreasuresApi.getJewelryType(tokens[2]).orElse(null);
-                            if (type == null) return;
-                        }
-                    } else if (tokens.length == 4) {
-                        sizeTier = MagicTreasuresApi.getJewelrySize(tokens[0]).orElse(JewelrySizeTier.REGULAR);
-                        material = MagicTreasuresApi.getJewelryMaterial(ModUtil.asLocation(tokens[1])).orElse(null);
-                        if (material == null) return;
-                        stone = Registries.ITEM.get(ModUtil.asLocation(tokens[2]));
-                        if (stone == null || stone == Items.AIR) return;
-                        type = MagicTreasuresApi.getJewelryType(tokens[3]).orElse(null);
-                        if (type == null) return;
-                    } else {
-                        return;
-                    }
+            MagicTreasuresItems.ALL_JEWELRY.forEach(jewelry -> {
+                if (MagicTreasuresItems.CUSTOM_JEWELRY.contains(jewelry)) {
+                    getOrCreateTagBuilder(MagicTreasuresTags.Items.CUSTOM_JEWELRY).add(jewelry);
                 }
-//                ItemStack stack = new ItemStack(registryItem);
-//                if (stack.contains(MagicTreasuresComponents.JEWELRY_ATTRIBS)) {
-//                    JewelryAttribsComponent attribs = stack.get(MagicTreasuresComponents.JEWELRY_ATTRIBS);
-                    // add to the type tag
-                    getOrCreateTagBuilder(TYPE_TAG_MAP.get(type)).add(registryItem);
-                    // -- curios integration
-//                    TagKey<Item> curiosTagKey = CURIOS_TYPE_TAG_MAP.get(handler.getJewelryType());
-//                    if (curiosTagKey != null) {
-//                        getOrCreateTagBuilder(curiosTagKey).add(registryItem.get());
-//                    }
-                    // add to the material tag
-                    getOrCreateTagBuilder(MATERIAL_TAG_MAP.get(material)).add(registryItem);
-                    getOrCreateTagBuilder(SIZE_TAG_MAP.get(sizeTier)).add(registryItem);
-                    if (stone != null && stone != Items.AIR) {
-                        getOrCreateTagBuilder(STONE_TAG_MAP.get(stone)).add(registryItem);
-                    }
-
-                    // only run this for standard jewelry (special is handled explicitly)
-//                    if (!MagicTreasuresItems.STANDARD_JEWELRY.contains(registryItem)) return;
-
-                    IRarity materialRarity = MATERIAL_RARITY_MAP.get(material);
-                    IRarity rarity = materialRarity;
-//                    Optional<Item> gemstoneItem = ComponentHelper.gemstoneItem(stack);
-//                    Optional<Identifier> gemstone = ComponentHelper.gemstone(stack);
-
-                    if (stone != null && stone != Items.AIR) {
-                        IRarity stoneRarity = STONE_RARITY_MAP.get(stone);
-
-                        if (stoneRarity != null) {
-                            rarity = MagicTreasuresRarity.getByCode(Math.max(stoneRarity.getCode(), materialRarity.getCode()));
-                            rarity = MagicTreasuresRarity.getByCode(rarity.getCode() + sizeTier.getCode());
-                        }
-                        else {
-                            rarity = MagicTreasuresRarity.getByCode(rarity.getCode() + sizeTier.getCode());
-                        }
-                        getOrCreateTagBuilder(JEWELRY_RARITY_TAG_MAP.get(rarity)).add(registryItem);
-                    } else {
-                        rarity = MagicTreasuresRarity.getByCode(rarity.getCode() + sizeTier.getCode());
-                        getOrCreateTagBuilder(JEWELRY_RARITY_TAG_MAP.get(rarity)).add(registryItem);
-                    }
-//                }
-            });
-            */
-            JewelryRegistry.getAllAttribs().forEach(pair -> {
-                // add to the type tag
-                getOrCreateTagBuilder(TYPE_TAG_MAP.get(pair.getRight().getType())).add(pair.getLeft());
-                // add to the material tag
-                getOrCreateTagBuilder(MATERIAL_TAG_MAP.get(pair.getRight().getMaterial())).add(pair.getLeft());
-                // add to size tag
-                getOrCreateTagBuilder(SIZE_TAG_MAP.get(pair.getRight().getSizeTier())).add(pair.getLeft());
-
-                // calculate stone tag and stone rarity in one go.
-                Item stone = null;
-                if (pair.getRight().getStone() != null && !pair.getRight().getStone().equals(ModUtil.getName(Items.AIR))) {
-                    // NOTE can't use the StoneRegistry - it is loaded by tags and we are creating the tags.
-                    stone = Registries.ITEM.get(pair.getRight().getStone());
-                    if(stone != null) {
-                        // add to stone tag
-                        getOrCreateTagBuilder(STONE_TAG_MAP.get(stone)).add(pair.getLeft());
-                    }
+                else {
+                    getOrCreateTagBuilder(MagicTreasuresTags.Items.STANDARD_JEWELRY).add(jewelry);
                 }
-                // standard jewelry only
-                if (!MagicTreasuresItems.STANDARD_JEWELRY.contains(pair.getLeft())) return;
+                ItemStack stack = new ItemStack(jewelry);
+                ComponentHelper.jewelryType(stack).ifPresent(type -> {
+                    getOrCreateTagBuilder(TYPE_TAG_MAP.get(type)).add(jewelry);
+                });
+                ComponentHelper.material(stack).ifPresent(material -> {
+                    getOrCreateTagBuilder(MATERIAL_TAG_MAP.get(material)).add(jewelry);
+                });
+                ComponentHelper.sizeTier(stack).ifPresent(sizeTier -> {
+                    getOrCreateTagBuilder(SIZE_TAG_MAP.get(sizeTier)).add(jewelry);
+                });
 
-                // calculate rarities
-                IRarity materialRarity = MATERIAL_RARITY_MAP.get(pair.getRight().getMaterial());
-                IRarity rarity = materialRarity;
-
-                if (stone != null && stone != Items.AIR) {
-                    IRarity stoneRarity = STONE_RARITY_MAP.get(stone);
-                    if (stoneRarity != null) {
-                        rarity = MagicTreasuresRarity.getByCode(Math.max(stoneRarity.getCode(), materialRarity.getCode()));
-                        rarity = MagicTreasuresRarity.getByCode(rarity.getCode() + pair.getRight().getSizeTier().getCode());
-                    }
-                    else {
-                        rarity = MagicTreasuresRarity.getByCode(rarity.getCode() + pair.getRight().getSizeTier().getCode());
-                    }
-                    getOrCreateTagBuilder(JEWELRY_RARITY_TAG_MAP.get(rarity)).add(pair.getLeft());
-                } else {
-                    rarity = MagicTreasuresRarity.getByCode(rarity.getCode() + pair.getRight().getSizeTier().getCode());
-                    getOrCreateTagBuilder(JEWELRY_RARITY_TAG_MAP.get(rarity)).add(pair.getLeft());
-                }
-            });
-
-            /*
-             * custom jewelry
-             */
-            // TODO Castle Rings and Haws Rings are not setup yet.
-            // TODO need to somehow process these rings without explicitly coding them
-            MagicTreasuresItems.CUSTOM_JEWELRY.forEach(custom -> {
-                // TEMP discriminate for castle or hawk
-                if (ModUtil.getName(custom).getPath().contains("castle")
-                        || ModUtil.getName(custom).getPath().contains("hawk")) {
-                    getOrCreateTagBuilder(MagicTreasuresTags.Items.CUSTOM_JEWELRY).add(custom);
-                    ItemStack stack = new ItemStack(custom);
-                    ComponentHelper.jewelryType(stack).ifPresent(type -> {
-                        getOrCreateTagBuilder(TYPE_TAG_MAP.get(type)).add(custom);
-                    });
-                    ComponentHelper.material(stack).ifPresent(material -> {
-                        getOrCreateTagBuilder(MATERIAL_TAG_MAP.get(material)).add(custom);
-                    });
-                    ComponentHelper.sizeTier(stack).ifPresent(sizeTier -> {
-                        getOrCreateTagBuilder(SIZE_TAG_MAP.get(sizeTier)).add(custom);
-                    });
-
+                ComponentHelper.rarity(stack).ifPresentOrElse(rarity -> {
+                    getOrCreateTagBuilder(JEWELRY_RARITY_TAG_MAP.get(rarity)).add(jewelry);
+                }, () -> {
                     IRarity materialRarity = MATERIAL_RARITY_MAP.get(ComponentHelper.material(stack).orElse(JewelryMaterials.NONE));
                     IRarity rarity = materialRarity;
-                    Item stone = ComponentHelper.gemstoneMinecraftItem(stack).orElse(Items.AIR);
+                    Item gemstone = ComponentHelper.gemstoneMinecraftItem(stack).orElse(Items.AIR);
 
                     // calculate rarities
-                    if (stone != Items.AIR) {
-                        getOrCreateTagBuilder(STONE_TAG_MAP.get(stone)).add(custom);
-
-                        IRarity stoneRarity = STONE_RARITY_MAP.get(stone);
+                    if (gemstone != Items.AIR) {
+                        if (STONE_TAG_MAP.containsKey(gemstone)) {
+                            getOrCreateTagBuilder(STONE_TAG_MAP.get(gemstone)).add(jewelry);
+                        }
+                        IRarity stoneRarity = STONE_RARITY_MAP.get(gemstone);
                         if (stoneRarity != null) {
                             rarity = MagicTreasuresRarity.getByCode(Math.max(stoneRarity.getCode(), materialRarity.getCode()));
                             rarity = MagicTreasuresRarity.getByCode(rarity.getCode() + ComponentHelper.sizeTier(stack).orElse(JewelrySizeTier.REGULAR).getCode());
@@ -366,136 +211,13 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
                         else {
                             rarity = MagicTreasuresRarity.getByCode(rarity.getCode() + ComponentHelper.sizeTier(stack).orElse(JewelrySizeTier.REGULAR).getCode());
                         }
-                        getOrCreateTagBuilder(JEWELRY_RARITY_TAG_MAP.get(rarity)).add(custom);
+                        getOrCreateTagBuilder(JEWELRY_RARITY_TAG_MAP.get(rarity)).add(jewelry);
                     } else {
                         rarity = MagicTreasuresRarity.getByCode(rarity.getCode() + ComponentHelper.sizeTier(stack).orElse(JewelrySizeTier.REGULAR).getCode());
-                        getOrCreateTagBuilder(JEWELRY_RARITY_TAG_MAP.get(rarity)).add(custom);
+                        getOrCreateTagBuilder(JEWELRY_RARITY_TAG_MAP.get(rarity)).add(jewelry);
                     }
-                }
+                });
             });
-
-            Item item = MagicTreasuresItems.SILBROS_RING_OF_VITALITY;
-            // silbro's
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.CUSTOM_JEWELRY).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.RINGS).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.WOOD).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.REGULAR).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY_COMMON).add(MagicTreasuresItems.SILBROS_RING_OF_VITALITY);
-
-            // strongmans bracers
-            item = MagicTreasuresItems.STRONGMANS_BRACERS;
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.CUSTOM_JEWELRY).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.BRACELETS).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.WOOD).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.REGULAR).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY_COMMON).add(MagicTreasuresItems.STRONGMANS_BRACERS);
-
-            // peasents fortune
-            item = MagicTreasuresItems.PEASANTS_FORTUNE;
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.CUSTOM_JEWELRY).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.RINGS).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.IRON).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.GREAT).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY_COMMON).add(MagicTreasuresItems.PEASANTS_FORTUNE);
-
-            // maldritchs
-            item = MagicTreasuresItems.MALDRITCHS_FIRST_AMULET;
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.CUSTOM_JEWELRY).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.NECKLACES).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.BONE).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.ONYX).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY_UNCOMMON).add(MagicTreasuresItems.MALDRITCHS_FIRST_AMULET);
-
-            // aqua ring
-            item = MagicTreasuresItems.AQUA_RING;
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.CUSTOM_JEWELRY).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.RINGS).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.SILVER).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.TOPAZ).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY_UNCOMMON).add(MagicTreasuresItems.AQUA_RING);
-
-            // amulet of defence
-            item = MagicTreasuresItems.AMULET_OF_DEFENCE;
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.CUSTOM_JEWELRY).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.NECKLACES).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.COPPER).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.TOPAZ).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY_UNCOMMON).add(MagicTreasuresItems.AMULET_OF_DEFENCE);
-
-            // jouneymans bands
-            item = MagicTreasuresItems.JOURNEYMANS_BANDS;
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.CUSTOM_JEWELRY).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.BRACELETS).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.GOLD).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JADEITE).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.GREAT).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY_SCARCE).add(MagicTreasuresItems.JOURNEYMANS_BANDS);
-
-            // adephagias bounty
-            item = MagicTreasuresItems.ADEPHAGIAS_BOUNTY;
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.CUSTOM_JEWELRY).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.BRACELETS).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.GOLD).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JADEITE).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.GREAT).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY_SCARCE).add(MagicTreasuresItems.ADEPHAGIAS_BOUNTY);
-
-            // medics token
-            item = MagicTreasuresItems.MEDICS_TOKEN;
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.CUSTOM_JEWELRY).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.NECKLACES).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.GOLD).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JADEITE).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.GREAT).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY_SCARCE).add(MagicTreasuresItems.MEDICS_TOKEN);
-
-            // salandaars ward
-            item = MagicTreasuresItems.SALANDAARS_WARD;
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.CUSTOM_JEWELRY).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.NECKLACES).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.GOLD).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.RUBY).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.GREAT).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY_RARE).add(MagicTreasuresItems.SALANDAARS_WARD);
-
-            // angels ring
-            item = MagicTreasuresItems.MEDICS_TOKEN;
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.CUSTOM_JEWELRY).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.RINGS).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.GOLD).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.WHITE_PEARL).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.GREAT).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY_RARE).add(MagicTreasuresItems.ANGELS_RING);
-
-            // ring of fortitude
-            item = MagicTreasuresItems.RING_OF_FORTITUDE;
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.CUSTOM_JEWELRY).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.RINGS).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.GOLD).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.SAPPHIRE).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.GREAT).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY_RARE).add(MagicTreasuresItems.RING_OF_FORTITUDE);
-
-            // ring of life or death
-            item = MagicTreasuresItems.RING_LIFE_DEATH;
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.CUSTOM_JEWELRY).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.RINGS).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.BLOOD).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.RUBY).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.LORDS).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY_EPIC).add(MagicTreasuresItems.RING_LIFE_DEATH);
-
-            // eye of the phoenix
-            item = MagicTreasuresItems.EYE_OF_THE_PHOENIX;
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.CUSTOM_JEWELRY).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.NECKLACES).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.GOLD).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.BLACK_PEARL).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.GREAT).add(item);
-            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY_EPIC).add(MagicTreasuresItems.EYE_OF_THE_PHOENIX);
-
-            // castle rings
-
 
             // types
             getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY).addOptionalTag(MagicTreasuresTags.Items.RINGS);
@@ -504,7 +226,6 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
             getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY).addOptionalTag(MagicTreasuresTags.Items.POCKETS);
 //            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY).addTag(MagicTreasuresTags.Items.NECKLACES);
 //            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY).addTag(MagicTreasuresTags.Items.BRACELETS);
-//            getOrCreateTagBuilder(MagicTreasuresTags.Items.JEWELRY).add(MagicTreasuresItems.ADEPHAGIAS_BOUNTY);
 
             // special jewelry tags
             getOrCreateTagBuilder(MagicTreasuresTags.Items.CASTLE_RING_RUBY).add(MagicTreasuresItems.RUBY);
