@@ -1,0 +1,5 @@
+{
+  "icon": "magictreasures:gui/slots/bracelet",
+  "order": -512,
+  "validator_predicates": ["trinkets:tag"]
+}

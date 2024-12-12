@@ -33,7 +33,7 @@ public class MagicTreasuresIntegrations {
         IEquipmentSpellHandler equipmentSpellHandler = null;
 
         if (FabricLoader.getInstance().isModLoaded("trinkets")) {
-            MagicTreasures.LOGGER.debug("curios IS loaded");
+            MagicTreasures.LOGGER.debug("Trinkets is loaded");
             try {
                 equipmentSpellHandler =
                         (IEquipmentSpellHandler) Class.forName(className).newInstance();

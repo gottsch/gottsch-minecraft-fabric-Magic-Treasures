@@ -66,6 +66,13 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
         TYPE_TAG_MAP.put(JewelryType.NECKLACE, MagicTreasuresTags.Items.NECKLACES);
         TYPE_TAG_MAP.put(JewelryType.POCKET, MagicTreasuresTags.Items.POCKETS);
 
+        // trinkets type map
+        Map<IJewelryType, TagKey<Item>> TRINKETS_TYPE_TAG_MAP = Maps.newHashMap();
+        TRINKETS_TYPE_TAG_MAP.put(JewelryType.RING, MagicTreasuresTags.Items.TRINKETS_RING);
+        TRINKETS_TYPE_TAG_MAP.put(JewelryType.BRACELET, MagicTreasuresTags.Items.TRINKETS_BRACELET);
+        TRINKETS_TYPE_TAG_MAP.put(JewelryType.NECKLACE, MagicTreasuresTags.Items.TRINKETS_NECKLACE);
+        TRINKETS_TYPE_TAG_MAP.put(JewelryType.BELT, MagicTreasuresTags.Items.TRINKETS_BELT);
+
         Map<JewelryMaterial, TagKey<Item>> MATERIAL_TAG_MAP = Maps.newHashMap();
         MATERIAL_TAG_MAP.put(JewelryMaterials.WOOD, MagicTreasuresTags.Items.WOOD);
         MATERIAL_TAG_MAP.put(JewelryMaterials.IRON, MagicTreasuresTags.Items.IRON);
@@ -183,6 +190,7 @@ public class ModItemTagProvider extends FabricTagProvider.ItemTagProvider {
                 ItemStack stack = new ItemStack(jewelry);
                 ComponentHelper.jewelryType(stack).ifPresent(type -> {
                     getOrCreateTagBuilder(TYPE_TAG_MAP.get(type)).add(jewelry);
+                    getOrCreateTagBuilder(TRINKETS_TYPE_TAG_MAP.get(type)).add(jewelry);
                 });
                 ComponentHelper.material(stack).ifPresent(material -> {
                     getOrCreateTagBuilder(MATERIAL_TAG_MAP.get(material)).add(jewelry);
