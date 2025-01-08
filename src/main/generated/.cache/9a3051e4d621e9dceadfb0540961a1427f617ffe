@@ -1,10 +1,10 @@
-// 1.21.1	2024-12-07T08:20:37.3817082	Magic Treasures/Tags for minecraft:item
+// 1.21.1	2025-01-07T23:54:48.1911257	Magic Treasures/Tags for minecraft:item
 0ab6f47694de6162a45f02abcea3d197a2e70b27 data\magictreasures\tags\item\jewelry\category\gemstone\diamond.json
 dec88ed82818c35de64ceec6ba2f03a59ee46476 data\magictreasures\tags\item\jewelry\gemstone\rarity\scarce.json
 d0026d385cb48c236fc112440ad34d2801d56a4f data\magictreasures\tags\item\jewelry\category\type\bracelets.json
 0e9b3b5e2ccc005efdca82e7c160913cc3cf986f data\magictreasures\tags\item\jewelry\gemstone\all_gemstones.json
-3944bc88e94f91e49447c65aeb4976cc676bfc77 data\trinkets\tags\item\hand\ring.json
 2a6b773e4ed0963d9b7ccdd8c5b32b53283dae58 data\magictreasures\tags\item\jewelry\category\rarity\common.json
+3944bc88e94f91e49447c65aeb4976cc676bfc77 data\trinkets\tags\item\hand\ring.json
 d0026d385cb48c236fc112440ad34d2801d56a4f data\trinkets\tags\item\hand\bracelet.json
 5b564b58fc914f6ccb6de9a1ad00a95b5d96cd6e data\magictreasures\tags\item\jewelry\gemstone\rarity\epic.json
 fdab8ddd5529ae14b26bc1853b004131135318a4 data\magictreasures\tags\item\jewelry\gemstone\tier\tier3.json
@@ -14,8 +14,8 @@ fdab8ddd5529ae14b26bc1853b004131135318a4 data\magictreasures\tags\item\jewelry\g
 4ec06aa3c34b61950a3d5fd6de73db1a28940b4b data\trinkets\tags\item\chest\necklace.json
 af2a29efa21f1e77a63db2357c0431ea69870134 data\c\tags\item\ingots\silver.json
 788b138ab502d027a1802d7566a86478f036a811 data\magictreasures\tags\item\jewelry\category\rarity\legendary.json
-f8f63e392ef10bd6919a48c3d880b01c51dde9aa data\magictreasures\tags\item\jewelry\category\size\regular.json
 a91f36441330b112983c7b779454d65478f5df2f data\magictreasures\tags\item\jewelry\category\rarity\rare.json
+f8f63e392ef10bd6919a48c3d880b01c51dde9aa data\magictreasures\tags\item\jewelry\category\size\regular.json
 243f2dab6ef46a493d12775f6f28baf7b72922cf data\c\tags\item\raw_materials\bones.json
 1e8cf41bf92f2db4728a067d94c356f4c0f9c13c data\magictreasures\tags\item\jewelry\category\class\all_jewelry.json
 9a5c60547a44e34f9cd21493035bd7774dc4930d data\magictreasures\tags\item\jewelry\category\rarity\uncommon.json

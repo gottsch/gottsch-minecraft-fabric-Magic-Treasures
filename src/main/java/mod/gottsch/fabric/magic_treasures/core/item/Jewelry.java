@@ -40,7 +40,7 @@ import java.util.function.Predicate;
 /**
  * Created by Mark Gottschling on 5/29/2023
  */
-public class Jewelry extends TrinketItem implements IJewelry {
+public class Jewelry extends Item implements IJewelry {
     // TODO if Jewelry is truely to be data-driven ie any item from any mod
     // can be registered as a Jewelry item, then these properties need to be components
     // as well and there isn't any custom methods to Jewelry.
